@@ -244,6 +244,7 @@ async def check_config():
                 print('Config for command "%s" not found in config of guild "%s"' % (command.name, guild_config['name']))
                 guild_config['commands'][command.name] = {'whitelist': [], 'blacklist': [], 'enabled': True}
     await write_config()
+    print('Config check succesful')
 
 # Write config to file
 async def write_config():
