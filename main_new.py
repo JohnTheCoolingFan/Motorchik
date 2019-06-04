@@ -2,13 +2,8 @@ tokenfile = open('token.txt', 'r')
 TOKEN = tokenfile.read().rstrip()
 tokenfile.close()
 
-BOT_USER_ID = 551085000775172096
-TEST_SERVER_ID = 574559408894377984
 JTCF_SERVER_ID = 370167294439063564
 JTCF_DEFAULT_ROLE = 527382415014887424
-JTCF_WELCOME_CHANNEL = 525772525045809152
-JTCF_MODSTAT_CHANNEL = 569108021238824991
-JTCF_BOTFLOOD_CHANNEL = 574920316057419827
 MOD_LIST = ['Random Factorio Things', 'Plutonium Energy', 'RealisticReactors Ingo', 'Placeable-off-grid', 'No Artillery Map Reveal']
 DEFAULT_GUILD_CONFIG = {'name': '', 'welcome_channel_id': 0, 'welcome_enabled': True, 'log_channel_id': 0, 'log_enabled': True, 'commands': {}}
 
@@ -29,7 +24,7 @@ async def on_message(message):
     if message.author == bot.user:
         return
 
-    if message.content.startswith('<@{0}>'.format(BOT_USER_ID)):
+    if message.content.startswith('<@{0}>'.format(bot.user.id)):
         await message.channel.send('What?')
 
     await bot.process_commands(message)
