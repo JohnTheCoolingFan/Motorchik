@@ -98,12 +98,9 @@ async def rickroll(ctx):
 @bot.command(aliases = ['modstat'], description = 'Info about mods', brief = 'Info about mods', help = 'Prints a bunch of commands for uBot to display info about mods')
 @commands.check(is_enabled)
 async def mods_statistics(ctx):
-    if ctx.guild.id == TEST_SERVER_ID or ctx.channel.id == JTCF_MODSTAT_CHANNEL or ctx.channel.id == JTCF_BOTFLOOD_CHANNEL:
-        for modname in MOD_LIST:
-            await ctx.send(content = '>>{0}<<'.format(modname), delete_after = 1)
-        await ctx.message.delete()
-    else:
-        await ctx.send(content = '{0.author.mention}, This command cannot be used in this channel'.format(ctx), delete_after = 5)
+    for modname in MOD_LIST:
+        await ctx.send(content = '>>{0}<<'.format(modname), delete_after = 1)
+    await ctx.message.delete()
 
 @bot.command(hidden = True, help = 'pong')
 @commands.check(is_enabled)
