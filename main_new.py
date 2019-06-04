@@ -50,6 +50,12 @@ async def on_member_remove(member):
     if bot_config[str(member.guild.id)]['welcome_enabled']:
         await member.guild.get_channel(bot_config[str(member.guild.id)]['welcome_channel_id']).send('Goodbye, {0.mention}!'.format(member))
 
+async def is_enabled(ctx):
+    return                    bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['enabled']\
+    and not ctx.channel.id in bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['blacklist']\
+    and    (ctx.channel.id in bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['whitelist']\
+    or                    len(bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['whitelist']) == 0)
+
 @bot.command(hidden = True, help = 'Returns text typed after $test')
 async def test(ctx, arg):
     await ctx.send(arg)
