@@ -37,6 +37,8 @@ async def on_message(message):
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CheckFailure):
         await ctx.send('**{0.author.mention}, this command is disabled in this channel or on this server.**'.format(ctx), delete_after = 5)
+    else:
+        await ctx.send('Exception raised while executing command `{0.command.name}`:\n```\n{1}\n```'.format(ctx, error))
 
 @bot.event
 async def on_member_join(member):
@@ -148,8 +150,8 @@ async def whitelist(ctx, command_name):
 @config.command()
 async def blacklist(ctx, command_name):
     if ctx.author.permissions_in(ctx.channel).administrator:
-        if bot_config[sstr(ctx.guild.id)]['commands'].get(command_name):
-            bot_config[sstr(ctx.guild.id)]['commands'][command_name]['blacklist'] = list(set([channel.id for channel in ctx.message.channel_mentions]))
+        if bot_config[str(ctx.guild.id)]['commands'].get(command_name):
+            bot_config[str(ctx.guild.id)]['commands'][command_name]['blacklist'] = list(set([channel.id for channel in ctx.message.channel_mentions]))
             await write_config()
             await ctx.send('Blacklist channel list for `{0}` command updated'.format(command_name))
         else:
