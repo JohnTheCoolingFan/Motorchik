@@ -20,8 +20,9 @@ bot = commands.Bot(command_prefix = '$')
 
 @bot.event
 async def on_ready():
-    await check_config()
     print('Logged in as {0.user}'.format(bot))
+    print('Checking config...')
+    await check_config()
 
 @bot.event
 async def on_message(message):
@@ -64,31 +65,38 @@ async def test(ctx, arg):
     await ctx.send(arg)
 
 @bot.command(description = '\"Hello\" in English', brief = '\"Hello\" in English', help = 'Returns \"Hello\" in English')
+@commands.check(is_enabled)
 async def hello(ctx):
     await ctx.send('Hello!')
 
 @bot.command(aliases = ['gutentag'], description = '\"Hello\" in German', brief = '\"Hello\" in German', help = 'Returns \"Hello\" in German')
+@commands.check(is_enabled)
 async def hello_german(ctx):
     await ctx.send('Guten tag')
 
 @bot.command(aliases = ['privet'], description = '\"Hello\" in Russian', brief = '\"Hello\" in Russian', help = 'Returns \"Hello\" in Russian')
+@commands.check(is_enabled)
 async def hello_russian(ctx):
     await ctx.send('Приветствую!')
 
 @bot.command(hidden = True, help = 'tag')
+@commands.check(is_enabled)
 async def guten(ctx):
     await ctx.send('tag')
 
 @bot.command(hidden = True, help = 'You spin me right round, baby, right round')
+@commands.check(is_enabled)
 async def spin(ctx):
     await ctx.send('https://www.youtube.com/watch?v=PGNiXGX2nLU')
 
 @bot.command(hidden = True, aliases = ['XcQ'], help = 'You\'ve got RICKROLLED, LUL')
+@commands.check(is_enabled)
 async def rickroll(ctx):
     await ctx.send('<https://www.youtube.com/watch?v=dQw4w9WgXcQ>')
     await ctx.send('<:kappa_jtcf:546748910765604875>')
 
 @bot.command(aliases = ['modstat'], description = 'Info about mods', brief = 'Info about mods', help = 'Prints a bunch of commands for uBot to display info about mods')
+@commands.check(is_enabled)
 async def mods_statistics(ctx):
     if ctx.guild.id == TEST_SERVER_ID or ctx.channel.id == JTCF_MODSTAT_CHANNEL or ctx.channel.id == JTCF_BOTFLOOD_CHANNEL:
         for modname in MOD_LIST:
@@ -98,15 +106,18 @@ async def mods_statistics(ctx):
         await ctx.send(content = '{0.author.mention}, This command cannot be used in this channel'.format(ctx), delete_after = 5)
 
 @bot.command(hidden = True, help = 'pong')
+@commands.check(is_enabled)
 async def ping(ctx):
     await ctx.send('pong')
 
 @bot.command(aliases = ['clear'], description = 'Clear chat', brief = 'Clear chat', help = 'Deletes specified count of messages in this channel. Only for admins and moderators.')
+@commands.check(is_enabled)
 async def clearchat(ctx, arg: int):
     if ctx.author.permissions_in(ctx.channel).manage_messages:
         async for message in ctx.channel.history(limit = arg + 1):
             await message.delete()
 
+# Bot configuration commands
 @bot.group(case_sensitive = True)
 async def config(ctx):
     return
@@ -219,10 +230,12 @@ async def disable_log(ctx):
     else:
         await ctx.send('You are not allowed to use `config` command')
 
+# Config file load
 config_file = open('config.json', 'r')
 bot_config = json.loads(config_file.read())
 config_file.close()
 
+# Check config for servers and commands
 async def check_config():
     for guild in bot.guilds:
         if not str(guild.id) in bot_config.keys():
@@ -235,11 +248,13 @@ async def check_config():
                 guild_config['commands'][command.name] = {'whitelist': [], 'blacklist': [], 'enabled': True}
     await write_config()
 
+# Write config to file
 async def write_config():
     config_file = open('config.json', 'w')
     config_file.write(json.dumps(bot_config, sort_keys = True, indent = 4))
     config_file.close()
 
+# Add guild to config
 async def add_guild_to_config(guild):
     bot_config[str(guild.id)] = DEFAULT_GUILD_CONFIG
     bot_config[str(guild.id)]['name'] = guild.name
