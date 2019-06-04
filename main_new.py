@@ -34,6 +34,11 @@ async def on_message(message):
     await bot.process_commands(message)
 
 @bot.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.CheckFailure):
+        ctx.send(content = 'This command is disbaled in this channle or on this server.')
+
+@bot.event
 async def on_member_join(member):
     if member.guild.id == JTCF_SERVER_ID:
         await member.add_roles(member.guild.get_role(JTCF_DEFAULT_ROLE))
