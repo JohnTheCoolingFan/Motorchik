@@ -36,7 +36,7 @@ async def on_message(message):
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CheckFailure):
-        ctx.send('This command is disbaled in this channle or on this server.', delete_after = 5)
+        await ctx.send('**{0.author.mention}, this command is disabled in this channel or on this server.**'.format(ctx), delete_after = 5)
 
 @bot.event
 async def on_member_join(member):
@@ -57,6 +57,7 @@ async def is_enabled(ctx):
     or                    len(bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['whitelist']) == 0)
 
 @bot.command(hidden = True, help = 'Returns text typed after $test')
+@commands.check(is_enabled)
 async def test(ctx, arg):
     await ctx.send(arg)
 
