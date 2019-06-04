@@ -1,4 +1,7 @@
-TOKEN = ''
+tokenfile = open('token.txt', 'r')
+TOKEN = tokenfile.read().rstrip()
+tokenfile.close()
+
 BOT_USER_ID = 551085000775172096
 TEST_SERVER_ID = 574559408894377984
 JTCF_SERVER_ID = 370167294439063564

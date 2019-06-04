@@ -1,4 +1,6 @@
-TOKEN = ''
+tokenfile = open('token.txt', 'r')
+TOKEN = tokenfile.read().rstrip()
+tokenfile.close()
 
 import json
 import discord
