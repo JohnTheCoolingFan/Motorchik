@@ -1,8 +1,6 @@
 tokenfile = open('token.txt', 'r')
-TOKEN = tokenfile.read()
-tokefile.close()
-
-TOKEN = input()
+TOKEN = tokenfile.read().rstrip()
+tokenfile.close()
 
 BOT_USER_ID = 551085000775172096
 TEST_SERVER_ID = 574559408894377984
