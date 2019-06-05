@@ -40,8 +40,8 @@ async def on_command_error(ctx, error):
 async def on_member_join(member):
     if bot_config[str(member.guild.id)]['welcome_enabled']:
         await member.guild.get_channel(bot_config[str(member.guild.id)]['welcome_channel_id']).send('Welcome, {0.mention}'.format(member))
-    if len(bot_config[str(member.guild.id)]['default_roles'] != 0):
-        member.add_roles()
+    if len(bot_config[str(member.guild.id)]['default_roles']) != 0:
+        await member.add_roles(*[member.guild.get_role(role_id) for role_id in bot_config[str(member.guild.id)]['default_roles']], reason = 'Default roles given on member join.')
 
 @bot.event
 async def on_member_remove(member):
