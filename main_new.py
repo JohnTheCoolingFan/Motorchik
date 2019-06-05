@@ -2,8 +2,6 @@ tokenfile = open('token.txt', 'r')
 TOKEN = tokenfile.read().rstrip()
 tokenfile.close()
 
-JTCF_SERVER_ID = 370167294439063564
-JTCF_DEFAULT_ROLE = 527382415014887424
 MOD_LIST = ['Random Factorio Things', 'Plutonium Energy', 'RealisticReactors Ingo', 'Placeable-off-grid', 'No Artillery Map Reveal']
 DEFAULT_GUILD_CONFIG = {'name': '', 'welcome_channel_id': 0, 'welcome_enabled': True, 'log_channel_id': 0, 'log_enabled': True, 'default_roles': [], 'commands': {}}
 
