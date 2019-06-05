@@ -238,15 +238,19 @@ config_file.close()
 
 # Check config for servers and commands
 async def check_config():
+    # Check for all guilds where bot is in are in config
     for guild in bot.guilds:
         if not str(guild.id) in bot_config.keys():
             print('Guild "{0.name}" ({0.id}) not found in config.'.format(guild))
             await add_guild_to_config(guild)
+
+    # Check that all guild configs have entries for all commands
     for guild_id, guild_config in bot_config.items():
         for command in bot.commands:
             if not command.name in guild_config['commands'].keys():
                 print('Config for command "%s" not found in config of guild "%s"' % (command.name, guild_config['name']))
                 guild_config['commands'][command.name] = {'whitelist': [], 'blacklist': [], 'enabled': True}
+
     await write_config()
     print('Config check succesful')
 
