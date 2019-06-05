@@ -225,7 +225,7 @@ async def disable_log(ctx):
 @config.command()
 async def default_roles(ctx):
     if ctx.author.permissions_in(ctx.channel).administrator:
-        bot_config[str(ctx.guild.id)]["default_roles"] = [role.id for role in ctx.message.role_mentions]
+        bot_config[str(ctx.guild.id)]["default_roles"] = list(set([role.id for role in ctx.message.role_mentions]))
         await write_config()
         await ctx.send('List of default roles updated.')
     else:
