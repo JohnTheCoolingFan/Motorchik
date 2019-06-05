@@ -38,10 +38,10 @@ async def on_command_error(ctx, error):
 
 @bot.event
 async def on_member_join(member):
-    if member.guild.id == JTCF_SERVER_ID:
-        await member.add_roles(member.guild.get_role(JTCF_DEFAULT_ROLE))
     if bot_config[str(member.guild.id)]['welcome_enabled']:
         await member.guild.get_channel(bot_config[str(member.guild.id)]['welcome_channel_id']).send('Welcome, {0.mention}'.format(member))
+    if len(bot_config[str(member.guild.id)]['default_roles'] != 0):
+        member.add_roles()
 
 @bot.event
 async def on_member_remove(member):
@@ -142,7 +142,7 @@ async def disable(ctx, command_name):
 async def whitelist(ctx, command_name):
     if ctx.author.permissions_in(ctx.channel).administrator:
         if bot_config[str(ctx.guild.id)]['commands'].get(command_name):
-            bot_config[str(ctx.guild.id)]['commands'][command_name]['whitelist'] = list(set([channel.id for channel in ctx.message.channel_mentions ]))
+            bot_config[str(ctx.guild.id)]['commands'][command_name]['whitelist'] = list(set([channel.id for channel in ctx.message.channel_mentions]))
             await write_config()
             await ctx.send('Whitelist channel list for `{0}` command updated'.format(command_name))
         else:
