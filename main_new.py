@@ -5,7 +5,7 @@ tokenfile.close()
 JTCF_SERVER_ID = 370167294439063564
 JTCF_DEFAULT_ROLE = 527382415014887424
 MOD_LIST = ['Random Factorio Things', 'Plutonium Energy', 'RealisticReactors Ingo', 'Placeable-off-grid', 'No Artillery Map Reveal']
-DEFAULT_GUILD_CONFIG = {'name': '', 'welcome_channel_id': 0, 'welcome_enabled': True, 'log_channel_id': 0, 'log_enabled': True, 'commands': {}}
+DEFAULT_GUILD_CONFIG = {'name': '', 'welcome_channel_id': 0, 'welcome_enabled': True, 'log_channel_id': 0, 'log_enabled': True, 'default_roles': [], 'commands': {}}
 
 import json
 import discord
@@ -219,6 +219,15 @@ async def disable_log(ctx):
         bot_config[str(ctx.guild.id)]['log_enabled'] = False
         await write_config()
         await ctx.send('Log messsages in channel <#{0}> disabled.'.format(bot_config[str(ctx.guild.id)]['log_channel_id']))
+    else:
+        await ctx.send('You are not allowed to use `config` command')
+
+@config.command()
+async def default_roles(ctx):
+    if ctx.author.permissions_in(ctx.channel).administrator:
+        bot_config[str(ctx.guild.id)]["default_roles"] = [role.id for role in ctx.message.role_mentions]
+        await write_config()
+        await ctx.send('List of default roles updated.')
     else:
         await ctx.send('You are not allowed to use `config` command')
 
