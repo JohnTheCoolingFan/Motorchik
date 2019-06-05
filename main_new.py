@@ -1,3 +1,7 @@
+# TODO: make rol-level system and levelup/leveldown commands
+# TODO: make config list command
+# TODO: make experience system
+
 tokenfile = open('token.txt', 'r')
 TOKEN = tokenfile.read().rstrip()
 tokenfile.close()
