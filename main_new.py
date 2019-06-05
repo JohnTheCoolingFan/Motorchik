@@ -266,3 +266,5 @@ async def add_guild_to_config(guild):
     bot_config[str(guild.id)]['log_channel_id'] = guild.text_channels[0].id
 
 bot.run(TOKEN)
+
+TOKEN = None
