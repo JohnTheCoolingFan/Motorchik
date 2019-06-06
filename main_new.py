@@ -112,7 +112,7 @@ async def clearchat(ctx, arg: int):
             await message.delete()
 
 # Bot configuration commands
-@bot.group(case_sensitive = True)
+@bot.group(case_sensitive = True, invoke_without_command = True)
 async def config(ctx):
     return
 
