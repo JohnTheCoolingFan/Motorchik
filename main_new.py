@@ -1,4 +1,4 @@
-# TODO: make rol-level system and levelup/leveldown commands
+# TODO: make role-level system and levelup/leveldown commands
 # TODO: make config list command
 # TODO: make experience system
 
