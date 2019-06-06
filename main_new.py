@@ -37,7 +37,7 @@ async def on_command_error(ctx, error):
     if isinstance(error, commands.CheckFailure):
         await ctx.send('**{0.author.mention}, this command is disabled in this channel or on this server.**'.format(ctx), delete_after = 5)
     else:
-        await ctx.send('Exception raised while executing command `{0.command.name}`:\n```\n{1}\n```'.format(ctx, error), delete_efter = 5)
+        await ctx.send('Exception raised while executing command `{0.command.name}`:\n```\n{1}\n```'.format(ctx, error), delete_after = 5)
 
 @bot.event
 async def on_member_join(member):
@@ -236,7 +236,13 @@ async def default_roles(ctx):
 
 @config.group(name = 'list', case_sensitive = True, invoke_without_command = True)
 async def list_config(ctx):
-    return
+    config_embed = discord.Embed(title = 'Config for server **{0.guild.name}**'.format(ctx))
+    config_embed.add_field(name = 'Default roles', value = '\n'.join(['<@&{0}>'.format(roleid) for roleid in bot_config[str(ctx.guild.id)]['default_roles']]), inline = False)
+    config_embed.add_field(name = 'Welcome messages', value = '<#{0}>'.format(bot_config[str(ctx.guild.id)]['welcome_channel_id']) if bot_config[str(ctx.guild.id)]['welcome_enabled'] else 'Disabled', inline = True)
+    config_embed.add_field(name = 'Log messages', value = '<#{0}>'.format(bot_config[str(ctx.guild.id)]['log_channel_id']) if bot_config[str(ctx.guild.id)]['log_enabled'] else 'Disabled')
+    config_commands_embed = '\n'.join([('**`{0.name}`**'.format(command)+('\n{0}'.format(((('Blacklisted in:'+('\n'.join(['<#{0}>'.format(blacklist_channel) for blacklist_channel in bot_config[str(ctx.guild.id)]['commands'][command.name]['blacklist']]))) if len(bot_config[str(ctx.guild.id)]['commands'][command.name]['whitelist']) == 0 else ('Whitelisted in:'+('\n'.join(['<#{0}>'.format(whitelist_channel) for whitelist_channel in bot_config[str(ctx.guild.id)]['commands'][command.name]['whitelist']])))) if (len(bot_config[str(ctx.guild.id)]['commands'][command.name]['blacklist']) != 0 or len(bot_config[str(ctx.guild.id)]['commands'][command.name]['whitelist']) != 0) else 'Allowed in all channels') if bot_config[str(ctx.guild.id)]['commands'][command.name]['enabled'] else 'Disabled'))) for command in bot.commands])
+    config_embed.add_field(name = 'Commands', value = config_commands_embed, inline = False)
+    await ctx.send(embed = config_embed)
 
 @list_config.command(name = 'raw')
 async def list_raw(ctx):
