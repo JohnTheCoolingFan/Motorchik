@@ -233,6 +233,14 @@ async def default_roles(ctx):
     else:
         await ctx.send('You are not allowed to use `config` command')
 
+@config.group(name = 'list', case_sensitive = True, invoke_without_command = True)
+async def list_config(ctx):
+    return
+
+@list_config.command(name = 'raw')
+async def list_raw(ctx):
+    await ctx.send('```json\n{0}\n```'.format(json.dumps(bot_config[str(ctx.guild.id)], sort_keys = True, indent = 4)))
+
 # Config file load
 config_file = open('config.json', 'r')
 bot_config = json.loads(config_file.read())
