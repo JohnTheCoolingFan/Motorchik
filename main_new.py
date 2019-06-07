@@ -1,7 +1,6 @@
 # TODO: make role-level system and levelup/leveldown commands
 # TODO: make experience system
 # TODO: make config commands output changed data
-# TODO: make config list command
 
 from discord.ext import commands
 import discord
