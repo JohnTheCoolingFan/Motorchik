@@ -268,8 +268,7 @@ async def list_config(ctx):
     config_embed.add_field(name='Default roles', value='\n'.join(['<@&{0}>'.format(roleid) for roleid in bot_config[str(ctx.guild.id)]['default_roles']]), inline=False)
     config_embed.add_field(name='Welcome messages', value='<#{0}>'.format(bot_config[str(ctx.guild.id)]['welcome_channel_id']) if bot_config[str(ctx.guild.id)]['welcome_enabled'] else 'Disabled', inline=True)
     config_embed.add_field(name='Log messages', value='<#{0}>'.format(bot_config[str(ctx.guild.id)]['log_channel_id']) if bot_config[str(ctx.guild.id)]['log_enabled'] else 'Disabled')
-    config_commands_embed = '\n'.join([('**`{0.name}`**'.format(command)+('\n{0}'.format(((('Blacklisted in:'+('\n'.join(['<#{0}>'.format(blacklist_channel) for blacklist_channel in bot_config[str(ctx.guild.id)]['commands'][command.name]['blacklist']]))) if len(bot_config[str(ctx.guild.id)]['commands'][command.name]['whitelist']) == 0 else ('Whitelisted in:'+('\n'.join(['<#{0}>'.format(whitelist_channel)
-                                                                                                                                                                                                                                                                                                                                                                                     for whitelist_channel in bot_config[str(ctx.guild.id)]['commands'][command.name]['whitelist']])))) if (len(bot_config[str(ctx.guild.id)]['commands'][command.name]['blacklist']) != 0 or len(bot_config[str(ctx.guild.id)]['commands'][command.name]['whitelist']) != 0) else 'Allowed in all channels') if bot_config[str(ctx.guild.id)]['commands'][command.name]['enabled'] else 'Disabled'))) for command in bot.commands])
+    config_commands_embed = '\n'.join([('**`{0.name}`**'.format(command)+('\n{0}'.format(((('Blacklisted in:'+('\n'.join(['<#{0}>'.format(blacklist_channel) for blacklist_channel in bot_config[str(ctx.guild.id)]['commands'][command.name]['blacklist']]))) if len(bot_config[str(ctx.guild.id)]['commands'][command.name]['whitelist']) == 0 else ('Whitelisted in:'+('\n'.join(['<#{0}>'.format(whitelist_channel)  for whitelist_channel in bot_config[str(ctx.guild.id)]['commands'][command.name]['whitelist']])))) if (len(bot_config[str(ctx.guild.id)]['commands'][command.name]['blacklist']) != 0 or len(bot_config[str(ctx.guild.id)]['commands'][command.name]['whitelist']) != 0) else 'Allowed in all channels') if bot_config[str(ctx.guild.id)]['commands'][command.name]['enabled'] else 'Disabled'))) for command in bot.commands])
     config_embed.add_field(name='Commands', value=config_commands_embed, inline=False)
     await ctx.send(embed=config_embed)
 
@@ -277,6 +276,7 @@ async def list_config(ctx):
 @list_config.command(name='raw')
 async def list_raw(ctx):
     await ctx.send('```json\n{0}\n```'.format(json.dumps(bot_config[str(ctx.guild.id)], sort_keys=True, indent=4)))
+
 
 # Config file load
 config_file = open('config.json', 'r')
