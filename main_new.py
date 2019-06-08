@@ -38,6 +38,8 @@ async def on_message(message):
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CheckFailure):
         await ctx.send('**{0.author.mention}, this command is disabled in this channel or on this server.**'.format(ctx), delete_after=5)
+    elif isinstance(error, commands.CommandNotFound):
+        pass
     else:
         await ctx.send('Exception raised while executing command `{0.command.name}`:\n```\n{1}\n```'.format(ctx, error), delete_after=5)
 
