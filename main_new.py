@@ -147,6 +147,7 @@ async def config(ctx):
 
 
 @config.command()
+@commands.check(is_admin)
 async def enable(ctx, command_name):
     if ctx.author.permissions_in(ctx.channel).administrator:
         if bot_config[str(ctx.guild.id)]['commands'].get(command_name):
@@ -160,6 +161,7 @@ async def enable(ctx, command_name):
 
 
 @config.command()
+@commands.check(is_admin)
 async def disable(ctx, command_name):
     if ctx.author.permissions_in(ctx.channel).administrator:
         if bot_config[str(ctx.guild.id)]['commands'].get(command_name):
@@ -173,6 +175,7 @@ async def disable(ctx, command_name):
 
 
 @config.command()
+@commands.check(is_admin)
 async def whitelist(ctx, command_name):
     if ctx.author.permissions_in(ctx.channel).administrator:
         if bot_config[str(ctx.guild.id)]['commands'].get(command_name):
@@ -186,6 +189,7 @@ async def whitelist(ctx, command_name):
 
 
 @config.command()
+@commands.check(is_admin)
 async def blacklist(ctx, command_name):
     if ctx.author.permissions_in(ctx.channel).administrator:
         if bot_config[str(ctx.guild.id)]['commands'].get(command_name):
@@ -199,6 +203,7 @@ async def blacklist(ctx, command_name):
 
 
 @config.command()
+@commands.check(is_admin)
 async def welcome_channel(ctx):
     if ctx.author.permissions_in(ctx.channel).administrator:
         if not len({channel.id for channel in ctx.message.channel_mentions}) > 1:
@@ -212,6 +217,7 @@ async def welcome_channel(ctx):
 
 
 @config.command()
+@commands.check(is_admin)
 async def log_channel(ctx):
     if ctx.author.permissions_in(ctx.channel).administrator:
         if not len({channel.id for channel in ctx.message.channel_mentions}) > 1:
@@ -225,6 +231,7 @@ async def log_channel(ctx):
 
 
 @config.command()
+@commands.check(is_admin)
 async def enable_welcome(ctx):
     if ctx.author.permissions_in(ctx.channel).administrator:
         bot_config[str(ctx.guild.id)]['welcome_enabled'] = True
@@ -235,6 +242,7 @@ async def enable_welcome(ctx):
 
 
 @config.command()
+@commands.check(is_admin)
 async def disable_welcome(ctx):
     if ctx.author.permissions_in(ctx.channel).administrator:
         bot_config[str(ctx.guild.id)]['welcome_enabled'] = False
@@ -245,6 +253,7 @@ async def disable_welcome(ctx):
 
 
 @config.command()
+@commands.check(is_admin)
 async def enable_log(ctx):
     if ctx.author.permissions_in(ctx.channel).administrator:
         bot_config[str(ctx.guild.id)]['log_enabled'] = True
@@ -255,6 +264,7 @@ async def enable_log(ctx):
 
 
 @config.command()
+@commands.check(is_admin)
 async def disable_log(ctx):
     if ctx.author.permissions_in(ctx.channel).administrator:
         bot_config[str(ctx.guild.id)]['log_enabled'] = False
@@ -265,6 +275,7 @@ async def disable_log(ctx):
 
 
 @config.command()
+@commands.check(is_admin)
 async def default_roles(ctx):
     if ctx.author.permissions_in(ctx.channel).administrator:
         bot_config[str(ctx.guild.id)]["default_roles"] = list({role.id for role in ctx.message.role_mentions})
@@ -274,6 +285,7 @@ async def default_roles(ctx):
         await ctx.send('You are not allowed to use `config` command')
 
 @config.commad()
+@commands.check(is_admin)
 async def reports_channel(ctx):
     if ctx.author.permissions_in(ctx.channel).administrator:
         bot_config[str(ctx.guild.id)]['reports_channel_id'] = ctx.message.channel_mentions[0].id
@@ -284,6 +296,7 @@ async def reports_channel(ctx):
 
 
 @config.group(name='list', case_sensitive=True, invoke_without_command=True)
+@commands.check(is_admin)
 async def list_config(ctx):
     bot_guild_cfg = bot_config[str(ctx.guild.id)]
     bot_guild_com_cfg = bot_guild_cfg['commands']
@@ -297,6 +310,7 @@ async def list_config(ctx):
 
 
 @list_config.command(name='raw')
+@commands.check(is_admin)
 async def list_raw(ctx):
     await ctx.send('```json\n{0}\n```'.format(json.dumps(bot_config[str(ctx.guild.id)], sort_keys=True, indent=4)))
 
