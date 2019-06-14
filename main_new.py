@@ -7,6 +7,7 @@
 from discord.ext import commands
 import discord
 import json
+
 tokenfile = open('token.txt', 'r')
 TOKEN = tokenfile.read().rstrip()
 tokenfile.close()
@@ -14,9 +15,7 @@ tokenfile.close()
 MOD_LIST = ['Random Factorio Things', 'Plutonium Energy', 'RealisticReactors Ingo', 'Placeable-off-grid', 'No Artillery Map Reveal']
 DEFAULT_GUILD_CONFIG = {'name': '', 'welcome_channel_id': 0, 'welcome_enabled': True, 'log_channel_id': 0, 'log_enabled': True, 'default_roles': [], 'commands': {}}
 
-
 bot = commands.Bot(command_prefix='$')
-
 
 @bot.event
 async def on_ready():
