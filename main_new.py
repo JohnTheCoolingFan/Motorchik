@@ -130,6 +130,12 @@ async def clearchat(ctx, arg: int):
         async for message in ctx.channel.history(limit=arg + 1):
             await message.delete()
 
+@bot.command()
+@commands.check(is_enabled)
+async def report(ctx):
+    pass # TODO
+
+
 # Bot configuration commands
 @bot.group(case_sensitive=True, invoke_without_command=True)
 async def config(ctx):
@@ -260,6 +266,15 @@ async def default_roles(ctx):
         bot_config[str(ctx.guild.id)]["default_roles"] = list({role.id for role in ctx.message.role_mentions})
         await write_config()
         await ctx.send('List of default roles updated.')
+    else:
+        await ctx.send('You are not allowed to use `config` command')
+
+@config.commad()
+async def reports_channel(ctx):
+    if ctx.author.permissions_in(ctx.channel).administrator:
+        bot_config[str(ctx.guild.id)]['reports_channel_id'] = ctx.message.channel_mentions[0].id
+        await write_config()
+        await ctx.send('Channel for report messages is set to <#{0}>'.format(bot_config[str(ctx.guild.id)]['reports_channel_id']))
     else:
         await ctx.send('You are not allowed to use `config` command')
 
