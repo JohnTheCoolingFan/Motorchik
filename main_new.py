@@ -38,7 +38,7 @@ async def on_message(message):
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CheckFailure):
-        await ctx.send('**{0.author.mention}, this command is disabled in this channel or on this server.**'.format(ctx), delete_after=5)
+        await ctx.send('**{0.author.mention}, you can\'t use this command.\nIt is disabled, blacklisted or whitelisted or you don\'t have permissions to use it.**'.format(ctx), delete_after=5)
     elif isinstance(error, commands.CommandNotFound):
         pass
     else:
