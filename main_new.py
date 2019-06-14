@@ -137,7 +137,7 @@ async def clearchat(ctx, arg: int):
 @bot.command()
 @commands.check(is_enabled)
 async def report(ctx):
-    pass # TODO
+    ctx.guild.get_channel(bot_config[str(ctx.guild.id)]['reports_channel_id']).send('Well, this command is incomplete. {0.author.mention} wanted to report something.'.format(ctx))
 
 
 # Bot configuration commands
