@@ -149,150 +149,114 @@ async def config(ctx):
 @config.command()
 @commands.check(is_admin)
 async def enable(ctx, command_name):
-    if ctx.author.permissions_in(ctx.channel).administrator:
-        if bot_config[str(ctx.guild.id)]['commands'].get(command_name):
-            bot_config[str(ctx.guild.id)]['commands'][command_name]['enabled'] = True
-            await write_config()
-            await ctx.send('Enabled `{0}` command'.format(command_name))
-        else:
-            await ctx.send('Command `{0}` not found'.format(command_name))
+    if bot_config[str(ctx.guild.id)]['commands'].get(command_name):
+        bot_config[str(ctx.guild.id)]['commands'][command_name]['enabled'] = True
+        await write_config()
+        await ctx.send('Enabled `{0}` command'.format(command_name))
     else:
-        await ctx.send('You are not allowed to use `config` command')
+        await ctx.send('Command `{0}` not found'.format(command_name))
 
 
 @config.command()
 @commands.check(is_admin)
 async def disable(ctx, command_name):
-    if ctx.author.permissions_in(ctx.channel).administrator:
-        if bot_config[str(ctx.guild.id)]['commands'].get(command_name):
-            bot_config[str(ctx.guild.id)]['commands'][command_name]['enabled'] = False
-            await write_config()
-            await ctx.send('Disabled `{0}` command'.format(command_name))
-        else:
-            await ctx.send('Command `{0}` not found'.format(command_name))
+    if bot_config[str(ctx.guild.id)]['commands'].get(command_name):
+        bot_config[str(ctx.guild.id)]['commands'][command_name]['enabled'] = False
+        await write_config()
+        await ctx.send('Disabled `{0}` command'.format(command_name))
     else:
-        await ctx.send('You are not allowed to use `config` command')
+        await ctx.send('Command `{0}` not found'.format(command_name))
 
 
 @config.command()
 @commands.check(is_admin)
 async def whitelist(ctx, command_name):
-    if ctx.author.permissions_in(ctx.channel).administrator:
-        if bot_config[str(ctx.guild.id)]['commands'].get(command_name):
-            bot_config[str(ctx.guild.id)]['commands'][command_name]['whitelist'] = list({channel.id for channel in ctx.message.channel_mentions})
-            await write_config()
-            await ctx.send('Whitelist channel list for `{0}` command updated'.format(command_name))
-        else:
-            await ctx.send('Command `{0}` not found'.format(command_name))
+    if bot_config[str(ctx.guild.id)]['commands'].get(command_name):
+        bot_config[str(ctx.guild.id)]['commands'][command_name]['whitelist'] = list({channel.id for channel in ctx.message.channel_mentions})
+        await write_config()
+        await ctx.send('Whitelist channel list for `{0}` command updated'.format(command_name))
     else:
-        await ctx.send('You are not allowed to use `config` command')
+        await ctx.send('Command `{0}` not found'.format(command_name))
 
 
 @config.command()
 @commands.check(is_admin)
 async def blacklist(ctx, command_name):
-    if ctx.author.permissions_in(ctx.channel).administrator:
-        if bot_config[str(ctx.guild.id)]['commands'].get(command_name):
-            bot_config[str(ctx.guild.id)]['commands'][command_name]['blacklist'] = list({channel.id for channel in ctx.message.channel_mentions})
-            await write_config()
-            await ctx.send('Blacklist channel list for `{0}` command updated'.format(command_name))
-        else:
-            await ctx.send('Command `{0}` not found'.format(command_name))
+    if bot_config[str(ctx.guild.id)]['commands'].get(command_name):
+        bot_config[str(ctx.guild.id)]['commands'][command_name]['blacklist'] = list({channel.id for channel in ctx.message.channel_mentions})
+        await write_config()
+        await ctx.send('Blacklist channel list for `{0}` command updated'.format(command_name))
     else:
-        await ctx.send('You are not allowed to use `config` command')
+        await ctx.send('Command `{0}` not found'.format(command_name))
 
 
 @config.command()
 @commands.check(is_admin)
 async def welcome_channel(ctx):
-    if ctx.author.permissions_in(ctx.channel).administrator:
-        if not len({channel.id for channel in ctx.message.channel_mentions}) > 1:
-            bot_config[str(ctx.guild.id)]['welcome_channel_id'] = ctx.message.channel_mentions[0].id
-            await write_config()
-            await ctx.send('Welcome channel set to <#{0}>.'.format(bot_config[str(ctx.guild.id)]['welcome_channel_id']))
-        else:
-            await ctx.send('Too much channels provided. Please, provide only one channel.')
+    if not len({channel.id for channel in ctx.message.channel_mentions}) > 1:
+        bot_config[str(ctx.guild.id)]['welcome_channel_id'] = ctx.message.channel_mentions[0].id
+        await write_config()
+        await ctx.send('Welcome channel set to <#{0}>.'.format(bot_config[str(ctx.guild.id)]['welcome_channel_id']))
     else:
-        await ctx.send('You are not allowed to use `config` command')
+        await ctx.send('Too much channels provided. Please, provide only one channel.')
 
 
 @config.command()
 @commands.check(is_admin)
 async def log_channel(ctx):
-    if ctx.author.permissions_in(ctx.channel).administrator:
-        if not len({channel.id for channel in ctx.message.channel_mentions}) > 1:
-            bot_config[str(ctx.guild.id)]['log_channel_id'] = ctx.message.channel_mentions[0].id
-            await write_config()
-            await ctx.send('Log channel set to <#{0}>.'.format(bot_config[str(ctx.guild.id)]['log_channel_id']))
-        else:
-            await ctx.send('Too much channels provided. Please, provide only one channel.')
+    if not len({channel.id for channel in ctx.message.channel_mentions}) > 1:
+        bot_config[str(ctx.guild.id)]['log_channel_id'] = ctx.message.channel_mentions[0].id
+        await write_config()
+        await ctx.send('Log channel set to <#{0}>.'.format(bot_config[str(ctx.guild.id)]['log_channel_id']))
     else:
-        await ctx.send('You are not allowed to use `config` command')
+        await ctx.send('Too much channels provided. Please, provide only one channel.')
 
 
 @config.command()
 @commands.check(is_admin)
 async def enable_welcome(ctx):
-    if ctx.author.permissions_in(ctx.channel).administrator:
-        bot_config[str(ctx.guild.id)]['welcome_enabled'] = True
-        await write_config()
-        await ctx.send('Welcome messsages in channel <#{0}> enabled.'.format(bot_config[str(ctx.guild.id)]['welcome_channel_id']))
-    else:
-        await ctx.send('You are not allowed to use `config` command')
+    bot_config[str(ctx.guild.id)]['welcome_enabled'] = True
+    await write_config()
+    await ctx.send('Welcome messsages in channel <#{0}> enabled.'.format(bot_config[str(ctx.guild.id)]['welcome_channel_id']))
 
 
 @config.command()
 @commands.check(is_admin)
 async def disable_welcome(ctx):
-    if ctx.author.permissions_in(ctx.channel).administrator:
-        bot_config[str(ctx.guild.id)]['welcome_enabled'] = False
-        await write_config()
-        await ctx.send('Welcome messsages in channel <#{0}> disabled.'.format(bot_config[str(ctx.guild.id)]['welcome_channel_id']))
-    else:
-        await ctx.send('You are not allowed to use `config` command')
+    bot_config[str(ctx.guild.id)]['welcome_enabled'] = False
+    await write_config()
+    await ctx.send('Welcome messsages in channel <#{0}> disabled.'.format(bot_config[str(ctx.guild.id)]['welcome_channel_id']))
 
 
 @config.command()
 @commands.check(is_admin)
 async def enable_log(ctx):
-    if ctx.author.permissions_in(ctx.channel).administrator:
-        bot_config[str(ctx.guild.id)]['log_enabled'] = True
-        await write_config()
-        await ctx.send('Log messsages in channel <#{0}> enabled.'.format(bot_config[str(ctx.guild.id)]['log_channel_id']))
-    else:
-        await ctx.send('You are not allowed to use `config` command')
+    bot_config[str(ctx.guild.id)]['log_enabled'] = True
+    await write_config()
+    await ctx.send('Log messsages in channel <#{0}> enabled.'.format(bot_config[str(ctx.guild.id)]['log_channel_id']))
 
 
 @config.command()
 @commands.check(is_admin)
 async def disable_log(ctx):
-    if ctx.author.permissions_in(ctx.channel).administrator:
-        bot_config[str(ctx.guild.id)]['log_enabled'] = False
-        await write_config()
-        await ctx.send('Log messsages in channel <#{0}> disabled.'.format(bot_config[str(ctx.guild.id)]['log_channel_id']))
-    else:
-        await ctx.send('You are not allowed to use `config` command')
+    bot_config[str(ctx.guild.id)]['log_enabled'] = False
+    await write_config()
+    await ctx.send('Log messsages in channel <#{0}> disabled.'.format(bot_config[str(ctx.guild.id)]['log_channel_id']))
 
 
 @config.command()
 @commands.check(is_admin)
 async def default_roles(ctx):
-    if ctx.author.permissions_in(ctx.channel).administrator:
-        bot_config[str(ctx.guild.id)]["default_roles"] = list({role.id for role in ctx.message.role_mentions})
-        await write_config()
-        await ctx.send('List of default roles updated.')
-    else:
-        await ctx.send('You are not allowed to use `config` command')
+    bot_config[str(ctx.guild.id)]["default_roles"] = list({role.id for role in ctx.message.role_mentions})
+    await write_config()
+    await ctx.send('List of default roles updated.')
 
 @config.commad()
 @commands.check(is_admin)
 async def reports_channel(ctx):
-    if ctx.author.permissions_in(ctx.channel).administrator:
-        bot_config[str(ctx.guild.id)]['reports_channel_id'] = ctx.message.channel_mentions[0].id
-        await write_config()
-        await ctx.send('Channel for report messages is set to <#{0}>'.format(bot_config[str(ctx.guild.id)]['reports_channel_id']))
-    else:
-        await ctx.send('You are not allowed to use `config` command')
+    bot_config[str(ctx.guild.id)]['reports_channel_id'] = ctx.message.channel_mentions[0].id
+    await write_config()
+    await ctx.send('Channel for report messages is set to <#{0}>'.format(bot_config[str(ctx.guild.id)]['reports_channel_id']))
 
 
 @config.group(name='list', case_sensitive=True, invoke_without_command=True)
