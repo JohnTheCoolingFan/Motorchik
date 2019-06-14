@@ -2,6 +2,7 @@
 # TODO: make experience system
 # TODO: make config commands output changed data
 # TODO: add a report system (report user or report message)
+# TODO: add setting to report with emoji
 
 from discord.ext import commands
 import discord
