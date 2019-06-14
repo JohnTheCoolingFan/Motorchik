@@ -137,7 +137,7 @@ async def clearchat(ctx, arg: int):
 @bot.command()
 @commands.check(is_enabled)
 async def report(ctx):
-    ctx.guild.get_channel(bot_config[str(ctx.guild.id)]['reports_channel_id']).send('Well, this command is incomplete. {0.author.mention} wanted to report something.'.format(ctx))
+    await ctx.guild.get_channel(bot_config[str(ctx.guild.id)]['reports_channel_id']).send('Well, this command is incomplete. {0.author.mention} wanted to report something.'.format(ctx))
 
 
 # Bot configuration commands
@@ -251,7 +251,7 @@ async def default_roles(ctx):
     await write_config()
     await ctx.send('List of default roles updated.')
 
-@config.commad()
+@config.command()
 @commands.check(is_admin)
 async def reports_channel(ctx):
     bot_config[str(ctx.guild.id)]['reports_channel_id'] = ctx.message.channel_mentions[0].id
