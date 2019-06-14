@@ -1,6 +1,7 @@
 # TODO: make role-level system and levelup/leveldown commands
 # TODO: make experience system
 # TODO: make config commands output changed data
+# TODO: add a report system (report user or report message)
 
 from discord.ext import commands
 import discord
