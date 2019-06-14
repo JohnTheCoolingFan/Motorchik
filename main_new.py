@@ -143,7 +143,7 @@ async def report(ctx):
 # Bot configuration commands
 @bot.group(case_sensitive=True, invoke_without_command=True)
 async def config(ctx):
-    return
+    pass
 
 
 @config.command()
