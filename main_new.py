@@ -62,8 +62,12 @@ async def on_member_remove(member):
 async def is_enabled(ctx):
     return bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['enabled']\
         and ctx.channel.id not in bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['blacklist']\
-        and (ctx.channel.id in bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['whitelist']
-             or len(bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['whitelist']) == 0)
+        and (ctx.channel.id in bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['whitelist']\
+        or len(bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['whitelist']) == 0)\
+        or ctx.author.permissions_in(ctx.channel).administrator
+
+async def is_admin(ctx):
+    return ctx.author.permissions_in(ctx.channel).administrator
 
 
 @bot.command(hidden=True, help='Returns text typed after $test')
