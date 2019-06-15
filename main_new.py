@@ -56,7 +56,7 @@ async def on_member_join(member):
 @bot.event
 async def on_member_remove(member):
     if bot_config[str(member.guild.id)]['welcome_enabled']:
-        await member.guild.get_channel(bot_config[str(member.guild.id)]['welcome_channel_id']).send('Goodbye, {0.mention}!'.format(member))
+        await member.guild.get_channel(bot_config[str(member.guild.id)]['welcome_channel_id']).send('Goodbye, {0} (ID {1})'.format(str(member), member.id))
 
 
 async def is_enabled(ctx):
