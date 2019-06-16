@@ -269,11 +269,35 @@ async def list_config(ctx):
     bot_guild_cfg = bot_config[str(ctx.guild.id)]
     bot_guild_com_cfg = bot_guild_cfg['commands']
     config_embed = discord.Embed(title='Config for server **{0.guild.name}**'.format(ctx))
-    config_embed.add_field(name='Default roles', value='\n'.join(['<@&{0}>'.format(roleid) for roleid in bot_guild_cfg['default_roles']]), inline=False)
-    config_embed.add_field(name='Welcome messages', value='<#{0}>'.format(bot_guild_cfg['welcome_channel_id']) if bot_guild_cfg['welcome_enabled'] else 'Disabled', inline=True)
-    config_embed.add_field(name='Log messages', value='<#{0}>'.format(bot_guild_cfg['log_channel_id']) if bot_guild_cfg['log_enabled'] else 'Disabled')
+    config_embed.add_field(name='***Default roles***', value='\n'.join(['<@&{0}>'.format(roleid) for roleid in bot_guild_cfg['default_roles']]), inline=False)
+    config_embed.add_field(name='***Welcome messages***', value='<#{0}>'.format(bot_guild_cfg['welcome_channel_id']) if bot_guild_cfg['welcome_enabled'] else 'Disabled', inline=True)
+    config_embed.add_field(name='***Log messages***', value='<#{0}>'.format(bot_guild_cfg['log_channel_id']) if bot_guild_cfg['log_enabled'] else 'Disabled')
+
+    """
+    config_embed.add_field(name = '***Commands***', value = 'Commands settings on this server', inline = False)
+    for command in bot.commands:
+        command_filters_state = ''
+        command_filters = 'Not filtered by channel'
+        command_brief = command.brief
+        if not command_brief:
+            command_brief = 'No brief description'
+        if bot_guild_com_cfg[command.name]['enabled']:
+            if bot_guild_com_cfg[command.name]['whitelist']:
+                command_filters_state = 'Whitelisted in:'
+                command_filters = '\n'.join({'<#'+str(whitelist_id)+'>' for whitelist_id in bot_guild_com_cfg[command.name]['whitelist']})
+            elif bot_guild_com_cfg[command.name]['blacklist']:
+                command_filters_state = 'Blacklisted in:'
+                command_filters = '\n'.join({'<#'+str(blacklist_id)+'>' for blacklist_id in bot_guild_com_cfg[command.name]['blacklist']})
+            else:
+                command_filters_state = 'Enabled'
+        else:
+            command_filters_state = 'Disabled'
+        config_embed.add_field(name = '**`'+command.name+'`**', value = command_brief, inline = True)
+        config_embed.add_field(name = '**'+command_filters_state+'**', value = command_filters, inline = False)
+    """
+
     config_commands_embed = '\n'.join([('**`'+command.name+'`**:\n'+((('Whitelisted in:\n'+'\n'.join(['<#'+str(whitelist_id)+'>' for whitelist_id in bot_guild_com_cfg[command.name]['whitelist']])) if bot_guild_com_cfg[command.name]['whitelist'] else (('Blacklisted in:\n'+'\n'.join(['<#'+str(blacklist_id)+'>' for blacklist_id in bot_guild_com_cfg[command.name]['blacklist']])) if bot_guild_com_cfg[command.name]['blacklist'] else 'Enabled')) if bot_guild_com_cfg[command.name]['enabled'] else 'Disabled')+'\n') for command in bot.commands])
-    config_embed.add_field(name='Commands', value=config_commands_embed, inline=False)
+    config_embed.add_field(name = '***Commands***', value = config_commands_embed, inline = False)
     await ctx.send(embed=config_embed)
 
 
