@@ -38,7 +38,7 @@ async def on_message(message):
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CheckFailure):
-        await ctx.send('**{0.author.mention}, you can\'t use this command.\nIt is disabled, blacklisted or whitelisted or you don\'t have permissions to use it.**'.format(ctx), delete_after=5)
+        pass
     elif isinstance(error, commands.CommandNotFound):
         pass
     else:
@@ -60,14 +60,20 @@ async def on_member_remove(member):
 
 
 async def is_enabled(ctx):
-    return bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['enabled']\
+    if bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['enabled']\
         and ctx.channel.id not in bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['blacklist']\
         and (ctx.channel.id in bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['whitelist']\
         or len(bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['whitelist']) == 0)\
-        or ctx.author.permissions_in(ctx.channel).administrator
+        or ctx.author.permissions_in(ctx.channel).administrator:
+        return True
+    else:
+        await ctx.send('This command is disabled in this channel or on this server')
 
 async def is_admin(ctx):
-    return ctx.author.permissions_in(ctx.channel).administrator
+    if ctx.author.permissions_in(ctx.channel).administrator:
+        return True
+    else:
+        await ctx.send('You are not allowed to use this command.\nOnly administrators can use this command.')
 
 
 @bot.command(hidden=True, help='Returns text typed after $test')
