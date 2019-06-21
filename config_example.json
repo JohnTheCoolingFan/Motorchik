@@ -1,0 +1,85 @@
+{
+    "370167294439063564": {
+        "commands": {
+            "clearchat": {
+                "blacklist": [],
+                "enabled": true,
+                "whitelist": []
+            },
+            "config": {
+                "blacklist": [],
+                "enabled": true,
+                "whitelist": []
+            },
+            "guten": {
+                "blacklist": [],
+                "enabled": true,
+                "whitelist": []
+            },
+            "hello": {
+                "blacklist": [],
+                "enabled": true,
+                "whitelist": []
+            },
+            "hello_german": {
+                "blacklist": [],
+                "enabled": true,
+                "whitelist": []
+            },
+            "hello_russian": {
+                "blacklist": [],
+                "enabled": true,
+                "whitelist": []
+            },
+            "help": {
+                "blacklist": [],
+                "enabled": true,
+                "whitelist": []
+            },
+            "mods_statistics": {
+                "blacklist": [],
+                "enabled": true,
+                "whitelist": [
+                    574920316057419827,
+                    569108021238824991
+                ]
+            },
+            "ping": {
+                "blacklist": [],
+                "enabled": true,
+                "whitelist": []
+            },
+            "report": {
+                "blacklist": [],
+                "enabled": false,
+                "whitelist": []
+            },
+            "rickroll": {
+                "blacklist": [],
+                "enabled": true,
+                "whitelist": []
+            },
+            "spin": {
+                "blacklist": [],
+                "enabled": true,
+                "whitelist": []
+            },
+            "test": {
+                "blacklist": [
+                    505687801283739650
+                ],
+                "enabled": true,
+                "whitelist": []
+            }
+        },
+        "default_roles": [
+            527382415014887424
+        ],
+        "log_channel_id": 532928945964843034,
+        "log_enabled": true,
+        "name": "John The Cooling Fan",
+        "reports_channel_id": 589221215302975572,
+        "welcome_channel_id": 525772525045809152,
+        "welcome_enabled": true
+    }
+}
