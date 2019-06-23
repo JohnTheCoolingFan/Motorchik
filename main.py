@@ -14,7 +14,7 @@ tokenfile = open('token.txt', 'r')
 TOKEN = tokenfile.read().rstrip()
 tokenfile.close()
 
-MOD_LIST = ['Random Factorio Things', 'Plutonium Energy', 'RealisticReactors Ingo', 'Placeable-off-grid', 'No Artillery Map Reveal']
+MOD_LIST = ['Placeable-off-grid', 'No Artillery Map Reveal', 'Random Factorio Things', 'Plutonium Energy', 'RealisticReactors Ingo']
 DEFAULT_GUILD_CONFIG = {'name': '', 'welcome_channel_id': 0, 'welcome_enabled': True, 'log_channel_id': 0, 'log_enabled': True, 'report_channel_id': 0, 'default_roles': [], 'commands': {}}
 
 bot = commands.Bot(command_prefix='$')
