@@ -149,7 +149,7 @@ async def report(ctx):
 
 
 # Bot configuration commands
-@bot.group(case_sensitive=True, invoke_without_command=True)
+@bot.group(case_sensitive=True, invoke_without_command=True, brief='Configurate bot for this server')
 async def config(ctx):
     pass
 
