@@ -68,12 +68,14 @@ async def is_enabled(ctx):
         or not bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['whitelist'])\
         or ctx.author.permissions_in(ctx.channel).administrator:
         return True
-    await ctx.send('This command is disabled in this channel or on this server')
+    else:
+        await ctx.send('This command is disabled in this channel or on this server')
 
 async def is_admin(ctx):
     if ctx.author.permissions_in(ctx.channel).administrator:
         return True
-    await ctx.send('You are not allowed to use this command.\nOnly administrators can use this command.')
+    else:
+        await ctx.send('You are not allowed to use this command.\nOnly administrators can use this command.')
 
 
 @bot.command(hidden=True, help='Returns text typed after $test')
