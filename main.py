@@ -84,19 +84,19 @@ async def test(ctx, arg):
     await ctx.send(arg)
 
 
-@bot.command(description='\"Hello\" in English', brief='\"Hello\" in English', help='Returns \"Hello\" in English')
+@bot.command(hidden=True, description='\"Hello\" in English', brief='\"Hello\" in English', help='Returns \"Hello\" in English')
 @commands.check(is_enabled)
 async def hello(ctx):
     await ctx.send('Hello!')
 
 
-@bot.command(aliases=['gutentag'], description='\"Hello\" in German', brief='\"Hello\" in German', help='Returns \"Hello\" in German')
+@bot.command(hidden=True, aliases=['gutentag'], description='\"Hello\" in German', brief='\"Hello\" in German', help='Returns \"Hello\" in German')
 @commands.check(is_enabled)
 async def hello_german(ctx):
     await ctx.send('Guten tag')
 
 
-@bot.command(aliases=['privet'], description='\"Hello\" in Russian', brief='\"Hello\" in Russian', help='Returns \"Hello\" in Russian')
+@bot.command(hidden=True, aliases=['privet'], description='\"Hello\" in Russian', brief='\"Hello\" in Russian', help='Returns \"Hello\" in Russian')
 @commands.check(is_enabled)
 async def hello_russian(ctx):
     await ctx.send('Приветствую!')
