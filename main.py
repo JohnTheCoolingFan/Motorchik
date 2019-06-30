@@ -69,7 +69,7 @@ async def is_enabled(ctx):
         or ctx.author.permissions_in(ctx.channel).administrator:
         return True
     else:
-        await ctx.send('This command is disabled in this channel or on this server')
+        await ctx.send('This command is disabled in this channel or on this server.')
         return False
 
 async def is_admin(ctx):
