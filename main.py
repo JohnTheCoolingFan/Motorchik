@@ -142,9 +142,9 @@ async def ping(ctx):
 
 @bot.command(aliases=['clear'], description='Clear chat', brief='Clear chat', help='Deletes specified count of messages in this channel. Only for admins and moderators.')
 @commands.check(is_enabled)
-async def clearchat(ctx, arg: int):
+async def clearchat(ctx, messages_count: int):
     if ctx.author.permissions_in(ctx.channel).manage_messages:
-        async for message in ctx.channel.history(limit=arg + 1):
+        async for message in ctx.channel.history(limit=messages_count + 1):
             await message.delete()
 
 @bot.command()
