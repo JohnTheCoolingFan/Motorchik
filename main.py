@@ -70,6 +70,7 @@ async def is_enabled(ctx):
         return True
     else:
         await ctx.send('This command is disabled in this channel or on this server')
+        return False
 
 async def is_admin(ctx):
     if ctx.author.permissions_in(ctx.channel).administrator:
@@ -142,6 +143,7 @@ async def ping(ctx):
 
 @bot.command(aliases=['clear'], description='Clear chat', brief='Clear chat', help='Deletes specified count of messages in this channel. Only for admins and moderators.')
 @commands.check(is_enabled)
+@commands.has_permissions(manage_messages=True)
 async def clearchat(ctx, messages_count: int):
     if ctx.author.permissions_in(ctx.channel).manage_messages:
         async for message in ctx.channel.history(limit=messages_count + 1):
