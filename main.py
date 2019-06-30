@@ -80,8 +80,13 @@ async def is_admin(ctx):
 
 @bot.command(hidden=True, help='Returns text typed after $test')
 @commands.check(is_enabled)
-async def test(ctx, arg):
+async def test(ctx, *, arg):
     await ctx.send(arg)
+
+@bot.command(hidden=True, help='Returns passed arguments count and the arguments', aliases=['advtest', 'atest'])
+@commands.check(is_enabled)
+async def advanced_test(ctx, *args):
+    await ctx.send('Passed {} argiments: {}'.format(len(args), ', '.join(args)))
 
 
 @bot.command(hidden=True, description='\"Hello\" in English', brief='\"Hello\" in English', help='Returns \"Hello\" in English')
