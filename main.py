@@ -147,7 +147,7 @@ async def clearchat(ctx, messages_count: int):
         async for message in ctx.channel.history(limit=messages_count + 1):
             await message.delete()
 
-@bot.command()
+@bot.command(hidden=True)
 @commands.check(is_enabled)
 async def report(ctx):
     await ctx.guild.get_channel(bot_config[str(ctx.guild.id)]['reports_channel_id']).send('Well, `report` command is incomplete.\n{0.author.mention} wanted to report something.'.format(ctx))
