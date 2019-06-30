@@ -62,27 +62,18 @@ async def on_member_remove(member):
 
 
 async def is_enabled(ctx):
-    if bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['enabled']\
+    return bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['enabled']\
         and ctx.channel.id not in bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['blacklist']\
         and (ctx.channel.id in bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['whitelist']\
         or not bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['whitelist'])\
-        or ctx.author.permissions_in(ctx.channel).administrator:
-        return True
-    else:
-        await ctx.send('This command is disabled in this channel or on this server.')
-        return False
-
-async def is_admin(ctx):
-    if ctx.author.permissions_in(ctx.channel).administrator:
-        return True
-    else:
-        await ctx.send('You are not allowed to use this command.\nOnly administrators can use this command.')
+        or ctx.author.permissions_in(ctx.channel).administrator
 
 
 @bot.command(hidden=True, help='Returns text typed after $test')
 @commands.check(is_enabled)
-async def test(ctx, *, arg):
-    await ctx.send(arg)
+async def test(ctx, *, text):
+    await ctx.send(text)
+
 
 @bot.command(hidden=True, help='Returns passed arguments count and the arguments', aliases=['advtest', 'atest'])
 @commands.check(is_enabled)
@@ -142,7 +133,6 @@ async def ping(ctx):
 
 
 @bot.command(aliases=['clear'], description='Clear chat', brief='Clear chat', help='Deletes specified count of messages in this channel. Only for admins and moderators.')
-@commands.check(is_enabled)
 @commands.has_permissions(manage_messages=True)
 async def clearchat(ctx, messages_count: int):
     if ctx.author.permissions_in(ctx.channel).manage_messages:
@@ -268,7 +258,7 @@ async def default_roles(ctx):
     await ctx.send('List of default roles updated.')
 
 
-@config.command()
+@config.command(hidden=True)
 @commands.has_permissions(administrator=True)
 async def reports_channel(ctx):
     bot_config[str(ctx.guild.id)]['reports_channel_id'] = ctx.message.channel_mentions[0].id
@@ -355,6 +345,42 @@ async def add_guild_to_config(guild):
     bot_config[str(guild.id)]['name'] = guild.name
     bot_config[str(guild.id)]['welcome_channel_id'] = guild.text_channels[0].id
     bot_config[str(guild.id)]['log_channel_id'] = guild.text_channels[0].id
+
+
+@test.error
+@advanced_test.error
+@hello.error
+@hello_russian.error
+@hello_german.error
+@guten.error
+@spin.error
+@rickroll.error
+@mods_statistics.error
+@ping.error
+async def commanderror_disabled(ctx, error):
+    if isinstance(error, commands.CheckFailure):
+        await ctx.send('This command is disabled in this channel or on this server.')
+
+
+@config.error
+@enable.error
+@disable.error
+@whitelist.error
+@blacklist.error
+@welcome_channel.error
+@log_channel.error
+@enable_welcome.error
+@disable_welcome.error
+@enable_log.error
+@disable_log.error
+@default_roles.error
+@reports_channel.error
+@list_config.error
+@list_raw.error
+async def commanderror_adminonly(ctx, error):
+    if isinstance(error, commands.CheckFailure):
+        await ctx.send('This command can be used only by server administrator')
+
 
 bot.run(TOKEN)
 
