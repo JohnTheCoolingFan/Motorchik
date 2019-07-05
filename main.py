@@ -161,10 +161,15 @@ class Moderation(commands.Cog):
 bot.add_cog(Moderation(bot))
 
 
-@bot.command(hidden=True)
-@commands.check(is_enabled)
-async def report(ctx):
-    await ctx.guild.get_channel(bot_config[str(ctx.guild.id)]['reports_channel_id']).send('Well, `report` command is incomplete.\n{0.author.mention} wanted to report something.'.format(ctx))
+class Reports(commands.Cog, command_attrs=dict(hidden=True)):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @commands.command()
+    async def report(self, ctx):
+        await ctx.guild.get_channel(bot_config[str(ctx.guild.id)]['reports_channel_id']).send('Well, `report` command is incomplete.\n{0.author.mention} wanted to report something.'.format(ctx))
+
+bot.add_cog(Reports(bot))
 
 
 # Bot configuration commands
