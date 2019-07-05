@@ -99,29 +99,39 @@ class Greetings(commands.Cog):
 bot.add_cog(Greetings(bot))
 
 
-@bot.command(hidden=True, help='Returns text typed after $test')
-@commands.check(is_enabled)
-async def test(ctx, *, text):
-    await ctx.send(text)
+class TestCommands(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @commands.command(help='Returns text typed after $test')
+    async def test(self, ctx, *, text):
+        await ctx.send(text)
+
+    @commands.command(help='Returns passed arguments count and the arguments', aliases=['advtest', 'atest'])
+    async def advanced_test(self, ctx, *args):
+        await ctx.send('Passed {} argiments: {}'.format(len(args), ', '.join(args)))
+
+bot.add_cog(TestCommands(bot))
 
 
-@bot.command(hidden=True, help='Returns passed arguments count and the arguments', aliases=['advtest', 'atest'])
-@commands.check(is_enabled)
-async def advanced_test(ctx, *args):
-    await ctx.send('Passed {} argiments: {}'.format(len(args), ', '.join(args)))
+class FunCommands(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
 
+    @commands.command(help='You spin me right round, baby, right round')
+    async def spin(self, ctx):
+        await ctx.send('https://www.youtube.com/watch?v=PGNiXGX2nLU')
 
-@bot.command(hidden=True, help='You spin me right round, baby, right round')
-@commands.check(is_enabled)
-async def spin(ctx):
-    await ctx.send('https://www.youtube.com/watch?v=PGNiXGX2nLU')
+    @commands.command(aliases=['XcQ'], help='You\'ve got RICKROLLED, LUL')
+    async def rickroll(self, ctx):
+        await ctx.send('<https://www.youtube.com/watch?v=dQw4w9WgXcQ>')
+        await ctx.send('<:kappa_jtcf:546748910765604875>')
 
+    @commands.command()
+    async def ping(self, ctx):
+        await ctx.send('pong')
 
-@bot.command(hidden=True, aliases=['XcQ'], help='You\'ve got RICKROLLED, LUL')
-@commands.check(is_enabled)
-async def rickroll(ctx):
-    await ctx.send('<https://www.youtube.com/watch?v=dQw4w9WgXcQ>')
-    await ctx.send('<:kappa_jtcf:546748910765604875>')
+bot.add_cog(FunCommands(bot))
 
 
 @bot.command(aliases=['modstat'], description='Info about mods', brief='Info about mods', help='Prints a bunch of commands for uBot to display info about mods')
@@ -130,12 +140,6 @@ async def mods_statistics(ctx):
     for modname in MOD_LIST:
         await ctx.send(content='>>{0}<<'.format(modname), delete_after=1)
     await ctx.message.delete()
-
-
-@bot.command(hidden=True, help='pong')
-@commands.check(is_enabled)
-async def ping(ctx):
-    await ctx.send('pong')
 
 
 @bot.command(aliases=['clear'], description='Clear chat', brief='Clear chat', help='Deletes specified count of messages in this channel. Only for admins and moderators.')
