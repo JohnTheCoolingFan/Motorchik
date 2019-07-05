@@ -355,10 +355,6 @@ async def add_guild_to_config(guild):
 
 @test.error
 @advanced_test.error
-@hello.error
-@hello_russian.error
-@hello_german.error
-@guten.error
 @spin.error
 @rickroll.error
 @mods_statistics.error
