@@ -109,7 +109,7 @@ class TestCommands(commands.Cog):
 
     @commands.command(help='Returns passed arguments count and the arguments', aliases=['advtest', 'atest'])
     async def advanced_test(self, ctx, *args):
-        await ctx.send('Passed {} argiments: {}'.format(len(args), ', '.join(args)))
+        await ctx.send('Passed {} arguments: {}'.format(len(args), ', '.join(args)))
 
 bot.add_cog(TestCommands(bot))
 
