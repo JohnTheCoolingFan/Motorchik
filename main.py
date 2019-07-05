@@ -69,6 +69,36 @@ async def is_enabled(ctx):
         or ctx.author.permissions_in(ctx.channel).administrator
 
 
+class Greetings(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @commands.Cog.listener()
+    async def on_member_join(self, member):
+        if bot_config[str(member.guild.id)]['welcome_enabled']:
+            await member.guild.get_channel(bot_config[str(member.guild.id)]['welcome_channel_id']).send('Welcome, {0.mention}'.format(member))
+        if bot_config[str(member.guild.id)]['default_roles']:
+            await member.add_roles(*[member.guild.get_role(role_id) for role_id in bot_config[str(member.guild.id)]['default_roles']], reason='New member join.')
+
+    @commands.command(description='\"Hello\" in English', brief='\"Hello\" in English', help='Returns \"Hello\" in English')
+    async def hello(self, ctx):
+        await ctx.send('Hello!')
+
+    @commands.command(aliases=['gutentag'], description='\"Hello\" in German', brief='\"Hello\" in German', help='Returns \"Hello\" in German')
+    async def hello_german(self, ctx):
+        await ctx.send('Guten tag')
+
+    @commands.command(aliases=['privet'], description='\"Hello\" in Russian', brief='\"Hello\" in Russian', help='Returns \"Hello\" in Russian')
+    async def hello_russian(self, ctx):
+        await ctx.send('Приветствую!')
+
+    @commands.command(hidden=True, help='tag')
+    async def guten(self, ctx):
+        await ctx.send('tag')
+
+bot.add_cog(Greetings(bot))
+
+
 @bot.command(hidden=True, help='Returns text typed after $test')
 @commands.check(is_enabled)
 async def test(ctx, *, text):
@@ -79,30 +109,6 @@ async def test(ctx, *, text):
 @commands.check(is_enabled)
 async def advanced_test(ctx, *args):
     await ctx.send('Passed {} argiments: {}'.format(len(args), ', '.join(args)))
-
-
-@bot.command(hidden=True, description='\"Hello\" in English', brief='\"Hello\" in English', help='Returns \"Hello\" in English')
-@commands.check(is_enabled)
-async def hello(ctx):
-    await ctx.send('Hello!')
-
-
-@bot.command(hidden=True, aliases=['gutentag'], description='\"Hello\" in German', brief='\"Hello\" in German', help='Returns \"Hello\" in German')
-@commands.check(is_enabled)
-async def hello_german(ctx):
-    await ctx.send('Guten tag')
-
-
-@bot.command(hidden=True, aliases=['privet'], description='\"Hello\" in Russian', brief='\"Hello\" in Russian', help='Returns \"Hello\" in Russian')
-@commands.check(is_enabled)
-async def hello_russian(ctx):
-    await ctx.send('Приветствую!')
-
-
-@bot.command(hidden=True, help='tag')
-@commands.check(is_enabled)
-async def guten(ctx):
-    await ctx.send('tag')
 
 
 @bot.command(hidden=True, help='You spin me right round, baby, right round')
