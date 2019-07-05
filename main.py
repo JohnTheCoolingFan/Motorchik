@@ -353,37 +353,6 @@ async def add_guild_to_config(guild):
     bot_config[str(guild.id)]['log_channel_id'] = guild.text_channels[0].id
 
 
-@test.error
-@advanced_test.error
-@spin.error
-@rickroll.error
-@mods_statistics.error
-@ping.error
-async def commanderror_disabled(ctx, error):
-    if isinstance(error, commands.CheckFailure):
-        await ctx.send('This command is disabled in this channel or on this server.')
-
-
-@config.error
-@enable.error
-@disable.error
-@whitelist.error
-@blacklist.error
-@welcome_channel.error
-@log_channel.error
-@enable_welcome.error
-@disable_welcome.error
-@enable_log.error
-@disable_log.error
-@default_roles.error
-@reports_channel.error
-@list_config.error
-@list_raw.error
-async def commanderror_adminonly(ctx, error):
-    if isinstance(error, commands.CheckFailure):
-        await ctx.send('This command can be used only by server administrator')
-
-
 bot.run(TOKEN)
 
 TOKEN = ''
