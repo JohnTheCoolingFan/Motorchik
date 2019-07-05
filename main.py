@@ -99,7 +99,7 @@ class Greetings(commands.Cog):
 bot.add_cog(Greetings(bot))
 
 
-class TestCommands(commands.Cog):
+class TestCommands(commands.Cog, name='Test Commands', command_attrs=dict(hidden=True)):
     def __init__(self, bot):
         self.bot = bot
 
@@ -114,7 +114,7 @@ class TestCommands(commands.Cog):
 bot.add_cog(TestCommands(bot))
 
 
-class FunCommands(commands.Cog):
+class FunCommands(commands.Cog, name='Fun'):
     def __init__(self, bot):
         self.bot = bot
 
@@ -134,12 +134,17 @@ class FunCommands(commands.Cog):
 bot.add_cog(FunCommands(bot))
 
 
-@bot.command(aliases=['modstat'], description='Info about mods', brief='Info about mods', help='Prints a bunch of commands for uBot to display info about mods')
-@commands.check(is_enabled)
-async def mods_statistics(ctx):
-    for modname in MOD_LIST:
-        await ctx.send(content='>>{0}<<'.format(modname), delete_after=1)
-    await ctx.message.delete()
+class FactorioCog(commands.Cog, name='Factorio'):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @commands.command(aliases=['modstat'], description='Info about mods', brief='Info about mods', help='Prints a bunch of commands for uBot to display info about mods')
+    async def mods_statistics(self, ctx):
+        for modname in MOD_LIST:
+            await ctx.send(content='>>{0}<<'.format(modname), delete_after=1)
+        await ctx.message.delete()
+
+bot.add_cog(FactorioCog(bot))
 
 
 @bot.command(aliases=['clear'], description='Clear chat', brief='Clear chat', help='Deletes specified count of messages in this channel. Only for admins and moderators.')
@@ -148,6 +153,7 @@ async def clearchat(ctx, messages_count: int):
     if ctx.author.permissions_in(ctx.channel).manage_messages:
         async for message in ctx.channel.history(limit=messages_count + 1):
             await message.delete()
+
 
 @bot.command(hidden=True)
 @commands.check(is_enabled)
