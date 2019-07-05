@@ -147,12 +147,18 @@ class FactorioCog(commands.Cog, name='Factorio'):
 bot.add_cog(FactorioCog(bot))
 
 
-@bot.command(aliases=['clear'], description='Clear chat', brief='Clear chat', help='Deletes specified count of messages in this channel. Only for admins and moderators.')
-@commands.has_permissions(manage_messages=True)
-async def clearchat(ctx, messages_count: int):
-    if ctx.author.permissions_in(ctx.channel).manage_messages:
-        async for message in ctx.channel.history(limit=messages_count + 1):
+class Moderation(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @commands.command(aliases=['clear'], description='Clear chat', brief='Clear chat', help='Deletes specified count of messages in this channel. Only for admins and moderators.')
+    @commands.has_permissions(manage_messages=True)
+    async def clearchat(self, ctx, message_count: int):
+        await ctx.message.delete()
+        async for message in ctx.channel.history(limit=message_count):
             await message.delete()
+
+bot.add_cog(Moderation(bot))
 
 
 @bot.command(hidden=True)
