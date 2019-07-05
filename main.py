@@ -172,170 +172,144 @@ class Reports(commands.Cog, command_attrs=dict(hidden=True)):
 bot.add_cog(Reports(bot))
 
 
-# Bot configuration commands
-@bot.group(case_sensitive=True, invoke_without_command=True, brief='Configurate bot for this server')
-@commands.has_permissions(administrator=True)
-async def config(ctx):
-    pass
+class Configuration(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
 
+    async def cog_check(self, ctx):
+        return ctx.author.permissions_in(ctx.channel).administrator
 
-@config.command()
-@commands.has_permissions(administrator=True)
-async def enable(ctx, command_name):
-    if bot_config[str(ctx.guild.id)]['commands'].get(command_name):
-        bot_config[str(ctx.guild.id)]['commands'][command_name]['enabled'] = True
-        await write_config()
-        await ctx.send('Enabled `{0}` command'.format(command_name))
-    else:
-        await ctx.send('Command `{0}` not found'.format(command_name))
+    async def cog_command_error(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            await ctx.send('Only administrator can configurate bot settings')
 
+    @commands.group(case_sensitive=True, invoke_without_command=True, brief='Configurate bot for this server')
+    async def config(self, ctx):
+        await ctx.send_help(ctx.command)
 
-@config.command()
-@commands.has_permissions(administrator=True)
-async def disable(ctx, command_name):
-    if bot_config[str(ctx.guild.id)]['commands'].get(command_name):
-        bot_config[str(ctx.guild.id)]['commands'][command_name]['enabled'] = False
-        await write_config()
-        await ctx.send('Disabled `{0}` command'.format(command_name))
-    else:
-        await ctx.send('Command `{0}` not found'.format(command_name))
-
-
-@config.command()
-@commands.has_permissions(administrator=True)
-async def whitelist(ctx, command_name):
-    if bot_config[str(ctx.guild.id)]['commands'].get(command_name):
-        bot_config[str(ctx.guild.id)]['commands'][command_name]['whitelist'] = list({channel.id for channel in ctx.message.channel_mentions})
-        await write_config()
-        await ctx.send('Whitelist channel list for `{0}` command updated'.format(command_name))
-    else:
-        await ctx.send('Command `{0}` not found'.format(command_name))
-
-
-@config.command()
-@commands.has_permissions(administrator=True)
-async def blacklist(ctx, command_name):
-    if bot_config[str(ctx.guild.id)]['commands'].get(command_name):
-        bot_config[str(ctx.guild.id)]['commands'][command_name]['blacklist'] = list({channel.id for channel in ctx.message.channel_mentions})
-        await write_config()
-        await ctx.send('Blacklist channel list for `{0}` command updated'.format(command_name))
-    else:
-        await ctx.send('Command `{0}` not found'.format(command_name))
-
-
-@config.command()
-@commands.has_permissions(administrator=True)
-async def welcome_channel(ctx):
-    if not len({channel.id for channel in ctx.message.channel_mentions}) > 1:
-        bot_config[str(ctx.guild.id)]['welcome_channel_id'] = ctx.message.channel_mentions[0].id
-        await write_config()
-        await ctx.send('Welcome channel set to <#{0}>.'.format(bot_config[str(ctx.guild.id)]['welcome_channel_id']))
-    else:
-        await ctx.send('Too much channels provided. Please, provide only one channel.')
-
-
-@config.command()
-@commands.has_permissions(administrator=True)
-async def log_channel(ctx):
-    if not len({channel.id for channel in ctx.message.channel_mentions}) > 1:
-        bot_config[str(ctx.guild.id)]['log_channel_id'] = ctx.message.channel_mentions[0].id
-        await write_config()
-        await ctx.send('Log channel set to <#{0}>.'.format(bot_config[str(ctx.guild.id)]['log_channel_id']))
-    else:
-        await ctx.send('Too much channels provided. Please, provide only one channel.')
-
-
-@config.command()
-@commands.has_permissions(administrator=True)
-async def enable_welcome(ctx):
-    bot_config[str(ctx.guild.id)]['welcome_enabled'] = True
-    await write_config()
-    await ctx.send('Welcome messsages in channel <#{0}> enabled.'.format(bot_config[str(ctx.guild.id)]['welcome_channel_id']))
-
-
-@config.command()
-@commands.has_permissions(administrator=True)
-async def disable_welcome(ctx):
-    bot_config[str(ctx.guild.id)]['welcome_enabled'] = False
-    await write_config()
-    await ctx.send('Welcome messsages in channel <#{0}> disabled.'.format(bot_config[str(ctx.guild.id)]['welcome_channel_id']))
-
-
-@config.command()
-@commands.has_permissions(administrator=True)
-async def enable_log(ctx):
-    bot_config[str(ctx.guild.id)]['log_enabled'] = True
-    await write_config()
-    await ctx.send('Log messsages in channel <#{0}> enabled.'.format(bot_config[str(ctx.guild.id)]['log_channel_id']))
-
-
-@config.command()
-@commands.has_permissions(administrator=True)
-async def disable_log(ctx):
-    bot_config[str(ctx.guild.id)]['log_enabled'] = False
-    await write_config()
-    await ctx.send('Log messsages in channel <#{0}> disabled.'.format(bot_config[str(ctx.guild.id)]['log_channel_id']))
-
-
-@config.command()
-@commands.has_permissions(administrator=True)
-async def default_roles(ctx):
-    bot_config[str(ctx.guild.id)]["default_roles"] = list({role.id for role in ctx.message.role_mentions})
-    await write_config()
-    await ctx.send('List of default roles updated.')
-
-
-@config.command(hidden=True)
-@commands.has_permissions(administrator=True)
-async def reports_channel(ctx):
-    bot_config[str(ctx.guild.id)]['reports_channel_id'] = ctx.message.channel_mentions[0].id
-    await write_config()
-    await ctx.send('Channel for report messages is set to <#{0}>'.format(bot_config[str(ctx.guild.id)]['reports_channel_id']))
-
-
-@config.group(name='list', case_sensitive=True, invoke_without_command=True)
-@commands.has_permissions(administrator=True)
-async def list_config(ctx):
-    bot_guild_cfg = bot_config[str(ctx.guild.id)]
-    bot_guild_com_cfg = bot_guild_cfg['commands']
-    config_embed = discord.Embed(title='Config for server **{0.guild.name}**'.format(ctx))
-    config_embed.add_field(name='***Default roles***', value='\n'.join(['<@&{0}>'.format(roleid) for roleid in bot_guild_cfg['default_roles']]), inline=False)
-    config_embed.add_field(name='***Welcome messages***', value='<#{0}>'.format(bot_guild_cfg['welcome_channel_id']) if bot_guild_cfg['welcome_enabled'] else 'Disabled', inline=True)
-    config_embed.add_field(name='***Log messages***', value='<#{0}>'.format(bot_guild_cfg['log_channel_id']) if bot_guild_cfg['log_enabled'] else 'Disabled')
-
-    """
-    config_embed.add_field(name = '***Commands***', value = 'Commands settings on this server', inline = False)
-    for command in bot.commands:
-        command_filters_state = ''
-        command_filters = 'Not filtered by channel'
-        command_brief = command.brief
-        if not command_brief:
-            command_brief = 'No brief description'
-        if bot_guild_com_cfg[command.name]['enabled']:
-            if bot_guild_com_cfg[command.name]['whitelist']:
-                command_filters_state = 'Whitelisted in:'
-                command_filters = '\n'.join({'<#'+str(whitelist_id)+'>' for whitelist_id in bot_guild_com_cfg[command.name]['whitelist']})
-            elif bot_guild_com_cfg[command.name]['blacklist']:
-                command_filters_state = 'Blacklisted in:'
-                command_filters = '\n'.join({'<#'+str(blacklist_id)+'>' for blacklist_id in bot_guild_com_cfg[command.name]['blacklist']})
-            else:
-                command_filters_state = 'Enabled'
+    @config.command()
+    async def enable(self, ctx, command_name):
+        if bot_config[str(ctx.guild.id)]['commands'].get(command_name):
+            bot_config[str(ctx.guild.id)]['commands'][command_name]['enabled'] = True
+            await write_config()
+            await ctx.send('Enabled `{0}` command'.format(command_name))
         else:
-            command_filters_state = 'Disabled'
-        config_embed.add_field(name = '**`'+command.name+'`**', value = command_brief, inline = True)
-        config_embed.add_field(name = '**'+command_filters_state+'**', value = command_filters, inline = False)
-    """
+            await ctx.send('Command `{0}` not found'.format(command_name))
 
-    config_commands_embed = '\n'.join([('**`'+command.name+'`**:\n'+((('Whitelisted in:\n'+'\n'.join(['<#'+str(whitelist_id)+'>' for whitelist_id in bot_guild_com_cfg[command.name]['whitelist']])) if bot_guild_com_cfg[command.name]['whitelist'] else (('Blacklisted in:\n'+'\n'.join(['<#'+str(blacklist_id)+'>' for blacklist_id in bot_guild_com_cfg[command.name]['blacklist']])) if bot_guild_com_cfg[command.name]['blacklist'] else 'Enabled')) if bot_guild_com_cfg[command.name]['enabled'] else 'Disabled')+'\n') for command in bot.commands])
-    config_embed.add_field(name = '***Commands***', value = config_commands_embed, inline = False)
-    await ctx.send(embed=config_embed)
+    @config.command()
+    async def disable(self, ctx, command_name):
+        if bot_config[str(ctx.guild.id)]['commands'].get(command_name):
+            bot_config[str(ctx.guild.id)]['commands'][command_name]['enabled'] = False
+            await write_config()
+            await ctx.send('Disabled `{0}` command'.format(command_name))
+        else:
+            await ctx.send('Command `{0}` not found'.format(command_name))
 
+    @config.command()
+    async def whitelist(self, ctx, command_name, *whitelist_channels: discord.TextChannel):
+        if bot_config[str(ctx.guild.id)]['commands'].get(command_name):
+            bot_config[str(ctx.guild.id)]['commands'][command_name]['whitelist'] = {channel.id for channel in whitelist_channels}
+            await write_config()
+            await ctx.send('Whitelist channel list for `{0}` command updated'.format(command_name))
+        else:
+            await ctx.send('Command `{0}` not found'.format(command_name))
 
-@list_config.command(name='raw')
-@commands.has_permissions(administrator=True)
-async def list_raw(ctx):
-    await ctx.send('```json\n{0}\n```'.format(json.dumps(bot_config[str(ctx.guild.id)], sort_keys=True, indent=4)))
+    @config.command()
+    async def blacklist(self, ctx, command_name, *blacklist_channels: discord.TextChannel):
+        if bot_config[str(ctx.guild.id)]['commands'].get(command_name):
+            bot_config[str(ctx.guild.id)]['commands'][command_name]['blacklist'] = {channel.id for channel in blacklist_channels}
+            await write_config()
+            await ctx.send('Blacklist channel list for `{0}` command updated'.format(command_name))
+        else:
+            await ctx.send('Command `{0}` not found'.format(command_name))
 
+    @config.command()
+    async def welcome_channel(self, ctx, welcome_channel: discord.TextChannel):
+        bot_config[str(ctx.guild.id)]['welcome_channel_id'] = welcome_channel.id
+        await write_config()
+        await ctx.send('Welcome channel is set to <#{0.id}>'.format(welcome_channel))
+
+    @config.command()
+    async def log_channel(self, ctx, log_channel: discord.TextChannel):
+        bot_config[str(ctx.guild.id)]['log_channel_id'] = log_channel.id
+        await write_config()
+        await ctx.send('Log channel is set to <#{0.id}>'.format(log_channel))
+
+    @config.command()
+    async def enable_welcome(self, ctx):
+        bot_config[str(ctx.guild.id)]['welcome_enabled'] = True
+        await write_config()
+        await ctx.send('Welcome messages enabled')
+
+    @config.command()
+    async def disable_welcome(self, ctx):
+        bot_config[str(ctx.guild.id)]['welcome_enabled'] = False
+        await write_config()
+        await ctx.send('Welcome messages disabled')
+
+    @config.command()
+    async def enable_log(self, ctx):
+        bot_config[str(ctx.guild.id)]['log_enabled'] = True
+        await write_config()
+        await ctx.send('Log messsages enabled.')
+
+    @config.command()
+    async def disable_log(self, ctx):
+        bot_config[str(ctx.guild.id)]['log_enabled'] = False
+        await write_config()
+        await ctx.send('Log messsages disabled.')
+
+    @config.command()
+    async def default_roles(self, ctx, *roles: discord.Role):
+        bot_config[str(ctx.guild.id)]['default_roles'] = {role.id for role in roles}
+        await write_config()
+        await ctx.send('List of default roles updated.')
+
+    @config.command(hidden=True)
+    async def reports_channel(self, ctx, channel: discord.TextChannel):
+        bot_config[str(ctx.guild.id)]['reports_channel_id'] = channel.id
+        await write_config()
+        await ctx.send('Channel for report messages is set to <#{0.id}>'.format(channel))
+
+    @config.group(name='list', case_sensitive=True, invoke_without_command=True)
+    async def list_config(self, ctx):
+        bot_guild_cfg = bot_config[str(ctx.guild.id)]
+        bot_guild_com_cfg = bot_guild_cfg['commands']
+        config_embed = discord.Embed(title='Config for server **{0.guild.name}**'.format(ctx))
+        config_embed.add_field(name='***Default roles***', value='\n'.join(['<@&{0}>'.format(roleid) for roleid in bot_guild_cfg['default_roles']]), inline=False)
+        config_embed.add_field(name='***Welcome messages***', value='<#{0}>'.format(bot_guild_cfg['welcome_channel_id']) if bot_guild_cfg['welcome_enabled'] else 'Disabled', inline=True)
+        config_embed.add_field(name='***Log messages***', value='<#{0}>'.format(bot_guild_cfg['log_channel_id']) if bot_guild_cfg['log_enabled'] else 'Disabled')
+
+        """
+        config_embed.add_field(name = '***Commands***', value = 'Commands settings on this server', inline = False)
+        for command in bot.commands:
+            command_filters_state = ''
+            command_filters = 'Not filtered by channel'
+            command_brief = command.brief
+            if not command_brief:
+                command_brief = 'No brief description'
+            if bot_guild_com_cfg[command.name]['enabled']:
+                if bot_guild_com_cfg[command.name]['whitelist']:
+                    command_filters_state = 'Whitelisted in:'
+                    command_filters = '\n'.join({'<#'+str(whitelist_id)+'>' for whitelist_id in bot_guild_com_cfg[command.name]['whitelist']})
+                elif bot_guild_com_cfg[command.name]['blacklist']:
+                    command_filters_state = 'Blacklisted in:'
+                    command_filters = '\n'.join({'<#'+str(blacklist_id)+'>' for blacklist_id in bot_guild_com_cfg[command.name]['blacklist']})
+                else:
+                    command_filters_state = 'Enabled'
+            else:
+                command_filters_state = 'Disabled'
+            config_embed.add_field(name = '**`'+command.name+'`**', value = command_brief, inline = True)
+            config_embed.add_field(name = '**'+command_filters_state+'**', value = command_filters, inline = False)
+        """
+
+        config_commands_embed = '\n'.join([('**`'+command.name+'`**:\n'+((('Whitelisted in:\n'+'\n'.join(['<#'+str(whitelist_id)+'>' for whitelist_id in bot_guild_com_cfg[command.name]['whitelist']])) if bot_guild_com_cfg[command.name]['whitelist'] else (('Blacklisted in:\n'+'\n'.join(['<#'+str(blacklist_id)+'>' for blacklist_id in bot_guild_com_cfg[command.name]['blacklist']])) if bot_guild_com_cfg[command.name]['blacklist'] else 'Enabled')) if bot_guild_com_cfg[command.name]['enabled'] else 'Disabled')+'\n') for command in bot.commands])
+        config_embed.add_field(name = '***Commands***', value = config_commands_embed, inline = False)
+        await ctx.send(embed=config_embed)
+
+    @list_config.command(name='raw')
+    async def list_config_raw(self, ctx):
+        await ctx.send('```json\n{0}\n```'.format(json.dumps(bot_config[str(ctx.guild.id)], sort_keys=True, indent=4)))
 
 # Config file load
 config_file = open('config.json', 'r')
