@@ -302,6 +302,9 @@ class Configuration(commands.Cog):
     async def list_config_raw(self, ctx):
         await ctx.send('```json\n{0}\n```'.format(json.dumps(bot_config[str(ctx.guild.id)], sort_keys=True, indent=4)))
 
+bot.add_cog(Configuration(bot))
+
+
 # Config file load
 config_file = open('config.json', 'r')
 bot_config = json.loads(config_file.read())
