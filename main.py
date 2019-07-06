@@ -47,20 +47,6 @@ async def on_command_error(ctx, error):
         await ctx.send('Exception raised while executing command `{0.command.name}`:\n```\n{1}\n```'.format(ctx, error), delete_after=5)
 
 
-@bot.event
-async def on_member_join(member):
-    if bot_config[str(member.guild.id)]['welcome_enabled']:
-        await member.guild.get_channel(bot_config[str(member.guild.id)]['welcome_channel_id']).send('Welcome, {0.mention}'.format(member))
-    if bot_config[str(member.guild.id)]['default_roles']:
-        await member.add_roles(*[member.guild.get_role(role_id) for role_id in bot_config[str(member.guild.id)]['default_roles']], reason='Default roles given on member join.')
-
-
-@bot.event
-async def on_member_remove(member):
-    if bot_config[str(member.guild.id)]['welcome_enabled']:
-        await member.guild.get_channel(bot_config[str(member.guild.id)]['welcome_channel_id']).send('Goodbye, {0} (ID {1})'.format(str(member), member.id))
-
-
 async def is_enabled(ctx):
     return bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['enabled']\
         and ctx.channel.id not in bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['blacklist']\
@@ -79,6 +65,11 @@ class Greetings(commands.Cog):
             await member.guild.get_channel(bot_config[str(member.guild.id)]['welcome_channel_id']).send('Welcome, {0.mention}'.format(member))
         if bot_config[str(member.guild.id)]['default_roles']:
             await member.add_roles(*[member.guild.get_role(role_id) for role_id in bot_config[str(member.guild.id)]['default_roles']], reason='New member join.')
+
+    @commands.Cog.listener()
+    async def on_member_remove(self, member):
+        if bot_config[str(member.guild.id)]['welcome_enabled']:
+            await member.guild.get_channel(bot_config[str(member.guild.id)]['welcome_channel_id']).send('Goodbye, {0} (ID:{1})'.format(str(member), member.id))
 
     @commands.command(description='\"Hello\" in English', brief='\"Hello\" in English', help='Returns \"Hello\" in English')
     async def hello(self, ctx):
