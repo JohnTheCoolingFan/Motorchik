@@ -35,14 +35,6 @@ async def on_message(message):
     await bot.process_commands(message)
 
 
-async def is_enabled(ctx):
-    return bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['enabled']\
-        and ctx.channel.id not in bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['blacklist']\
-        and (ctx.channel.id in bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['whitelist']\
-        or not bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['whitelist'])\
-        or ctx.author.permissions_in(ctx.channel).administrator
-
-
 class Greetings(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -291,6 +283,14 @@ class Configuration(commands.Cog):
         await ctx.send('```json\n{0}\n```'.format(json.dumps(bot_config[str(ctx.guild.id)], sort_keys=True, indent=4)))
 
 bot.add_cog(Configuration(bot))
+
+
+async def is_enabled(ctx):
+    return bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['enabled']\
+        and ctx.channel.id not in bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['blacklist']\
+        and (ctx.channel.id in bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['whitelist']\
+        or not bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['whitelist'])\
+        or ctx.author.permissions_in(ctx.channel).administrator
 
 
 # Config file load
