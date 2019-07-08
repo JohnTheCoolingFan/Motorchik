@@ -9,6 +9,7 @@
 from discord.ext import commands
 import discord
 import json
+import random
 
 tokenfile = open('token.txt', 'r')
 TOKEN = tokenfile.read().rstrip()
@@ -28,11 +29,8 @@ async def on_ready():
 
 @bot.event
 async def on_message(message):
-    if message.author == bot.user:
-        return
-
-    if message.content.startswith('<@{0}>'.format(bot.user.id)):
-        await message.channel.send('What?')
+    if bot.user.id in message.raw_mentions:
+        await message.channel.send(random.choice(['Yeah?', 'What?', 'Yeah, I\'m here.', 'Did I missed something?', 'Yep', 'Nah', 'Uhm...']))
 
     await bot.process_commands(message)
 
