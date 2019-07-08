@@ -48,15 +48,13 @@ class BotConfig():
             self.bot_config = bot_config
             self.raw_config = bot_config.raw_config[str(guild.id)]
 
-        async def enable_command(self, command_name):
+        async def switch_command(self, command_name, new_state):
             if self.raw_config['commands'].get(command_name):
-                self.raw_config['commands'][command_name]['enabled'] = True
+                self.raw_config['commands'][command_name]['enabled'] = new_state
                 await self.bot_config.write()
-
-        async def disable_command(self, command_name):
-            if self.raw_config['commands'].get(command_name):
-                self.raw_config['commands'][command_name]['enabled'] = False
-                await self.bot_config.write()
+                return True
+            else:
+                return False
 
 
 @bot.event
