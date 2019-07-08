@@ -53,7 +53,7 @@ class BotConfig():
                 self.raw_config['commands'][command_name]['enabled'] = True
                 await self.bot_config.write()
 
-        async def diable_command(self, command_name):
+        async def disable_command(self, command_name):
             if self.raw_config['commands'].get(command_name):
                 self.raw_config['commands'][command_name]['enabled'] = False
                 await self.bot_config.write()
