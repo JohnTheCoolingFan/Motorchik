@@ -20,6 +20,45 @@ DEFAULT_GUILD_CONFIG = {'name': '', 'welcome_channel_id': 0, 'welcome_enabled': 
 
 bot = commands.Bot(command_prefix='$')
 
+
+class BotConfig():
+    def __init__(self, bot, filename):
+        self.bot = bot
+        config_file = open(filename, 'r')
+        self.raw_config = json.loads(config_file.read())
+        config_file.close()
+        self.filename = filename
+
+    async def write(self):
+        config_file = open(self.filename, 'w')
+        config_file.write(json.dumps(self.raw_config, sort_keys=True, indent=4))
+        config_file.close()
+
+    async def check(self):
+        # Check that all guild where bot is are in config
+        for guild in self.bot.guilds:
+            if str(guild.id) not in self.raw_config.keys():
+                print('Guild "{0.name}" ({0.id}) not found in config.'.format(guild))
+
+        # Check guild-specific configs
+
+    class GuildConfig():
+        def __init__(self, guild, bot_config):
+            self.guild = guild
+            self.bot_config = bot_config
+            self.raw_config = bot_config.raw_config[str(guild.id)]
+
+        async def enable_command(self, command_name):
+            if self.raw_config['commands'].get(command_name):
+                self.raw_config['commands'][command_name]['enabled'] = True
+                await self.bot_config.write()
+
+        async def diable_command(self, command_name):
+            if self.raw_config['commands'].get(command_name):
+                self.raw_config['commands'][command_name]['enabled'] = False
+                await self.bot_config.write()
+
+
 @bot.event
 async def on_ready():
     print('Logged in as {0.user}'.format(bot))
