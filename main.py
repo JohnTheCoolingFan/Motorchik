@@ -27,17 +27,14 @@ async def on_ready():
     await check_config()
 
 
-@bot.event
-async def on_message(message):
-    if bot.user.id in message.raw_mentions:
-        await message.channel.send(random.choice(['Yeah?', 'What?', 'Yeah, I\'m here.', 'Did I missed something?', 'Yep', 'Nah', 'Uhm...']))
-
-    await bot.process_commands(message)
-
-
 class Greetings(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if self.bot.user.id in message.raw_mentions:
+            await message.channel.send(random.choice(['Yeah?', 'What?', 'Yeah, I\'m here.', 'Did I missed something?', 'Yep', 'Nah', 'Uhm...']))
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
