@@ -329,4 +329,4 @@ async def add_guild_to_config(guild):
 
 bot.run(TOKEN)
 
-TOKEN = ''
+del TOKEN
