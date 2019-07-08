@@ -35,16 +35,6 @@ async def on_message(message):
     await bot.process_commands(message)
 
 
-@bot.event
-async def on_command_error(ctx, error):
-    if isinstance(error, commands.CheckFailure):
-        pass
-    elif isinstance(error, commands.CommandNotFound):
-        pass
-    else:
-        await ctx.send('Exception raised while executing command `{0.command.name}`:\n```\n{1}\n```'.format(ctx, error), delete_after=5)
-
-
 async def is_enabled(ctx):
     return bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['enabled']\
         and ctx.channel.id not in bot_config[str(ctx.guild.id)]['commands'][ctx.command.name]['blacklist']\
