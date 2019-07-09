@@ -35,12 +35,26 @@ class BotConfig():
         config_file.close()
 
     async def check(self):
+        print('Checking config')
         # Check that all guild where bot is are in config
         for guild in self.bot.guilds:
             if str(guild.id) not in self.raw_config.keys():
                 print('Guild "{0.name}" ({0.id}) not found in config.'.format(guild))
+                await self.add_guild(guild)
 
-        # Check guild-specific configs
+        # Check guild configs
+        for guild_id, guild_config in self.raw_config.items():
+            for command in bot.commands:
+                if command.name not in guild_config['commands'].keys():
+                    print('Config for command "{0}" not found in config of guild "{1}"'.format(command.name, guild_config['name']+'(ID '+guild_id+')'))
+                    guild_config['commands'][command.name] = {'whitelist': [], 'blacklist': [], 'enabled': True}
+
+        await self.write()
+        print('Config check succesful')
+
+    async def add_guild(self, guild):
+        defaul_channel = guild.system_channel.id if guild.system_channel is not None else guild.text_channels[0].id
+        self.raw_config[str(guild.id)] = {'name': guild.name, 'welcome_channel_id': defaul_channel, 'log_channel_id': defaul_channel, 'welcome_enabled': False, 'log_enabled': False, 'report_channel_id': defaul_channel, 'default_roles': [], 'commands': {}}
 
     class GuildConfig():
         def __init__(self, guild, bot_config):
