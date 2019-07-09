@@ -47,10 +47,19 @@ class BotConfig():
             self.guild = guild
             self.bot_config = bot_config
             self.raw_config = bot_config.raw_config[str(guild.id)]
+            self.commands = self.raw_config['commands'].keys()
 
         async def switch_command(self, command_name, new_state):
-            if self.raw_config['commands'].get(command_name):
+            if command_name in self.commands:
                 self.raw_config['commands'][command_name]['enabled'] = new_state
+                await self.bot_config.write()
+                return True
+            else:
+                return False
+
+        async def command_filter(self, command_name, filter_name, new_filter):
+            if command_name in self.commands:
+                self.raw_config['commands'][command_name][filter_name] = new_filter
                 await self.bot_config.write()
                 return True
             else:
