@@ -49,6 +49,7 @@ class BotConfig():
                     print('Config for command "{0}" not found in config of guild "{1}"'.format(command.name, guild_config['name']+'(ID '+guild_id+')'))
                     guild_config['commands'][command.name] = {'whitelist': [], 'blacklist': [], 'enabled': True}
 
+        # Write config
         await self.write()
         print('Config check succesful')
 
