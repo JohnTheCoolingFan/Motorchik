@@ -65,6 +65,21 @@ class BotConfig():
             else:
                 return False
 
+        async def set_messages(self, messages_type, new_id):
+            self.raw_config[messages_type+'_channel_id'] = new_id
+            await self.bot_config.write()
+
+        async def switch_messages(self, messages_type, new_state):
+            self.raw_config[messages_type+'_enabled'] = new_state
+            await self.bot_config.write()
+
+        async def set_default_roles(self, new_roles):
+            self.raw_config['default_roles'] = new_roles
+            await self.bot_config.write()
+
+        def json_config(self):
+            return json.dumps(self.raw_config, sort_keys=True, indent=4)
+
 
 @bot.event
 async def on_ready():
