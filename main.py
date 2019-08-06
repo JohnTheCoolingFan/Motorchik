@@ -336,7 +336,7 @@ class Configuration(commands.Cog):
     @list_config.command(name='raw')
     async def list_config_raw(self, ctx):
         guild_config = bot_config.GuildConfig(ctx.guild, bot_config)
-        await ctx.send('```json\n{0}\n```'.format(guild_config.json_config()))
+        await ctx.send('```json\n'+guild_config.json_config()+'\n```')
 
 bot.add_cog(Configuration(bot))
 
