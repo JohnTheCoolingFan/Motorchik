@@ -110,7 +110,7 @@ class BotConfig():
         def json_config(self):
             return json.dumps(self.raw_config, sort_keys=True, indent=4)
 
-bot_config = BotConfig(bot, 'config_new_example.json')
+bot_config = BotConfig(bot, 'config_new.json')
 
 
 @bot.event
