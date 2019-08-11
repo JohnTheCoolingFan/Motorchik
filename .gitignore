@@ -1,5 +1,5 @@
 token.txt
 config*.json
-!config_example.json
+!config*example.json
 .mypy_cache
 *Tagbar*
