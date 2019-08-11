@@ -57,7 +57,7 @@ class BotConfig():
 
     async def add_guild(self, guild):
         default_channel = guild.system_channel.id if guild.system_channel is not None else guild.text_channels[0].id
-        self.raw_config[str(guild.id)] = {'name': guild.name, 'welcome_channel_id': default_channel, 'log_channel_id': default_channel, 'welcome_enabled': False, 'log_enabled': False, 'report_channel_id': default_channel, 'default_roles': [], 'commands': {}}
+        self.raw_config[str(guild.id)] = {'name': guild.name, 'welcome': {'channel_id': default_channel, 'enabled': False}, 'log': {'channel_id': default_channel, 'enabled': False}, 'reports': {'channel_id': default_channel, 'enabled': False}, 'default_roles': [], 'commands': {}}
 
     class GuildConfig():
         def __init__(self, guild, bot_config):
