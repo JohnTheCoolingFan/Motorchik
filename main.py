@@ -68,15 +68,17 @@ class BotConfig():
 
         def update(self):
             self.commands = self.raw_config['commands'].keys()
-            self.welcome_channel = self.guild.get_channel(self.raw_config['welcome_channel_id'])
-            self.log_channel = self.guild.get_channel(self.raw_config['log_channel_id'])
-            self.reports_channel = self.guild.get_channel(self.raw_config['reports_channel_id'])
-            self.default_roles = [self.guild.get_role(role_id) for role_id in self.raw_config['default_roles']]
+            self.welcome_channel = self.guild.get_channel(self.raw_config['welcome']['channel_id']) if self.raw_config['welcome']['enabled'] else None
+            self.log_channel = self.guild.get_channel(self.raw_config['log']['channel_id']) if self.raw_config['log']['enabled'] else None
+            self.reports_channel = self.guild.get_channel(self.raw_config['reports']['channel_id']) if self.raw_config['reports']['enabled'] else None
+            self.default_roles = [self.guild.get_role(role_id) for role_id in self.raw_config['default_roles']] if self.raw_config['default_roles'] else []
+            self.bot_config.raw_config[str(self.guild.id)] = self.raw_config
+            await self.bot_config.write()
 
         async def switch_command(self, command_name, new_state):
             if command_name in self.commands:
                 self.raw_config['commands'][command_name]['enabled'] = new_state
-                await self.bot_config.write()
+                self.update()
                 return True
             else:
                 return False
@@ -84,22 +86,22 @@ class BotConfig():
         async def command_filter(self, command_name, filter_name, new_filter):
             if command_name in self.commands:
                 self.raw_config['commands'][command_name][filter_name] = {channel.id for channel in new_filter}
-                await self.bot_config.write()
+                self.update()
                 return True
             else:
                 return False
 
         async def set_messages(self, messages_type, new_id):
             self.raw_config[messages_type+'_channel_id'] = new_id
-            await self.bot_config.write()
+            self.update()
 
         async def switch_messages(self, messages_type, new_state):
             self.raw_config[messages_type+'_enabled'] = new_state
-            await self.bot_config.write()
+            self.update()
 
         async def set_default_roles(self, new_roles):
             self.raw_config['default_roles'] = {role.id for role in new_roles}
-            await self.bot_config.write()
+            self.update()
 
         def json_config(self):
             return json.dumps(self.raw_config, sort_keys=True, indent=4)
