@@ -64,6 +64,9 @@ class BotConfig():
             self.guild = guild
             self.bot_config = bot_config
             self.raw_config = bot_config.raw_config[str(guild.id)]
+            self.update()
+
+        def update(self):
             self.commands = self.raw_config['commands'].keys()
             self.welcome_channel = self.guild.get_channel(self.raw_config['welcome_channel_id'])
             self.log_channel = self.guild.get_channel(self.raw_config['log_channel_id'])
