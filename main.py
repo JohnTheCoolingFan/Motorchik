@@ -73,7 +73,6 @@ class BotConfig():
             self.reports_channel = self.guild.get_channel(self.raw_config['reports']['channel_id']) if self.raw_config['reports']['enabled'] else None
             self.default_roles = [self.guild.get_role(role_id) for role_id in self.raw_config['default_roles']] if self.raw_config['default_roles'] else []
             self.bot_config.raw_config[str(self.guild.id)] = self.raw_config
-            self.bot_config.write()
 
         async def switch_command(self, command_name, new_state):
             if command_name in self.commands:
