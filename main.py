@@ -93,12 +93,12 @@ class BotConfig():
                 return False
 
         async def set_messages(self, messages_type, new_id):
-            self.raw_config[messages_type+'_channel_id'] = new_id
+            self.raw_config[messages_type]['channel_id'] = new_id
             self.update()
             await self.bot_config.write()
 
         async def switch_messages(self, messages_type, new_state):
-            self.raw_config[messages_type+'_enabled'] = new_state
+            self.raw_config[messages_type]['enabled'] = new_state
             self.update()
             await self.bot_config.write()
 
