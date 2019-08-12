@@ -80,7 +80,7 @@ class BotConfig():
 
         async def command_filter(self, command_name, filter_name, new_filter):
             if command_name in self.commands:
-                self.raw_config['commands'][command_name][filter_name] = {channel.id for channel in new_filter}
+                self.raw_config['commands'][command_name][filter_name] = list({channel.id for channel in new_filter})
                 self.update()
                 await self.bot_config.write()
                 return True
@@ -98,7 +98,7 @@ class BotConfig():
             await self.bot_config.write()
 
         async def set_default_roles(self, new_roles):
-            self.raw_config['default_roles'] = {role.id for role in new_roles}
+            self.raw_config['default_roles'] = list({role.id for role in new_roles})
             self.update()
             await self.bot_config.write()
 
