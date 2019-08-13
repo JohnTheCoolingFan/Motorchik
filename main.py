@@ -27,20 +27,7 @@ bot.load_extension('greetings')
 bot.load_extension('testcommands')
 bot.load_extension('funcommandss')
 bot.load_extension('factorio')
-
-class Moderation(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-
-    @commands.command(aliases=['clear'], description='Clear chat', brief='Clear chat', help='Deletes specified count of messages in this channel. Only for admins and moderators.')
-    @commands.has_permissions(manage_messages=True)
-    async def clearchat(self, ctx, message_count: int):
-        await ctx.message.delete()
-        async for message in ctx.channel.history(limit=message_count):
-            await message.delete()
-
-bot.add_cog(Moderation(bot))
-
+bot.load_extension('moderation')
 
 class Reports(commands.Cog, command_attrs=dict(hidden=True)):
     def __init__(self, bot):
