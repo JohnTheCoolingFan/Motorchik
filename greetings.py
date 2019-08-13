@@ -1,10 +1,11 @@
 from discord.ext import commands
 import random
-from main import bot_config
+from botconfig import BotConfig
 
 class Greetings(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.bot_config = BotConfig(bot, 'config_new.json')
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -13,7 +14,7 @@ class Greetings(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        guild_config = bot_config.GuildConfig(member.guild, bot_config)
+        guild_config = self.bot_config.GuildConfig(member.guild, self.bot_config)
         if guild_config.raw_config['welcome_enabled']:
             await guild_config.welcome_channel.send('Welcome, {0.mention}'.format(member))
         if guild_config.raw_config['default_roles']:
@@ -21,7 +22,7 @@ class Greetings(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
-        guild_config = bot_config.GuildConfig(member.guild, bot_config)
+        guild_config = self.bot_config.GuildConfig(member.guild, self.bot_config)
         if guild_config.raw_config['welcome_enabled']:
             await guild_config.welcome_channel.send('Goodbye, {0} (ID:{1})'.format(str(member), member.id))
 

@@ -1,6 +1,5 @@
 from discord.ext import commands
-#from main import bot_config
-from main import MOD_LIST
+MOD_LIST = ['Placeable-off-grid', 'No Artillery Map Reveal', 'Random Factorio Things', 'Plutonium Energy', 'RealisticReactors Ingo']
 
 class FactorioCog(commands.Cog, name='Factorio'):
     def __init__(self, bot):

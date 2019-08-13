@@ -8,7 +8,7 @@
 # TODO: split code into a number of files
 
 from discord.ext import commands
-import discord
+#import discord
 from botconfig import BotConfig
 
 MOD_LIST = ['Placeable-off-grid', 'No Artillery Map Reveal', 'Random Factorio Things', 'Plutonium Energy', 'RealisticReactors Ingo']
