@@ -4,3 +4,4 @@ config*.json
 !config_*_example.json
 .mypy_cache
 *Tagbar*
+__pycache__
