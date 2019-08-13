@@ -24,7 +24,7 @@ async def on_ready():
 
 bot.load_extension('greetings')
 bot.load_extension('testcommands')
-bot.load_extension('funcommandss')
+bot.load_extension('funcommands')
 bot.load_extension('factorio')
 bot.load_extension('moderation')
 bot.load_extension('reports')
