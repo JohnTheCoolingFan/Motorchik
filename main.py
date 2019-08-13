@@ -24,21 +24,7 @@ async def on_ready():
     await bot_config.check(bot)
 
 bot.load_extension('greetings')
-
-class TestCommands(commands.Cog, name='Test Commands', command_attrs=dict(hidden=True)):
-    def __init__(self, bot):
-        self.bot = bot
-
-    @commands.command(help='Returns text typed after $test')
-    async def test(self, ctx, *, text):
-        await ctx.send(text)
-
-    @commands.command(help='Returns passed arguments count and the arguments', aliases=['advtest', 'atest'])
-    async def advanced_test(self, ctx, *args):
-        await ctx.send('Passed {} arguments: {}'.format(len(args), ', '.join(args)))
-
-bot.add_cog(TestCommands(bot))
-
+bot.load_extension('testcommands')
 
 class FunCommands(commands.Cog, name='Fun'):
     def __init__(self, bot):
