@@ -26,19 +26,7 @@ async def on_ready():
 bot.load_extension('greetings')
 bot.load_extension('testcommands')
 bot.load_extension('funcommandss')
-
-class FactorioCog(commands.Cog, name='Factorio'):
-    def __init__(self, bot):
-        self.bot = bot
-
-    @commands.command(aliases=['modstat'], description='Info about mods', brief='Info about mods', help='Prints a bunch of commands for uBot to display info about mods')
-    async def mods_statistics(self, ctx):
-        for modname in MOD_LIST:
-            await ctx.send(content='>>{0}<<'.format(modname), delete_after=1)
-        await ctx.message.delete()
-
-bot.add_cog(FactorioCog(bot))
-
+bot.load_extension('factorio')
 
 class Moderation(commands.Cog):
     def __init__(self, bot):
