@@ -13,6 +13,8 @@ class Configuration(commands.Cog):
     async def cog_command_error(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
             await ctx.send('Only administrator can configurate bot settings')
+        else:
+            print(error)
 
     @commands.group(case_sensitive=True, invoke_without_command=True, brief='Configurate bot for this server')
     async def config(self, ctx):
@@ -113,8 +115,6 @@ class Configuration(commands.Cog):
 
     @list_config.command(name='raw')
     async def list_config_raw(self, ctx):
-        await ctx.send('[DEBUG] Called list_config_raw command')
-        print('[DEBUG] Called list_config_raw command')
         guild_config = self.bot_config.GuildConfig(ctx.guild, self.bot_config)
         await ctx.send('```json\n'+guild_config.json_config()+'\n```')
 
