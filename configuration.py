@@ -103,16 +103,18 @@ class Configuration(commands.Cog):
         guild_config = self.bot_config.GuildConfig(ctx.guild, self.bot_config)
         config_embed = discord.Embed(title='Config for server **{0.guild.name}**'.format(ctx))
         config_embed.add_field(name='***Default roles***', value='\n'.join({role.mention for role in guild_config.default_roles}), inline=False)
-        config_embed.add_field(name='***Welcome messages***', value=guild_config.welcome_channel.mention if guild_config.raw_config['welcome_enabled'] else 'Disabled', inline=True)
-        config_embed.add_field(name='***Log messages***', value=guild_config.log_channel.mention if guild_config.raw_config['log_enabled'] else 'Disabled')
+        config_embed.add_field(name='***Welcome messages***', value=guild_config.welcome_channel.mention if guild_config.welcome_channel else 'Disabled', inline=True)
+        config_embed.add_field(name='***Log messages***', value=guild_config.log_channel.mention if guild_config.log_channel else 'Disabled')
 
         # A VERY long line
-        config_commands_embed = '\n'.join([('**`'+command.name+'`**:\n'+((('Whitelisted in:\n'+'\n'.join(['<#'+str(whitelist_id)+'>' for whitelist_id in guild_config.raw_config['commands'][command.name]])) if guild_config.raw_config['commands'][command.name]['whitelist'] else (('Blacklisted in:\n'+'\n'.join(['<#'+str(blacklist_id)+'>' for blacklist_id in guild_config.raw_config['commands'][command.name]['blacklist']])) if guild_config.raw_config['commands'][command.name]['blacklist'] else 'Enabled')) if guild_config.raw_config['commands'][command.name]['enabled'] else 'Disabled')+'\n') for command in self.bot.commands])
+        config_commands_embed = '\n'.join([('**`'+command.name+'`**:\n'+((('Whitelisted in:\n'+'\n'.join(['<#'+str(whitelist_id)+'>' for whitelist_id in guild_config.raw_config['commands'][command.name]['whitelist']])) if guild_config.raw_config['commands'][command.name]['whitelist'] else (('Blacklisted in:\n'+'\n'.join(['<#'+str(blacklist_id)+'>' for blacklist_id in guild_config.raw_config['commands'][command.name]['blacklist']])) if guild_config.raw_config['commands'][command.name]['blacklist'] else 'Enabled')) if guild_config.raw_config['commands'][command.name]['enabled'] else 'Disabled')+'\n') for command in self.bot.commands])
         config_embed.add_field(name = '***Commands***', value = config_commands_embed, inline = False)
         await ctx.send(embed=config_embed)
 
     @list_config.command(name='raw')
     async def list_config_raw(self, ctx):
+        await ctx.send('[DEBUG] Called list_config_raw command')
+        print('[DEBUG] Called list_config_raw command')
         guild_config = self.bot_config.GuildConfig(ctx.guild, self.bot_config)
         await ctx.send('```json\n'+guild_config.json_config()+'\n```')
 
