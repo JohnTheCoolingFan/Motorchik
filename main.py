@@ -15,7 +15,7 @@ DEFAULT_GUILD_CONFIG = {'name': '', 'welcome_channel_id': 0, 'welcome_enabled': 
 
 bot = commands.Bot(command_prefix='$')
 
-bot_config = BotConfig(bot, 'config_new.json')
+bot_config = BotConfig(bot, 'config.json')
 
 @bot.event
 async def on_ready():

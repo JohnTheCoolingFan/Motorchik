@@ -4,7 +4,7 @@ from botconfig import BotConfig
 class Reports(commands.Cog, command_attrs=dict(hidden=True)):
     def __init__(self, bot):
         self.bot = bot
-        self.bot_config = BotConfig(bot, 'config_new.json')
+        self.bot_config = BotConfig(bot, 'config.json')
 
     @commands.command()
     async def report(self, ctx):

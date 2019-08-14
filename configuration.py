@@ -5,7 +5,7 @@ from botconfig import BotConfig
 class Configuration(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.bot_config = BotConfig(bot, 'config_new.json')
+        self.bot_config = BotConfig(bot, 'config.json')
 
     async def cog_check(self, ctx):
         return ctx.author.permissions_in(ctx.channel).administrator

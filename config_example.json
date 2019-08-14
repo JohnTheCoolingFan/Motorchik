@@ -75,11 +75,19 @@
         "default_roles": [
             527382415014887424
         ],
-        "log_channel_id": 532928945964843034,
-        "log_enabled": true,
-        "name": "John The Cooling Fan",
-        "reports_channel_id": 589221215302975572,
-        "welcome_channel_id": 525772525045809152,
-        "welcome_enabled": true
+        "log": {
+            "channel_id": 532928945964843034,
+            "enabled": true
+        },
+        "welcome": {
+            "channel_id": 532928945964843034,
+            "enabled": true
+        },
+        "reports": {
+            "channel_id": 589221215302975572,
+            "enabled": true,
+            "list": []
+        },
+        "name": "John The Cooling Fan"
     }
 }

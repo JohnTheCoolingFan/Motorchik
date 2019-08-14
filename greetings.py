@@ -5,7 +5,7 @@ from botconfig import BotConfig
 class Greetings(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.bot_config = BotConfig(bot, 'config_new.json')
+        self.bot_config = BotConfig(bot, 'config.json')
 
     @commands.Cog.listener()
     async def on_message(self, message):
