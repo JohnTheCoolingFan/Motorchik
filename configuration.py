@@ -113,10 +113,12 @@ class Configuration(commands.Cog):
         config_embed.add_field(name = '***Commands***', value = config_commands_embed, inline = False)
         await ctx.send(embed=config_embed)
 
-    @list_config.command(name='raw')
+    @list_config.command(name='raw', hidden=True)
     async def list_config_raw(self, ctx):
         guild_config = self.bot_config.GuildConfig(ctx.guild, self.bot_config)
-        await ctx.send('```json\n'+guild_config.json_config()+'\n```')
+        embed = discord.Embed(title='Server config')
+        embed.add_field(name=ctx.guild.name, value='```json\n'+guild_config.json_config()+'\n```')
+        await ctx.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(Configuration(bot))
