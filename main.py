@@ -5,7 +5,6 @@
 # TODO: make experience system
 # TODO: add a report system (report user or report message)
 # TODO: add setting to report with emoji
-# TODO: split code into a number of files
 
 from discord.ext import commands
 #import discord
