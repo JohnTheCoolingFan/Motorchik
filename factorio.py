@@ -20,7 +20,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
     async def new_mods_statistics(self, ctx, mod_name):
         request = req.get('https://mods.factorio.com/api/mods/'+mod_name)
         if request.status_code != 404:
-            latest_release = sorted(request.json()['releases'], key=lambda release: release['version'], reverse=True)[0] 
+            latest_release = sorted(request.json()['releases'], key=lambda release: release['version'], reverse=True)[0]
             await ctx.send('https://mods.factorio.com'+latest_release['download_url']+'\nOR\n'+'https://factorio-launcher-mods.storage.googleapis.com/'+mod_name+'/'+latest_release['version']+'.zip')
         else:
             await ctx.send('MOD NOT FOUND')
