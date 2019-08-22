@@ -15,15 +15,15 @@ class Greetings(commands.Cog):
     @commands.Cog.listener()
     async def on_member_join(self, member):
         guild_config = self.bot_config.GuildConfig(member.guild, self.bot_config)
-        if guild_config.raw_config['welcome_enabled']:
+        if guild_config.welcome_channel:
             await guild_config.welcome_channel.send('Welcome, {0.mention}'.format(member))
-        if guild_config.raw_config['default_roles']:
+        if guild_config.default_roles:
             await member.add_roles(*guild_config.default_roles, reason='New member join.')
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
         guild_config = self.bot_config.GuildConfig(member.guild, self.bot_config)
-        if guild_config.raw_config['welcome_enabled']:
+        if guild_config.welcome_channel:
             await guild_config.welcome_channel.send('Goodbye, {0} (ID:{1})'.format(str(member), member.id))
 
     @commands.command(description='\"Hello\" in English', brief='\"Hello\" in English', help='Returns \"Hello\" in English')
