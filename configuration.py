@@ -2,6 +2,8 @@ from discord.ext import commands
 import discord
 from botconfig import BotConfig
 
+from io import StringIO as strio
+
 class Configuration(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -116,9 +118,7 @@ class Configuration(commands.Cog):
     @list_config.command(name='raw', hidden=True)
     async def list_config_raw(self, ctx):
         guild_config = self.bot_config.GuildConfig(ctx.guild, self.bot_config)
-        embed = discord.Embed(title='Server config')
-        embed.add_field(name=ctx.guild.name, value='```json\n'+guild_config.json_config()+'\n```')
-        await ctx.send(embed=embed)
+        await ctx.send(file=discord.File(strio(guild_config.json_config()), filename='GuildConfig'+str(guild_config.guild.id)+'.json'))
 
 def setup(bot):
     bot.add_cog(Configuration(bot))
