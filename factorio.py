@@ -1,3 +1,5 @@
+# TODO: finish nmodstat
+
 from discord.ext import commands
 import requests as req
 MOD_LIST = ['Placeable-off-grid', 'No Artillery Map Reveal', 'Random Factorio Things', 'Plutonium Energy', 'RealisticReactors Ingo']
