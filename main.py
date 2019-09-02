@@ -19,7 +19,7 @@ bot_config = BotConfig(bot, 'config.json')
 @bot.event
 async def on_ready():
     print('Logged in as {0.user}'.format(bot))
-    await bot_config.check(bot)
+    await bot_config.check()
 
 bot.load_extension('greetings')
 bot.load_extension('testcommands')

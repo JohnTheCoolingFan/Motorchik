@@ -12,7 +12,7 @@ class BotConfig():
         config_file.write(json.dumps(self.raw_config, sort_keys=True, indent=4))
         config_file.close()
 
-    async def check(self, bot):
+    async def check(self):
         print('Checking config')
         # Check that all guild where bot is are in config
         for guild in self.bot.guilds:
@@ -22,7 +22,7 @@ class BotConfig():
 
         # Check guild configs
         for guild_id, guild_config in self.raw_config.items():
-            for command in bot.commands:
+            for command in self.bot.commands:
                 if command.name not in guild_config['commands'].keys():
                     print('Config for command "{0}" not found in config of guild "{1}"'.format(command.name, guild_config['name']+'(ID '+guild_id+')'))
                     guild_config['commands'][command.name] = {'whitelist': [], 'blacklist': [], 'enabled': True}
