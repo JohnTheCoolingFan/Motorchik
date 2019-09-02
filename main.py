@@ -1,10 +1,8 @@
 #! /usr/bin/python3.7
 # TabNine::sem
 
-# TODO: make role-level system and levelup/leveldown commands
 # TODO: make experience system
-# TODO: add a report system (report user or report message)
-# TODO: add setting to report with emoji
+# TODO: make role-level system and levelup/leveldown commands
 
 from discord.ext import commands
 #import discord
