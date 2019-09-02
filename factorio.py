@@ -4,8 +4,9 @@ import requests as req
 from dateutil import parser
 from colorthief import ColorThief
 from io import BytesIO
-MOD_LIST = ['Placeable-off-grid', 'No Artillery Map Reveal', 'Random Factorio Things', 'Plutonium Energy', 'RealisticReactors Ingo']
-MOD_LIST_NEW = ['PlaceableOffGrid', 'NoArtilleryMapReveal', 'RandomFactorioThings', 'PlutoniumEnergy', 'RealisticReactors']
+
+MOD_LIST_UBOT = ['Placeable-off-grid', 'No Artillery Map Reveal', 'Random Factorio Things', 'Plutonium Energy', 'RealisticReactors Ingo']
+MOD_LIST_MOTORCHIK = ['PlaceableOffGrid', 'NoArtilleryMapReveal', 'RandomFactorioThings', 'PlutoniumEnergy', 'RealisticReactors']
 
 class FactorioCog(commands.Cog, name='Factorio'):
     def __init__(self, bot):
@@ -17,7 +18,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
             for modname in mod_names:
                 await ctx.send('>>'+modname+'<<', delete_after=1)
         else:
-            for modname in MOD_LIST:
+            for modname in MOD_LIST_UBOT:
                 await ctx.send(content='>>{0}<<'.format(modname), delete_after=1)
             await ctx.message.delete()
 
@@ -44,7 +45,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
 
     @commands.command()
     async def modlist(self, ctx):
-        for mod_name in MOD_LIST_NEW:
+        for mod_name in MOD_LIST_MOTORCHIK:
             await ctx.invoke(self.new_mods_statistics, mod_name)
         await ctx.message.delete()
 
