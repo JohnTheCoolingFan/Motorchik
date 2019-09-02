@@ -1,5 +1,3 @@
-# TODO: Improve clear command
-
 from discord.ext import commands
 
 class Moderation(commands.Cog):
