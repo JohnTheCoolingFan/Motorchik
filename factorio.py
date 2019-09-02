@@ -1,4 +1,4 @@
-# TODO: finish nmodstat
+# TODO: search mod portal for mod instead of taking only exact mod's name (not title)
 
 from discord.ext import commands
 import discord
