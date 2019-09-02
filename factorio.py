@@ -4,6 +4,8 @@ from discord.ext import commands
 import discord
 import requests as req
 from dateutil import parser
+from colorthief import ColorThief
+from io import BytesIO
 MOD_LIST = ['Placeable-off-grid', 'No Artillery Map Reveal', 'Random Factorio Things', 'Plutonium Energy', 'RealisticReactors Ingo']
 
 class FactorioCog(commands.Cog, name='Factorio'):
@@ -26,9 +28,11 @@ class FactorioCog(commands.Cog, name='Factorio'):
         if request.status_code != 404:
             json_req = request.json()
             latest_release = sorted(json_req['releases'], key=lambda release: release['version'], reverse=True)[0]
-            embed = discord.Embed(title=json_req['title'], description=json_req['summary'], url='https://mods.factorio.com/mod/'+mod_name, timestamp=parser.isoparse(latest_release['released_at']))
+            thumb_color = discord.Color.from_rgb(*ColorThief(BytesIO(req.get('https://mods-data.factorio.com'+json_req['thumbnail']).content)).get_color()) if json_req['thumbnail'] != '/assets/.thumb.png' else discord.Color.from_rgb(47, 137, 197)
+            embed = discord.Embed(title=json_req['title'], description=json_req['summary'], url='https://mods.factorio.com/mod/'+mod_name, timestamp=parser.isoparse(latest_release['released_at']), color=thumb_color)
             embed.set_footer(text='Latest update released at:')
-            embed.set_thumbnail(url='https://mods-data.factorio.com'+json_req['thumbnail'])
+            if json_req['thumbnail'] != '/assets/.thumb.png':
+                embed.set_thumbnail(url='https://mods-data.factorio.com'+json_req['thumbnail'])
             embed.add_field(name='Game Version', value=latest_release['info_json']['factorio_version'])
             embed.add_field(name='Download', value='[From Official Mod Portal](https://mods.factorio.com'+latest_release['download_url']+')\n[From Factorio Launcher storage](https://factorio-launcher-mods.storage.googleapis.com/'+mod_name+'/'+latest_release['version']+'.zip)')
             embed.add_field(name='Latest Version', value=latest_release['version'])
