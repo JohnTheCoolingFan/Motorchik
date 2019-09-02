@@ -7,6 +7,7 @@ from dateutil import parser
 from colorthief import ColorThief
 from io import BytesIO
 MOD_LIST = ['Placeable-off-grid', 'No Artillery Map Reveal', 'Random Factorio Things', 'Plutonium Energy', 'RealisticReactors Ingo']
+MOD_LIST_NEW = ['PlaceableOffGrid', 'NoArtilleryMapReveal', 'RandomFactorioThings', 'PlutoniumEnergy', 'RealisticReactors']
 
 class FactorioCog(commands.Cog, name='Factorio'):
     def __init__(self, bot):
@@ -41,6 +42,12 @@ class FactorioCog(commands.Cog, name='Factorio'):
             await ctx.send(embed=embed)
         else:
             await ctx.send('MOD NOT FOUND')
+
+    @commands.command()
+    async def modlist(self, ctx):
+        for mod_name in MOD_LIST_NEW:
+            await ctx.invoke(self.new_mods_statistics, mod_name)
+        await ctx.message.delete()
 
 def setup(bot):
     bot.add_cog(FactorioCog(bot))
