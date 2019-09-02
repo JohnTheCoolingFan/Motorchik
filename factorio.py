@@ -1,5 +1,3 @@
-# TODO: search mod portal for mod instead of taking only exact mod's name (not title)
-
 from discord.ext import commands
 import discord
 import requests as req
@@ -23,6 +21,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
                 await ctx.send(content='>>{0}<<'.format(modname), delete_after=1)
             await ctx.message.delete()
 
+    # TODO: search mod portal for mod instead of taking only exact mod's name (not title)
     @commands.command(aliases=['nmodstat'])
     async def new_mods_statistics(self, ctx, mod_name):
         request = req.get('https://mods.factorio.com/api/mods/'+mod_name)
