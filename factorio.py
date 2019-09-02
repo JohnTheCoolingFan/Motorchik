@@ -1,7 +1,9 @@
 # TODO: finish nmodstat
 
 from discord.ext import commands
+import discord
 import requests as req
+from dateutil import parser
 MOD_LIST = ['Placeable-off-grid', 'No Artillery Map Reveal', 'Random Factorio Things', 'Plutonium Energy', 'RealisticReactors Ingo']
 
 class FactorioCog(commands.Cog, name='Factorio'):
@@ -22,8 +24,17 @@ class FactorioCog(commands.Cog, name='Factorio'):
     async def new_mods_statistics(self, ctx, mod_name):
         request = req.get('https://mods.factorio.com/api/mods/'+mod_name)
         if request.status_code != 404:
-            latest_release = sorted(request.json()['releases'], key=lambda release: release['version'], reverse=True)[0]
-            await ctx.send('https://mods.factorio.com'+latest_release['download_url']+'\nOR\n'+'https://factorio-launcher-mods.storage.googleapis.com/'+mod_name+'/'+latest_release['version']+'.zip')
+            json_req = request.json()
+            latest_release = sorted(json_req['releases'], key=lambda release: release['version'], reverse=True)[0]
+            embed = discord.Embed(title=json_req['title'], description=json_req['summary'], url='https://mods.factorio.com/mod/'+mod_name, timestamp=parser.isoparse(latest_release['released_at']))
+            embed.set_footer(text='Latest update released at:')
+            embed.set_thumbnail(url='https://mods-data.factorio.com'+json_req['thumbnail'])
+            embed.add_field(name='Game Version', value=latest_release['info_json']['factorio_version'])
+            embed.add_field(name='Download', value='[From Official Mod Portal](https://mods.factorio.com'+latest_release['download_url']+')\n[From Factorio Launcher storage](https://factorio-launcher-mods.storage.googleapis.com/'+mod_name+'/'+latest_release['version']+'.zip)')
+            embed.add_field(name='Latest Version', value=latest_release['version'])
+            embed.add_field(name='Downloaded', value=str(json_req['downloads_count'])+' times')
+            embed.add_field(name='Author', value='['+json_req['owner']+'](https://mods.factorio.com/user/'+json_req['owner']+')')
+            await ctx.send(embed=embed)
         else:
             await ctx.send('MOD NOT FOUND')
 
