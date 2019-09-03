@@ -42,7 +42,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
             embed.add_field(name='Download', value='[From Official Mod Portal](https://mods.factorio.com'+latest_release['download_url']+')\n[From Factorio Launcher storage](https://factorio-launcher-mods.storage.googleapis.com/'+mod_name+'/'+latest_release['version']+'.zip)')
             embed.add_field(name='Latest Version', value=latest_release['version'])
             embed.add_field(name='Downloaded', value=str(json_req['downloads_count'])+' times')
-            embed.add_field(name='Author', value='['+json_req['owner']+'](https://mods.factorio.com/user/'+json_req['owner']+')')
+            embed.add_field(name='Author', value='[{0}](https://mods.factorio.com/user/{0})'.format(json_req['owner']))
             await ctx.send(embed=embed)
         else:
             new_mod_name = self.find_mod(mod_name)
