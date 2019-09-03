@@ -1,7 +1,12 @@
 from discord.ext import commands
 import discord
+
 import requests as req
+
+from bs4 import BeautifulSoup
+
 from dateutil import parser
+
 from colorthief import ColorThief
 from io import BytesIO
 
@@ -13,7 +18,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
         self.bot = bot
 
     @commands.command(aliases=['modstat'], description='Info about mods', brief='Info about mods', help='Prints a bunch of commands for uBot to display info about mods')
-    async def mods_statistics(self, ctx, *mod_names):
+    async def mods_statistics(self, ctx, *mod_names: str):
         if mod_names:
             for modname in mod_names:
                 await ctx.send('>>'+modname+'<<', delete_after=1)
@@ -24,9 +29,9 @@ class FactorioCog(commands.Cog, name='Factorio'):
 
     # TODO: search mod portal for mod instead of taking only exact mod's name (not title)
     @commands.command(aliases=['nmodstat'])
-    async def new_mods_statistics(self, ctx, mod_name):
+    async def new_mods_statistics(self, ctx, *, mod_name: str):
         request = req.get('https://mods.factorio.com/api/mods/'+mod_name)
-        if request.status_code != 404:
+        if request.status_code == 200:
             json_req = request.json()
             latest_release = sorted(json_req['releases'], key=lambda release: release['version'], reverse=True)[0]
             thumb_color = discord.Color.from_rgb(*ColorThief(BytesIO(req.get('https://mods-data.factorio.com'+json_req['thumbnail']).content)).get_color()) if json_req['thumbnail'] != '/assets/.thumb.png' else discord.Color.from_rgb(47, 137, 197)
@@ -41,7 +46,24 @@ class FactorioCog(commands.Cog, name='Factorio'):
             embed.add_field(name='Author', value='['+json_req['owner']+'](https://mods.factorio.com/user/'+json_req['owner']+')')
             await ctx.send(embed=embed)
         else:
-            await ctx.send('MOD NOT FOUND')
+            new_mod_name = self.find_mod(mod_name)
+            if new_mod_name:
+                await ctx.invoke(self.new_mods_statistics, mod_name=new_mod_name)
+            else:
+                await ctx.send('MOD NOT FOUND')
+
+    def find_mod(self, mod_name: str):
+        request = req.get('https://mods.factorio.com/query/'+mod_name.replace(' ', '%20'))
+        if request.status_code == 200:
+            soup = BeautifulSoup(request.text, 'html.parser')
+            mod_card = soup.find('div', {'class': 'mod-card'})
+            if mod_card:
+                retrieved_mod_name = mod_card.a['href'].replace('/mod/', '')
+                return retrieved_mod_name
+            else:
+                return ''
+        else:
+            return ''
 
     @commands.command()
     async def modlist(self, ctx):
