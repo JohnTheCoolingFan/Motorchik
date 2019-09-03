@@ -39,7 +39,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
             if json_req['thumbnail'] != '/assets/.thumb.png':
                 embed.set_thumbnail(url='https://mods-data.factorio.com'+json_req['thumbnail'])
             embed.add_field(name='Game Version', value=latest_release['info_json']['factorio_version'])
-            embed.add_field(name='Download', value='[From Official Mod Portal](https://mods.factorio.com{download_url})\n[From Factorio Launcher storage](https://factorio-launcher-mods.storage.googleapis.com/{mod_name}/{version}.zip)'.format(download_url=latest_release['downloaad_url'], mod_name=mod_name, version=latest_release['version']))
+            embed.add_field(name='Download', value='[From Official Mod Portal](https://mods.factorio.com{download_url})\n[From Factorio Launcher storage](https://factorio-launcher-mods.storage.googleapis.com/{mod_name}/{version}.zip)'.format(download_url=latest_release['download_url'], mod_name=mod_name, version=latest_release['version']))
             embed.add_field(name='Latest Version', value=latest_release['version'])
             embed.add_field(name='Downloaded', value=str(json_req['downloads_count'])+' times')
             embed.add_field(name='Author', value='[{owner}](https://mods.factorio.com/user/{owner})'.format(owner=json_req['owner']))
