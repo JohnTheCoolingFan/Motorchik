@@ -50,7 +50,8 @@ class FactorioCog(commands.Cog, name='Factorio'):
             if new_mod_name:
                 await ctx.invoke(self.new_mods_statistics, mod_name=new_mod_name)
             else:
-                await ctx.send('MOD NOT FOUND')
+                embed = discord.Embed(title='Mod not found', description='Failed to find mod \'{}\''.format(mod_name), color=discord.Color.from_rgb(255, 10, 10))
+                await ctx.send(embed=embed)
 
     def find_mod(self, mod_name: str):
         request = req.get('https://mods.factorio.com/query/'+mod_name.replace(' ', '%20'))
@@ -68,7 +69,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
     @commands.command()
     async def modlist(self, ctx):
         for mod_name in MOD_LIST_MOTORCHIK:
-            await ctx.invoke(self.new_mods_statistics, mod_name)
+            await ctx.invoke(self.new_mods_statistics, mod_name=mod_name)
         await ctx.message.delete()
 
 def setup(bot):
