@@ -106,7 +106,7 @@ class Configuration(commands.Cog):
     async def list_config(self, ctx):
         guild_config = self.bot_config.GuildConfig(ctx.guild, self.bot_config)
         config_embed = discord.Embed(title='Config for server **{0.guild.name}**'.format(ctx))
-        config_embed.add_field(name='***Default roles***', value='\n'.join({role.mention for role in guild_config.default_roles}), inline=False)
+        config_embed.add_field(name='***Default roles***', value='\n'.join({role.mention for role in guild_config.default_roles}) if guild_config.default_roles else 'No default roles set', inline=False)
         config_embed.add_field(name='***Welcome messages***', value=guild_config.welcome_channel.mention if guild_config.welcome_channel else 'Disabled', inline=True)
         config_embed.add_field(name='***Log messages***', value=guild_config.log_channel.mention if guild_config.log_channel else 'Disabled')
 
