@@ -75,7 +75,7 @@ class Configuration(commands.Cog):
     @config.command()
     async def disable_welcome(self, ctx):
         guild_config = self.bot_config.GuildConfig(ctx.guild, self.bot_config)
-        await guild_config.switch_messages('welcome', True)
+        await guild_config.switch_messages('welcome', False)
         await ctx.send('Welcome messages disabled')
 
     @config.command()
