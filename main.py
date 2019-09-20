@@ -26,6 +26,7 @@ bot.load_extension('factorio')
 bot.load_extension('moderation')
 bot.load_extension('reports')
 bot.load_extension('configuration')
+bot.load_extension('miscellaneous')
 
 tokenfile = open('token.txt', 'r')
 TOKEN = tokenfile.read().rstrip()

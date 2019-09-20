@@ -17,5 +17,9 @@ class FunCommands(commands.Cog, name='Fun'):
     async def ping(self, ctx):
         await ctx.send('pong')
 
+    @commands.command(hidden=True, aliases=['UDODCOMMUNIST', 'Удод_Коммунист', 'УДОД'])
+    async def udod_communist(self, ctx):
+        await ctx.send('https://www.youtube.com/watch?v=YHR5_IvC8Gw')
+
 def setup(bot):
     bot.add_cog(FunCommands(bot))
