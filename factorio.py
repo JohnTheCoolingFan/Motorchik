@@ -13,6 +13,8 @@ from io import BytesIO
 MOD_LIST_UBOT = ['Placeable-off-grid', 'No Artillery Map Reveal', 'Random Factorio Things', 'Plutonium Energy', 'RealisticReactors Ingo']
 MOD_LIST_MOTORCHIK = ['PlaceableOffGrid', 'NoArtilleryMapReveal', 'RandomFactorioThings', 'PlutoniumEnergy', 'RealisticReactors']
 
+# TODO: make customizable mod-list, which will update automatically over time by editing messages
+
 class FactorioCog(commands.Cog, name='Factorio'):
     def __init__(self, bot):
         self.bot = bot
