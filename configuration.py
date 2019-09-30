@@ -50,7 +50,7 @@ class Configuration(commands.Cog):
     async def blacklist(self, ctx, command_name, *blacklist_channels: discord.TextChannel):
         guild_config = self.bot_config.GuildConfig(ctx.guild, self.bot_config)
         if await guild_config.command_filter(command_name, 'blacklist', blacklist_channels):
-            await ctx.send('New whitelist for command `{0}`:\n{1}'.format(command_name, '\n'.join({channel.mention for channel in blacklist_channels})))
+            await ctx.send('New blacklist for command `{0}`:\n{1}'.format(command_name, '\n'.join({channel.mention for channel in blacklist_channels})))
         else:
             await ctx.send('Command `{0}` not found'.format(command_name))
 
