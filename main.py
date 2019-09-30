@@ -27,6 +27,7 @@ bot.load_extension('moderation')
 bot.load_extension('reports')
 bot.load_extension('configuration')
 bot.load_extension('miscellaneous')
+bot.load_extension('servicetools')
 
 tokenfile = open('token.txt', 'r')
 TOKEN = tokenfile.read().rstrip()
