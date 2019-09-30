@@ -4,7 +4,7 @@ class BotConfig():
     def __init__(self, bot, filename):
         self.bot = bot
         with open(filename, 'r') as config_file:
-            self.raw_config = json.loads(config_file.read())
+            self.raw_config = json.load(config_file)
         self.filename = filename
 
     async def write(self):
