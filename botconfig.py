@@ -9,7 +9,7 @@ class BotConfig():
 
     async def write(self):
         with open(self.filename, 'w') as config_file:
-            json.dump(self.raw_config, config_file)
+            json.dump(self.raw_config, config_file, indent=4, sort_keys=True)
 
     async def check(self):
         print('Checking config')
