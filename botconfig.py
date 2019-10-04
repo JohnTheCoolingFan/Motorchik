@@ -1,7 +1,9 @@
 import json
+from discord.ext import commands
+import discord
 
 class BotConfig():
-    def __init__(self, bot, filename):
+    def __init__(self, bot: commands.Bot, filename: str):
         self.bot = bot
         with open(filename, 'r') as config_file:
             self.raw_config = json.load(config_file)
@@ -35,7 +37,7 @@ class BotConfig():
         self.raw_config[str(guild.id)] = {'name': guild.name, 'welcome': {'channel_id': default_channel, 'enabled': False}, 'log': {'channel_id': default_channel, 'enabled': False}, 'reports': {'channel_id': default_channel, 'enabled': False}, 'default_roles': [], 'commands': {}}
 
     class GuildConfig():
-        def __init__(self, guild, bot_config):
+        def __init__(self, guild: discord.Guild, bot_config: BotConfig):
             self.guild = guild
             self.bot_config = bot_config
             self.raw_config = bot_config.raw_config[str(guild.id)]
@@ -49,7 +51,7 @@ class BotConfig():
             self.default_roles = [self.guild.get_role(role_id) for role_id in self.raw_config['default_roles']] if self.raw_config['default_roles'] else []
             self.bot_config.raw_config[str(self.guild.id)] = self.raw_config
 
-        async def switch_command(self, command_name, new_state):
+        async def switch_command(self, command_name: str, new_state: bool) -> bool:
             if command_name in self.commands:
                 self.raw_config['commands'][command_name]['enabled'] = new_state
                 self.update()
@@ -58,7 +60,7 @@ class BotConfig():
             else:
                 return False
 
-        async def command_filter(self, command_name, filter_name, new_filter):
+        async def command_filter(self, command_name, filter_name, new_filter) -> bool:
             if command_name in self.commands:
                 self.raw_config['commands'][command_name][filter_name] = list({channel.id for channel in new_filter})
                 self.update()
@@ -67,12 +69,12 @@ class BotConfig():
             else:
                 return False
 
-        async def set_messages(self, messages_type, new_id):
+        async def set_messages(self, messages_type: str, new_id: int):
             self.raw_config[messages_type]['channel_id'] = new_id
             self.update()
             await self.bot_config.write()
 
-        async def switch_messages(self, messages_type, new_state):
+        async def switch_messages(self, messages_type: str, new_state: int):
             self.raw_config[messages_type]['enabled'] = new_state
             self.update()
             await self.bot_config.write()
@@ -82,5 +84,5 @@ class BotConfig():
             self.update()
             await self.bot_config.write()
 
-        def json_config(self):
+        def json_config(self) -> str:
             return json.dumps(self.raw_config, sort_keys=True, indent=4)
