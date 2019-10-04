@@ -1,6 +1,9 @@
-import json
 from discord.ext import commands
 import discord
+
+import json
+
+from typing import List
 
 class BotConfig():
     def __init__(self, bot: commands.Bot, filename: str):
@@ -79,7 +82,7 @@ class BotConfig():
             self.update()
             await self.bot_config.write()
 
-        async def set_default_roles(self, new_roles):
+        async def set_default_roles(self, new_roles: List[discord.Role]):
             self.raw_config['default_roles'] = list({role.id for role in new_roles})
             self.update()
             await self.bot_config.write()
