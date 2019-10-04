@@ -1,5 +1,5 @@
 from discord.ext import commands
-import discord
+#import discord
 
 class ServiceTools(commands.Cog):
     def __init__(self, bot):
@@ -9,9 +9,9 @@ class ServiceTools(commands.Cog):
         return await self.bot.is_owner(ctx.author)
 
     @commands.command()
-    async def say(self, ctx, channel:discord.TextChannel, message):
+    async def say(self, ctx, channel_id: int, message):
         await ctx.message.delete()
-        await channel.send(message)
+        await self.bot.get_channel(channel_id).send(message)
 
 def setup(bot):
     bot.add_cog(ServiceTools(bot))
