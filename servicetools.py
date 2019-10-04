@@ -16,7 +16,11 @@ class ServiceTools(commands.Cog, name='Service Tools', command_attrs=dict(hidden
     @commands.command()
     async def say_dm(self, ctx, user_id: int, message):
         await ctx.message.delete()
-        await self.bot.get_user(user_id).dm_channel.send(message)
+        user = self.bot.get_user(user_id)
+        if user.dm_channel is None:
+            await user.create_dm()
+            dm_channel = user.dm_channel
+        await dm_channel.send(message)
 
 def setup(bot):
     bot.add_cog(ServiceTools(bot))
