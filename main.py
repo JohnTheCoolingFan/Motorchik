@@ -6,8 +6,6 @@
 from discord.ext import commands
 from botconfig import BotConfig
 
-DEFAULT_GUILD_CONFIG = {'name': '', 'welcome_channel_id': 0, 'welcome_enabled': True, 'log_channel_id': 0, 'log_enabled': True, 'reports_channel_id': 0, 'default_roles': [], 'commands': {}}
-
 bot = commands.Bot(command_prefix=commands.when_mentioned_or('$'))
 
 bot_config = BotConfig(bot, 'config.json')
