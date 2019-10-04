@@ -1,16 +1,10 @@
 from discord.ext import commands
-import random
 from botconfig import BotConfig
 
 class Greetings(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.bot_config = BotConfig(bot, 'config.json')
-
-    @commands.Cog.listener()
-    async def on_message(self, message):
-        if self.bot.user.id in message.raw_mentions:
-            await message.channel.send(random.choice(['Yeah?', 'What?', 'Yeah, I\'m here.', 'Did I missed something?', 'Yep', 'Nah', 'Uhm...']))
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
