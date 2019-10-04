@@ -1,5 +1,4 @@
 #! /usr/bin/python3.7
-# TabNine::sem
 
 # TODO: make experience system
 # TODO: make role-level system and levelup/leveldown commands
