@@ -5,7 +5,7 @@ class TestCommands(commands.Cog, name='Test Commands', command_attrs=dict(hidden
         self.bot = bot
 
     @commands.command(help='Returns text typed after $test')
-    async def test(self, ctx, *, text):
+    async def test(self, ctx, *, text: str):
         await ctx.send(text)
 
     @commands.command(help='Returns passed arguments count and the arguments', aliases=['advtest', 'atest'])
