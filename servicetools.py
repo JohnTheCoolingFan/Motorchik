@@ -1,7 +1,7 @@
 from discord.ext import commands
 #import discord
 
-class ServiceTools(commands.Cog):
+class ServiceTools(commands.Cog, name='Service Tools', command_attrs=dict(hidden=True)):
     def __init__(self, bot):
         self.bot = bot
 
