@@ -1,4 +1,5 @@
 from discord.ext import commands
+import discord
 from botconfig import BotConfig
 
 class Greetings(commands.Cog):
@@ -15,7 +16,7 @@ class Greetings(commands.Cog):
             await member.add_roles(*guild_config.default_roles, reason='New member join.')
 
     @commands.Cog.listener()
-    async def on_member_remove(self, member):
+    async def on_member_remove(self, member: discord.Member):
         guild_config = self.bot_config.GuildConfig(member.guild, self.bot_config)
         if guild_config.welcome_channel:
             await guild_config.welcome_channel.send('Goodbye, {0} (ID:{1})'.format(str(member), member.id))
