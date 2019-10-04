@@ -16,11 +16,11 @@ MOD_LIST_MOTORCHIK = ['PlaceableOffGrid', 'NoArtilleryMapReveal', 'RandomFactori
 # TODO: make customizable mod-list, which will update automatically over time by editing messages
 
 class FactorioCog(commands.Cog, name='Factorio'):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     @commands.command(aliases=['modstat'], description='Info about mods', brief='Info about mods', help='Prints a bunch of commands for uBot to display info about mods')
-    async def mods_statistics(self, ctx, *mod_names: str):
+    async def mods_statistics(self, ctx: commands.Context, *mod_names: str):
         if mod_names:
             for modname in mod_names:
                 await ctx.send('>>'+modname+'<<', delete_after=1)
@@ -30,7 +30,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
             await ctx.message.delete()
 
     @commands.command(aliases=['nmodstat'])
-    async def new_mods_statistics(self, ctx, *, mod_name: str):
+    async def new_mods_statistics(self, ctx: commands.Context, *, mod_name: str):
         request = req.get('https://mods.factorio.com/api/mods/'+mod_name)
         if request.status_code == 200:
             json_req = request.json()
@@ -54,7 +54,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
                 embed = discord.Embed(title='Mod not found', description='Failed to find mod \'{}\''.format(mod_name), color=discord.Color.from_rgb(255, 10, 10))
                 await ctx.send(embed=embed)
 
-    def find_mod(self, mod_name: str):
+    def find_mod(self, mod_name: str) -> str:
         request = req.get('https://mods.factorio.com/query/'+mod_name.replace(' ', '%20'))
         if request.status_code == 200:
             soup = BeautifulSoup(request.text, 'html.parser')
@@ -68,10 +68,10 @@ class FactorioCog(commands.Cog, name='Factorio'):
             return ''
 
     @commands.command()
-    async def modlist(self, ctx):
+    async def modlist(self, ctx: commands.Context):
         for mod_name in MOD_LIST_MOTORCHIK:
             await ctx.invoke(self.new_mods_statistics, mod_name=mod_name)
         await ctx.message.delete()
 
-def setup(bot):
+def setup(bot: commands.Bot):
     bot.add_cog(FactorioCog(bot))
