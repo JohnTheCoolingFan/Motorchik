@@ -25,10 +25,5 @@ bot.load_extension('configuration')
 bot.load_extension('miscellaneous')
 bot.load_extension('servicetools')
 
-tokenfile = open('token.txt', 'r')
-TOKEN = tokenfile.read().rstrip()
-tokenfile.close()
-
-bot.run(TOKEN)
-
-del TOKEN
+with open('token.txt', 'r') as token_file:
+    bot.run(token_file.read().rstrip())
