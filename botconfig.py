@@ -40,7 +40,7 @@ class BotConfig():
         self.raw_config[str(guild.id)] = {'name': guild.name, 'welcome': {'channel_id': default_channel, 'enabled': False}, 'log': {'channel_id': default_channel, 'enabled': False}, 'reports': {'channel_id': default_channel, 'enabled': False}, 'default_roles': [], 'commands': {}}
 
     class GuildConfig():
-        def __init__(self, guild: discord.Guild, bot_config: BotConfig):
+        def __init__(self, guild: discord.Guild, bot_config):
             self.guild = guild
             self.bot_config = bot_config
             self.raw_config = bot_config.raw_config[str(guild.id)]
