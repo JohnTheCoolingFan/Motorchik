@@ -10,7 +10,7 @@ class ServiceTools(commands.Cog, name='Service Tools', command_attrs=dict(hidden
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
-        if message.channel is discord.DMChannel:
+        if isinstance(message.channel, discord.DMChannel) and message.author != self.bot.user:
             app_info = await self.bot.application_info()
             await app_info.owner.dm_channel.send('I have received a DM message from {}:'.format(str(message.author)))
             await app_info.owner.dm_channel.send(message.content)
