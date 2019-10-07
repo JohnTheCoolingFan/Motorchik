@@ -5,7 +5,8 @@ import json
 
 from typing import List
 
-class BotConfig():
+
+class BotConfig:
     def __init__(self, bot: commands.Bot, filename: str):
         self.bot = bot
         with open(filename, 'r') as config_file:
@@ -33,17 +34,22 @@ class BotConfig():
 
         # Write config
         await self.write()
-        print('Config check succesful')
+        print('Config check successful')
 
     async def add_guild(self, guild):
         default_channel = guild.system_channel.id if guild.system_channel is not None else guild.text_channels[0].id
         self.raw_config[str(guild.id)] = {'name': guild.name, 'welcome': {'channel_id': default_channel, 'enabled': False}, 'log': {'channel_id': default_channel, 'enabled': False}, 'reports': {'channel_id': default_channel, 'enabled': False}, 'default_roles': [], 'commands': {}}
 
-    class GuildConfig():
+    class GuildConfig:
         def __init__(self, guild: discord.Guild, bot_config):
             self.guild = guild
             self.bot_config = bot_config
             self.raw_config = bot_config.raw_config[str(guild.id)]
+            self.commands = []
+            self.welcome_channel = None
+            self.log_channel = None
+            self.reports_channel = None
+            self.default_roles = []
             self.update()
 
         def update(self):
