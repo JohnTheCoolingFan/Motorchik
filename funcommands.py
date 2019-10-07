@@ -1,5 +1,6 @@
 from discord.ext import commands
 
+
 class FunCommands(commands.Cog, name='Fun'):
     def __init__(self, bot):
         self.bot = bot
@@ -20,6 +21,7 @@ class FunCommands(commands.Cog, name='Fun'):
     @commands.command(hidden=True, aliases=['UDODCOMMUNIST', 'Удод_Коммунист', 'УДОД'])
     async def udod_communist(self, ctx):
         await ctx.send('https://www.youtube.com/watch?v=YHR5_IvC8Gw')
+
 
 def setup(bot):
     bot.add_cog(FunCommands(bot))

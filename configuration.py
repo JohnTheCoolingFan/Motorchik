@@ -4,6 +4,7 @@ from botconfig import BotConfig
 
 from io import StringIO as strio
 
+
 class Configuration(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -112,7 +113,7 @@ class Configuration(commands.Cog):
 
         # A VERY long line
         config_commands_embed = '\n'.join([('**`'+command.name+'`**:\n'+((('Whitelisted in:\n'+'\n'.join(['<#'+str(whitelist_id)+'>' for whitelist_id in guild_config.raw_config['commands'][command.name]['whitelist']])) if guild_config.raw_config['commands'][command.name]['whitelist'] else (('Blacklisted in:\n'+'\n'.join(['<#'+str(blacklist_id)+'>' for blacklist_id in guild_config.raw_config['commands'][command.name]['blacklist']])) if guild_config.raw_config['commands'][command.name]['blacklist'] else 'Enabled')) if guild_config.raw_config['commands'][command.name]['enabled'] else 'Disabled')+'\n') for command in self.bot.commands])
-        config_embed.add_field(name = '***Commands***', value = config_commands_embed, inline = False)
+        config_embed.add_field(name='***Commands***', value=config_commands_embed, inline=False)
         await ctx.send(embed=config_embed)
 
     @list_config.command(name='raw', hidden=True)

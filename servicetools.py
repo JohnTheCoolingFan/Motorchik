@@ -1,6 +1,7 @@
 from discord.ext import commands
 import discord
 
+
 class ServiceTools(commands.Cog, name='Service Tools', command_attrs=dict(hidden=True)):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -24,10 +25,12 @@ class ServiceTools(commands.Cog, name='Service Tools', command_attrs=dict(hidden
     async def say_dm(self, ctx: commands.Context, user_id: int, message: str):
         await ctx.message.delete()
         user = self.bot.get_user(user_id)
-        if user.dm_channel is None:
+        dm_channel = user.dm_channel
+        if dm_channel is None:
             await user.create_dm()
             dm_channel = user.dm_channel
         await dm_channel.send(message)
+
 
 def setup(bot: commands.Bot):
     bot.add_cog(ServiceTools(bot))

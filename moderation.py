@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from botconfig import BotConfig
 
+
 class Moderation(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -22,6 +23,7 @@ class Moderation(commands.Cog):
         await ctx.send('Banned member '+str(member))
         if guild_config.log_channel:
             await guild_config.log_channel.send('Banned {0}\nReason: {1}'.format(str(member), reason))
+
 
 def setup(bot: commands.Bot):
     bot.add_cog(Moderation(bot))

@@ -15,6 +15,7 @@ MOD_LIST_MOTORCHIK = ['PlaceableOffGrid', 'NoArtilleryMapReveal', 'RandomFactori
 
 # TODO: make customizable mod-list, which will update automatically over time by editing messages
 
+
 class FactorioCog(commands.Cog, name='Factorio'):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -35,7 +36,11 @@ class FactorioCog(commands.Cog, name='Factorio'):
         if request.status_code == 200:
             json_req = request.json()
             latest_release = sorted(json_req['releases'], key=lambda release: release['version'], reverse=True)[0]
-            thumb_color = discord.Color.from_rgb(*ColorThief(BytesIO(req.get('https://mods-data.factorio.com'+json_req['thumbnail']).content)).get_color()) if json_req['thumbnail'] != '/assets/.thumb.png' else discord.Color.from_rgb(47, 137, 197)
+            if json_req['thumbnail'] != '/assets/.thumb.png':
+                thumb_color = discord.Color.from_rgb(*ColorThief(
+                    BytesIO(req.get('https://mods-data.factorio.com' + json_req['thumbnail']).content)).get_color())
+            else:
+                thumb_color = discord.Color.from_rgb(47, 137, 197)
             embed = discord.Embed(title=json_req['title'], description=json_req['summary'], url='https://mods.factorio.com/mod/'+mod_name, timestamp=parser.isoparse(latest_release['released_at']), color=thumb_color)
             embed.set_footer(text='Latest update released at:')
             if json_req['thumbnail'] != '/assets/.thumb.png':
@@ -54,7 +59,8 @@ class FactorioCog(commands.Cog, name='Factorio'):
                 embed = discord.Embed(title='Mod not found', description='Failed to find mod \'{}\''.format(mod_name), color=discord.Color.from_rgb(255, 10, 10))
                 await ctx.send(embed=embed)
 
-    def find_mod(self, mod_name: str) -> str:
+    @staticmethod
+    def find_mod(mod_name: str) -> object:
         request = req.get('https://mods.factorio.com/query/'+mod_name.replace(' ', '%20'))
         if request.status_code == 200:
             soup = BeautifulSoup(request.text, 'html.parser')
@@ -72,6 +78,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
         for mod_name in MOD_LIST_MOTORCHIK:
             await ctx.invoke(self.new_mods_statistics, mod_name=mod_name)
         await ctx.message.delete()
+
 
 def setup(bot: commands.Bot):
     bot.add_cog(FactorioCog(bot))

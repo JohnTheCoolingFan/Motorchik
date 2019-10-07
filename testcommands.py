@@ -1,5 +1,6 @@
 from discord.ext import commands
 
+
 class TestCommands(commands.Cog, name='Test Commands', command_attrs=dict(hidden=True)):
     def __init__(self, bot):
         self.bot = bot
@@ -11,6 +12,7 @@ class TestCommands(commands.Cog, name='Test Commands', command_attrs=dict(hidden
     @commands.command(help='Returns passed arguments count and the arguments', aliases=['advtest', 'atest'])
     async def advanced_test(self, ctx, *args):
         await ctx.send('Passed {} arguments: {}'.format(len(args), ', '.join(args)))
+
 
 def setup(bot):
     bot.add_cog(TestCommands(bot))

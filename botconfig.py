@@ -41,15 +41,18 @@ class BotConfig:
         self.raw_config[str(guild.id)] = {'name': guild.name, 'welcome': {'channel_id': default_channel, 'enabled': False}, 'log': {'channel_id': default_channel, 'enabled': False}, 'reports': {'channel_id': default_channel, 'enabled': False}, 'default_roles': [], 'commands': {}}
 
     class GuildConfig:
+        guild: discord.Guild
+        raw_config: dict
+        commands: list
+        welcome_channel: discord.TextChannel
+        log_channel: discord.TextChannel
+        reports_channel: discord.TextChannel
+        default_roles: list
+
         def __init__(self, guild: discord.Guild, bot_config):
             self.guild = guild
             self.bot_config = bot_config
             self.raw_config = bot_config.raw_config[str(guild.id)]
-            self.commands = []
-            self.welcome_channel = None
-            self.log_channel = None
-            self.reports_channel = None
-            self.default_roles = []
             self.update()
 
         def update(self):
