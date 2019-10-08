@@ -36,14 +36,14 @@ async def on_ready():
     GuildConfig.check(bot)
 
 bot.load_extension('greetings')
-bot.load_extension('testcommands')
-bot.load_extension('funcommands')
+bot.load_extension('test_commands')
+bot.load_extension('fun_commands')
 bot.load_extension('factorio')
 bot.load_extension('moderation')
 bot.load_extension('reports')
 bot.load_extension('configuration')
 bot.load_extension('miscellaneous')
-bot.load_extension('servicetools')
+bot.load_extension('service_tools')
 
 with open('token.txt', 'r') as token_file:
     bot.run(token_file.read().rstrip())
