@@ -81,7 +81,7 @@ class GuildConfig:
             json.dump(new_guild_config, new_guild_config_file, sort_keys=True, indent=4)
 
     def write(self):
-        with open('guild_{}.json'.format(self.guild.id), 'w') as guild_config:
+        with open('guilds/guild_{}.json'.format(self.guild.id), 'w') as guild_config:
             json.dump(self.raw, guild_config, indent=4, sort_keys=True)
 
     async def switch_command(self, command_name: str, new_state: bool) -> bool:
