@@ -22,10 +22,12 @@ async def on_guild_remove(guild: discord.Guild):
 
 
 @bot.listen()
-async def on_guild_update(_, guild_after: discord.Guild):
-    guild_config = GuildConfig(guild_after)
-    guild_config.raw['name'] = guild_after.name
-    guild_config.write()
+async def on_guild_update(guild_before: discord.Guild, guild_after: discord.Guild):
+    # Update guild name
+    if guild_after.name != guild_before.name:
+        guild_config = GuildConfig(guild_after)
+        guild_config.raw['name'] = guild_after.name
+        guild_config.write()
 
 
 @bot.event
