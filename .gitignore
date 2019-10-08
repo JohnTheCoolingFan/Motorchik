@@ -6,5 +6,5 @@ config*.json
 *Tagbar*
 __pycache__
 .idea
-guilds
+guilds/*
 users
