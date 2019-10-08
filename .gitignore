@@ -6,5 +6,5 @@ config*.json
 *Tagbar*
 __pycache__
 .idea
-guilds/*
+guilds/guild_[0-9]*.json
 users
