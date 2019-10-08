@@ -94,14 +94,14 @@ class GuildConfig:
 
     async def set_command_filter(self, command_name: str, filter_name: str, new_filter: Iterable[discord.TextChannel]) -> bool:
         if command_name in self.commands_names:
-            self.raw['commands'][filter_name] = list({channel.id for channel in new_filter})
+            self.raw['commands'][command_name][filter_name] = list({channel.id for channel in new_filter})
             self.write()
             return True
         else:
             return False
 
-    def set_info_channel(self, messages_type: str, new_channel: discord.TextChannel):
-        self.raw[messages_type]['channel_id'] = new_channel.id
+    def set_info_channel(self, info_channel_type: str, new_channel: discord.TextChannel):
+        self.raw[info_channel_type]['channel_id'] = new_channel.id
         self.update_info_channels()
         self.write()
 
