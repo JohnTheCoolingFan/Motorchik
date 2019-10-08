@@ -4,17 +4,15 @@
 # TODO: make role-level system and levelup/leveldown commands
 
 from discord.ext import commands
-from botconfig import BotConfig
+from guild_config import GuildConfig
 
 bot = commands.Bot(command_prefix=commands.when_mentioned_or('$'))
-
-bot_config = BotConfig(bot, 'config.json')
 
 
 @bot.event
 async def on_ready():
     print('Logged in as {0.user}'.format(bot))
-    await bot_config.check()
+    GuildConfig.check(bot)
 
 bot.load_extension('greetings')
 bot.load_extension('testcommands')

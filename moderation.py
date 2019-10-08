@@ -1,12 +1,11 @@
 import discord
 from discord.ext import commands
-from botconfig import BotConfig
+from guild_config import GuildConfig
 
 
 class Moderation(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.bot_config = BotConfig(bot, 'config.json')
 
     @commands.command(aliases=['clear'], description='Clear chat', brief='Clear chat', help='Deletes specified count of messages in this channel. Can be used only by members with messages managing permission.')
     @commands.has_permissions(manage_messages=True)
@@ -17,8 +16,8 @@ class Moderation(commands.Cog):
 
     @commands.has_permissions(ban_members=True)
     @commands.command(case_sensitive=False, description='Ban member')
-    async def ban(self, ctx: commands.Context, member: discord.Member, reason: str):
-        guild_config = self.bot_config.GuildConfig(ctx.guild, self.bot_config)
+    async def ban(self, ctx: commands.Context, member: discord.Member, reason: str = 'Not provided'):
+        guild_config = GuildConfig(ctx.guild)
         await member.ban(reason=reason, delete_message_days=0)
         await ctx.send('Banned member '+str(member))
         if guild_config.log_channel:
