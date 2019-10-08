@@ -38,6 +38,7 @@ class Configuration(commands.Cog):
         else:
             await ctx.send('Command `{0}` not found'.format(command_name))
 
+    # TODO: Send different message if new filter list is empty
     @config.command()
     async def whitelist(self, ctx: commands.Context, command_name: str, *whitelist_channels: discord.TextChannel):
         guild_config = GuildConfig(ctx.guild)
