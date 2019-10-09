@@ -106,16 +106,8 @@ class GuildConfig:
         else:
             return False
 
-    def set_info_channel(self, info_channel_type: str, new_channel: discord.TextChannel):
-        self.raw[info_channel_type]['channel_id'] = new_channel.id
-        self.write()
-
     def switch_info_channel(self, info_channel_type: str, new_state: bool):
         self.raw[info_channel_type]['enabled'] = new_state
-        self.write()
-
-    def set_default_roles(self, new_roles: Iterable[discord.Role]):
-        self.raw['default_roles'] = list({role.id for role in new_roles})
         self.write()
 
     def dump_json(self) -> str:
