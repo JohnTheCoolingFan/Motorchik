@@ -2,16 +2,16 @@ from discord.ext import commands
 import discord
 import json
 import os.path
-from typing import List, Union, Iterable
+from typing import List, Iterable, Optional
 
 
 class GuildConfig:
     guild: discord.Guild
     raw: dict
     commands_names: List[str]
-    welcome_channel: Union[discord.TextChannel, None]
-    log_channel: Union[discord.TextChannel, None]
-    reports_channel: Union[discord.TextChannel, None]
+    welcome_channel: Optional[discord.TextChannel]
+    log_channel: Optional[discord.TextChannel]
+    reports_channel: Optional[discord.TextChannel]
     default_roles: List[discord.Role]
 
     def __init__(self, guild: discord.Guild):
@@ -21,7 +21,7 @@ class GuildConfig:
         self.commands_names = self.raw['commands'].keys()
 
     @property
-    def welcome_channel(self) -> Union[discord.TextChannel, None]:
+    def welcome_channel(self) -> Optional[discord.TextChannel]:
         if self.raw['welcome']['enabled']:
             return self.guild.get_channel(self.raw['welcome']['channel_id'])
         else:
@@ -32,7 +32,7 @@ class GuildConfig:
         self.raw['welcome']['channel_id'] = new_channel.id
 
     @property
-    def log_channel(self) -> Union[discord.TextChannel, None]:
+    def log_channel(self) -> Optional[discord.TextChannel]:
         if self.raw['log']['enabled']:
             return self.guild.get_channel(self.raw['log']['channel_id'])
         else:
@@ -43,7 +43,7 @@ class GuildConfig:
         self.raw['log']['channel_id'] = new_channel.id
 
     @property
-    def reports_channel(self) -> Union[discord.TextChannel, None]:
+    def reports_channel(self) -> Optional[discord.TextChannel]:
         if self.raw['reports']['enabled']:
             return self.guild.get_channel(self.raw['welcome']['channel_id'])
         else:
