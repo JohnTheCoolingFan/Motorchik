@@ -20,40 +20,30 @@ class GuildConfig:
             self.raw = json.load(guild_config)
         self.commands_names = self.raw['commands'].keys()
 
-        # Check and set for welcome, log, and reports
+    @property
+    def welcome_channel(self) -> Union[discord.TextChannel, None]:
         if self.raw['welcome']['enabled']:
-            self.welcome_channel = self.guild.get_channel(self.raw['welcome']['channel_id'])
+            return self.guild.get_channel(self.raw['welcome']['channel_id'])
         else:
-            self.welcome_channel = None
-        if self.raw['log']['enabled']:
-            self.log_channel = self.guild.get_channel(self.raw['log']['channel_id'])
-        else:
-            self.log_channel = None
-        if self.raw['reports']['enabled']:
-            self.reports_channel = self.guild.get_channel(self.raw['reports']['channel_id'])
-        else:
-            self.reports_channel = None
+            return None
 
-        # Check and set default roles
-        if self.raw['default_roles']:
-            self.default_roles = [self.guild.get_role(role_id) for role_id in self.raw['default_roles']]
-        else:
-            self.default_roles = []
-
-    def update_info_channels(self):
-        # Exactly the same as in __init__
-        if self.raw['welcome']['enabled']:
-            self.welcome_channel = self.guild.get_channel(self.raw['welcome']['channel_id'])
-        else:
-            self.welcome_channel = None
+    @property
+    def log_channel(self) -> Union[discord.TextChannel, None]:
         if self.raw['log']['enabled']:
-            self.log_channel = self.guild.get_channel(self.raw['log']['channel_id'])
+            return self.guild.get_channel(self.raw['welcome']['channel_id'])
         else:
-            self.log_channel = None
+            return None
+
+    @property
+    def reports_channel(self) -> Union[discord.TextChannel, None]:
         if self.raw['reports']['enabled']:
-            self.reports_channel = self.guild.get_channel(self.raw['reports']['channel_id'])
+            return self.guild.get_channel(self.raw['welcome']['channel_id'])
         else:
-            self.reports_channel = None
+            return None
+
+    @property
+    def default_roles(self) -> List[discord.Role]:
+        return [self.guild.get_role(role_id) for role_id in self.raw['default_roles']]
 
     @classmethod
     def check(cls, bot: commands.Bot, guild: discord.Guild = None):
@@ -102,12 +92,10 @@ class GuildConfig:
 
     def set_info_channel(self, info_channel_type: str, new_channel: discord.TextChannel):
         self.raw[info_channel_type]['channel_id'] = new_channel.id
-        self.update_info_channels()
         self.write()
 
     def switch_info_channel(self, info_channel_type: str, new_state: bool):
         self.raw[info_channel_type]['enabled'] = new_state
-        self.update_info_channels()
         self.write()
 
     def set_default_roles(self, new_roles: Iterable[discord.Role]):
