@@ -5,6 +5,8 @@ from guild_config import GuildConfig
 from io import StringIO as StrIO
 
 
+# TODO: remake configuration to be more convenient and user-friendly
+
 class Configuration(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
