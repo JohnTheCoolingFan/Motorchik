@@ -106,9 +106,13 @@ class GuildConfig:
         else:
             return False
 
-    def switch_info_channel(self, info_channel_type: str, new_state: bool):
-        self.raw[info_channel_type]['enabled'] = new_state
-        self.write()
+    async def switch_info_channel(self, info_channel_type: str, new_state: bool) -> bool:
+        if info_channel_type in ['welcome', 'log', 'reports']:
+            self.raw[info_channel_type]['enabled'] = new_state
+            self.write()
+            return True
+        else:
+            return False
 
     def dump_json(self) -> str:
         return json.dumps(self.raw, sort_keys=True, indent=4)

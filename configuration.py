@@ -40,12 +40,14 @@ class Configuration(commands.Cog):
         else:
             await ctx.send('Command `{0}` not found'.format(command_name))
 
-    # TODO: Send different message if new filter list is empty
     @config.command()
     async def whitelist(self, ctx: commands.Context, command_name: str, *whitelist_channels: discord.TextChannel):
         guild_config = GuildConfig(ctx.guild)
         if await guild_config.set_command_filter(command_name, 'whitelist', whitelist_channels):
-            await ctx.send('New whitelist for command `{0}`:\n{1}'.format(command_name, '\n'.join({channel.mention for channel in whitelist_channels})))
+            if whitelist_channels:
+                await ctx.send('New whitelist for command `{0}`:\n{1}'.format(command_name, '\n'.join({channel.mention for channel in whitelist_channels})))
+            else:
+                await ctx.send('Whitelist for command `{}` is now empty'.format(command_name))
         else:
             await ctx.send('Command `{0}` not found'.format(command_name))
 
@@ -53,7 +55,10 @@ class Configuration(commands.Cog):
     async def blacklist(self, ctx: commands.Context, command_name: str, *blacklist_channels: discord.TextChannel):
         guild_config = GuildConfig(ctx.guild)
         if await guild_config.set_command_filter(command_name, 'blacklist', blacklist_channels):
-            await ctx.send('New blacklist for command `{0}`:\n{1}'.format(command_name, '\n'.join({channel.mention for channel in blacklist_channels})))
+            if blacklist_channels:
+                await ctx.send('New blacklist for command `{0}`:\n{1}'.format(command_name, '\n'.join({channel.mention for channel in blacklist_channels})))
+            else:
+                await ctx.send('Blacklist for command `{}` is now empty'.format(command_name))
         else:
             await ctx.send('Command `{0}` not found'.format(command_name))
 
