@@ -34,7 +34,7 @@ class GuildConfig:
     @property
     def log_channel(self) -> Union[discord.TextChannel, None]:
         if self.raw['log']['enabled']:
-            return self.guild.get_channel(self.raw['welcome']['channel_id'])
+            return self.guild.get_channel(self.raw['log']['channel_id'])
         else:
             return None
 
