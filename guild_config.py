@@ -27,12 +27,20 @@ class GuildConfig:
         else:
             return None
 
+    @welcome_channel.setter
+    def welcome_channel(self, new_channel: discord.TextChannel):
+        self.raw['welcome']['channel_id'] = new_channel.id
+
     @property
     def log_channel(self) -> Union[discord.TextChannel, None]:
         if self.raw['log']['enabled']:
             return self.guild.get_channel(self.raw['welcome']['channel_id'])
         else:
             return None
+
+    @log_channel.setter
+    def log_channel(self, new_channel: discord.TextChannel):
+        self.raw['log']['channel_id'] = new_channel.id
 
     @property
     def reports_channel(self) -> Union[discord.TextChannel, None]:
@@ -41,9 +49,17 @@ class GuildConfig:
         else:
             return None
 
+    @reports_channel.setter
+    def reports_channel(self, new_channel: discord.TextChannel):
+        self.raw['reports']['channel_id'] = new_channel.id
+
     @property
     def default_roles(self) -> List[discord.Role]:
         return [self.guild.get_role(role_id) for role_id in self.raw['default_roles']]
+
+    @default_roles.setter
+    def default_roles(self, new_roles: Iterable[discord.Role]):
+        self.raw['default_roles'] = list({role.id for role in new_roles})
 
     @classmethod
     def check(cls, bot: commands.Bot, guild: discord.Guild = None):
