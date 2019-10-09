@@ -2,17 +2,16 @@
 # TODO: add setting to report with emoji
 
 from discord.ext import commands
-from botconfig import BotConfig
+from guild_config import GuildConfig
 
 
 class Reports(commands.Cog, command_attrs=dict(hidden=True)):
     def __init__(self, bot):
         self.bot = bot
-        self.bot_config = BotConfig(bot, 'config.json')
 
     @commands.command()
     async def report(self, ctx):
-        guild_config = self.bot_config.GuildConfig(ctx.guild, self.bot_config)
+        guild_config = GuildConfig(ctx.guild)
         await guild_config.reports_channel.send('Well, `report` command is incomplete.\n{0.author.mention} wanted to report something.'.format(ctx))
 
 

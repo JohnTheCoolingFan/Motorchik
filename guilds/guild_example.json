@@ -1,0 +1,141 @@
+{
+    "commands": {
+        "advanced_test": {
+            "blacklist": [
+                505687801283739650
+            ],
+            "enabled": true,
+            "whitelist": []
+        },
+        "ban": {
+            "blacklist": [],
+            "enabled": true,
+            "whitelist": []
+        },
+        "clearchat": {
+            "blacklist": [],
+            "enabled": true,
+            "whitelist": []
+        },
+        "config": {
+            "blacklist": [],
+            "enabled": true,
+            "whitelist": []
+        },
+        "find_mod": {
+            "blacklist": [],
+            "enabled": true,
+            "whitelist": []
+        },
+        "github": {
+            "blacklist": [],
+            "enabled": true,
+            "whitelist": []
+        },
+        "gitlab": {
+            "blacklist": [],
+            "enabled": true,
+            "whitelist": []
+        },
+        "guten": {
+            "blacklist": [],
+            "enabled": true,
+            "whitelist": []
+        },
+        "hello": {
+            "blacklist": [],
+            "enabled": true,
+            "whitelist": []
+        },
+        "hello_german": {
+            "blacklist": [],
+            "enabled": true,
+            "whitelist": []
+        },
+        "hello_russian": {
+            "blacklist": [],
+            "enabled": true,
+            "whitelist": []
+        },
+        "help": {
+            "blacklist": [],
+            "enabled": true,
+            "whitelist": []
+        },
+        "modlist": {
+            "blacklist": [],
+            "enabled": true,
+            "whitelist": []
+        },
+        "mods_statistics": {
+            "blacklist": [],
+            "enabled": true,
+            "whitelist": [
+                574920316057419827,
+                569108021238824991
+            ]
+        },
+        "new_mods_statistics": {
+            "blacklist": [],
+            "enabled": true,
+            "whitelist": []
+        },
+        "ping": {
+            "blacklist": [],
+            "enabled": true,
+            "whitelist": []
+        },
+        "report": {
+            "blacklist": [],
+            "enabled": false,
+            "whitelist": []
+        },
+        "rickroll": {
+            "blacklist": [],
+            "enabled": true,
+            "whitelist": []
+        },
+        "say": {
+            "blacklist": [],
+            "enabled": true,
+            "whitelist": []
+        },
+        "say_dm": {
+            "blacklist": [],
+            "enabled": true,
+            "whitelist": []
+        },
+        "spin": {
+            "blacklist": [],
+            "enabled": true,
+            "whitelist": []
+        },
+        "test": {
+            "blacklist": [],
+            "enabled": true,
+            "whitelist": []
+        },
+        "udod_communist": {
+            "blacklist": [],
+            "enabled": true,
+            "whitelist": []
+        }
+    },
+    "default_roles": [
+        527382415014887424
+    ],
+    "log": {
+        "channel_id": 532928945964843034,
+        "enabled": true
+    },
+    "name": "John The Cooling Fan",
+    "reports": {
+        "channel_id": 589221215302975572,
+        "enabled": true,
+        "list": []
+    },
+    "welcome": {
+        "channel_id": 525772525045809152,
+        "enabled": true
+    }
+}
