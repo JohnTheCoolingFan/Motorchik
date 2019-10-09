@@ -60,14 +60,20 @@ class Configuration(commands.Cog):
     @config.command()
     async def welcome_channel(self, ctx: commands.Context, welcome_channel: discord.TextChannel):
         guild_config = GuildConfig(ctx.guild)
-        await guild_config.set_info_channel('welcome', welcome_channel)
+        guild_config.welcome_channel = welcome_channel
         await ctx.send('Welcome channel is set to {0.mention}'.format(welcome_channel))
 
     @config.command()
     async def log_channel(self, ctx: commands.Context, log_channel: discord.TextChannel):
         guild_config = GuildConfig(ctx.guild)
-        await guild_config.set_info_channel('log', log_channel)
+        guild_config.log_channel = log_channel
         await ctx.send('Log channel is set to {0.mention}'.format(log_channel))
+
+    @config.command(hidden=True)
+    async def reports_channel(self, ctx: commands.Context, reports_channel: discord.TextChannel):
+        guild_config = GuildConfig(ctx.guild)
+        guild_config.reports_channel = reports_channel
+        await ctx.send('Channel for report messages is set to {0.mention}'.format(reports_channel))
 
     @config.command()
     async def enable_welcome(self, ctx: commands.Context):
@@ -96,14 +102,8 @@ class Configuration(commands.Cog):
     @config.command()
     async def default_roles(self, ctx: commands.Context, *roles: discord.Role):
         guild_config = GuildConfig(ctx.guild)
-        await guild_config.set_default_roles(roles)
+        guild_config.default_roles = roles
         await ctx.send('List of default roles updated.')
-
-    @config.command(hidden=True)
-    async def reports_channel(self, ctx: commands.Context, channel: discord.TextChannel):
-        guild_config = GuildConfig(ctx.guild)
-        await guild_config.set_info_channel('reports', channel)
-        await ctx.send('Channel for report messages is set to {0.mention}'.format(channel))
 
     @config.group(name='list', case_sensitive=True, invoke_without_command=True)
     async def list_config(self, ctx: commands.Context):
