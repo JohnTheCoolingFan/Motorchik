@@ -100,7 +100,6 @@ class GuildConfig:
 
     def set_default_roles(self, new_roles: Iterable[discord.Role]):
         self.raw['default_roles'] = list({role.id for role in new_roles})
-        self.default_roles = list(new_roles)
         self.write()
 
     def dump_json(self) -> str:
