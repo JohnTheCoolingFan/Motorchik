@@ -16,7 +16,7 @@ class Configuration(commands.Cog):
 
     async def cog_command_error(self, ctx: commands.Context, error: commands.CommandError):
         if isinstance(error, commands.CheckFailure):
-            await ctx.send('Only administrator can configure bot settings')
+            await ctx.send('Only server administrator can configure bot settings')
         else:
             print(error)
 
@@ -126,7 +126,7 @@ class Configuration(commands.Cog):
     @list_config.command(name='raw', hidden=True)
     async def list_config_raw(self, ctx: commands.Context):
         guild_config = GuildConfig(ctx.guild)
-        await ctx.send(file=discord.File(StrIO(guild_config.dump_json()), filename='GuildConfig' + str(guild_config.guild.id) + '.json'))
+        await ctx.send(file=discord.File(StrIO(guild_config.json), filename='GuildConfig' + str(guild_config.guild.id) + '.json'))
 
 
 def setup(bot: commands.Bot):

@@ -114,5 +114,6 @@ class GuildConfig:
         else:
             return False
 
-    def dump_json(self) -> str:
+    @property
+    def json(self) -> str:
         return json.dumps(self.raw, sort_keys=True, indent=4)
