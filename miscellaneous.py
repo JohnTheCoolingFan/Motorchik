@@ -13,6 +13,10 @@ class Miscellaneous(commands.Cog):
     async def gitlab(self, ctx: commands.Context):
         await ctx.send('https://gitlab.com/JohnTheCoolingFan/Motorchik')
 
+    @commands.command()
+    async def source(self, ctx: commands.Context):
+        await ctx.send('Choose one which you prefer:\nGitHub: https://github.com/JohnTheCoolingFan/Motorchik\nGitLab: https://gitlab.com/JohnTheCoolingFan/Motorchik')
+
 
 def setup(bot):
     bot.add_cog(Miscellaneous(bot))
