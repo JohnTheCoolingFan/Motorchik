@@ -2,11 +2,11 @@ from discord.ext import commands
 import discord
 
 
-class ServiceTools(commands.Cog, name='Service Tools', command_attrs=dict(hidden=True)):
+class ServiceTools(commands.Cog, name='Service Tools'):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    async def cog_check(self, ctx: commands.Context):
+    async def cog_check(self, ctx: commands.Context) -> bool:
         return await self.bot.is_owner(ctx.author)
 
     @commands.Cog.listener()
