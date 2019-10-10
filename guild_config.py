@@ -90,7 +90,7 @@ class GuildConfig:
         with open('guilds/guild_{}.json'.format(self.guild.id), 'w') as guild_config:
             json.dump(self.raw, guild_config, indent=4, sort_keys=True)
 
-    async def switch_command(self, command_name: str, new_state: bool) -> bool:
+    def switch_command(self, command_name: str, new_state: bool) -> bool:
         if command_name in self.commands_names:
             self.raw['commands'][command_name]['enabled'] = new_state
             self.write()
@@ -98,7 +98,7 @@ class GuildConfig:
         else:
             return False
 
-    async def set_command_filter(self, command_name: str, filter_name: str, new_filter: Iterable[discord.TextChannel]) -> bool:
+    def set_command_filter(self, command_name: str, filter_name: str, new_filter: Iterable[discord.TextChannel]) -> bool:
         if command_name in self.commands_names:
             self.raw['commands'][command_name][filter_name] = list({channel.id for channel in new_filter})
             self.write()
@@ -106,7 +106,7 @@ class GuildConfig:
         else:
             return False
 
-    async def switch_info_channel(self, info_channel_type: str, new_state: bool) -> bool:
+    def switch_info_channel(self, info_channel_type: str, new_state: bool) -> bool:
         if info_channel_type in ['welcome', 'log', 'reports']:
             self.raw[info_channel_type]['enabled'] = new_state
             self.write()

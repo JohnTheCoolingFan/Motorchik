@@ -5,8 +5,6 @@ from guild_config import GuildConfig
 from io import StringIO as StrIO
 
 
-# TODO: remake configuration to be more convenient and user-friendly
-
 class Configuration(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -20,30 +18,31 @@ class Configuration(commands.Cog):
         else:
             print(error)
 
-    @commands.group(case_sensitive=True, invoke_without_command=True, brief='Configure bot for this server')
-    async def config(self, ctx: commands.Context):
+    # Command filters configuration
+    @commands.group(name='command')
+    async def config_commands(self, ctx: commands.Context):
         await ctx.send_help(ctx.command)
 
-    @config.command()
+    @config_commands.command()
     async def enable(self, ctx: commands.Context, command_name: str):
         guild_config = GuildConfig(ctx.guild)
-        if await guild_config.switch_command(command_name, True):
+        if guild_config.switch_command(command_name, True):
             await ctx.send('Enabled `{0}` command'.format(command_name))
         else:
             await ctx.send('Command `{0}` not found'.format(command_name))
 
-    @config.command()
+    @config_commands.command()
     async def disable(self, ctx: commands.Context, command_name: str):
         guild_config = GuildConfig(ctx.guild)
-        if await guild_config.switch_command(command_name, False):
+        if guild_config.switch_command(command_name, False):
             await ctx.send('Disabled `{0}` command'.format(command_name))
         else:
             await ctx.send('Command `{0}` not found'.format(command_name))
 
-    @config.command()
+    @config_commands.command()
     async def whitelist(self, ctx: commands.Context, command_name: str, *whitelist_channels: discord.TextChannel):
         guild_config = GuildConfig(ctx.guild)
-        if await guild_config.set_command_filter(command_name, 'whitelist', whitelist_channels):
+        if guild_config.set_command_filter(command_name, 'whitelist', whitelist_channels):
             if whitelist_channels:
                 await ctx.send('New whitelist for command `{0}`:\n{1}'.format(command_name, '\n'.join({channel.mention for channel in whitelist_channels})))
             else:
@@ -51,10 +50,10 @@ class Configuration(commands.Cog):
         else:
             await ctx.send('Command `{0}` not found'.format(command_name))
 
-    @config.command()
+    @config_commands.command()
     async def blacklist(self, ctx: commands.Context, command_name: str, *blacklist_channels: discord.TextChannel):
         guild_config = GuildConfig(ctx.guild)
-        if await guild_config.set_command_filter(command_name, 'blacklist', blacklist_channels):
+        if guild_config.set_command_filter(command_name, 'blacklist', blacklist_channels):
             if blacklist_channels:
                 await ctx.send('New blacklist for command `{0}`:\n{1}'.format(command_name, '\n'.join({channel.mention for channel in blacklist_channels})))
             else:
@@ -62,47 +61,46 @@ class Configuration(commands.Cog):
         else:
             await ctx.send('Command `{0}` not found'.format(command_name))
 
-    @config.command()
-    async def welcome_channel(self, ctx: commands.Context, welcome_channel: discord.TextChannel):
-        guild_config = GuildConfig(ctx.guild)
-        guild_config.welcome_channel = welcome_channel
-        await ctx.send('Welcome channel is set to {0.mention}'.format(welcome_channel))
+    # Info channels configuration
+    @commands.group(invoke_without_command=True)
+    async def info_channels(self, ctx: commands.Context):
+        await ctx.send_help(ctx.command)
 
-    @config.command()
-    async def log_channel(self, ctx: commands.Context, log_channel: discord.TextChannel):
+    @info_channels.command(name='set')
+    async def set_channel(self, ctx: commands.Context, channel_type: str, new_channel: discord.TextChannel):
         guild_config = GuildConfig(ctx.guild)
-        guild_config.log_channel = log_channel
-        await ctx.send('Log channel is set to {0.mention}'.format(log_channel))
+        if channel_type == 'welcome':
+            guild_config.welcome_channel = new_channel
+            await ctx.send('Info channel for welcome messages is now set to {}'.format(new_channel.mention))
+        elif channel_type == 'log':
+            guild_config.log_channel = new_channel
+            await ctx.send('Info channel for log messages is now set to {}'.format(new_channel.mention))
+        elif channel_type == 'reports':
+            guild_config.reports_channel = new_channel
+            await ctx.send('Info channel for reports messages is now set to {}'.format(new_channel.mention))
+        else:
+            await ctx.send('Info channel `{}` not found'.format(channel_type))
 
-    @config.command(hidden=True)
-    async def reports_channel(self, ctx: commands.Context, reports_channel: discord.TextChannel):
+    @info_channels.command(name='enable')
+    async def enable_info_channel(self, ctx: commands.Context, channel_type: str):
         guild_config = GuildConfig(ctx.guild)
-        guild_config.reports_channel = reports_channel
-        await ctx.send('Channel for report messages is set to {0.mention}'.format(reports_channel))
+        if guild_config.switch_info_channel(channel_type, True):
+            await ctx.send('Enabled {} info channel'.format(channel_type))
+        else:
+            await ctx.send('Info channel `{}` not found'.format(channel_type))
 
-    @config.command()
-    async def enable_welcome(self, ctx: commands.Context):
+    @info_channels.command(name='disable')
+    async def disable_info_channel(self, ctx: commands.Context, channel_type: str):
         guild_config = GuildConfig(ctx.guild)
-        await guild_config.switch_info_channel('welcome', True)
-        await ctx.send('Welcome messages enabled')
+        if guild_config.switch_info_channel(channel_type, False):
+            await ctx.send('Disabled {} info channel'.format(channel_type))
+        else:
+            await ctx.send('Info channel `{}` not found'.format(channel_type))
 
-    @config.command()
-    async def disable_welcome(self, ctx: commands.Context):
-        guild_config = GuildConfig(ctx.guild)
-        await guild_config.switch_info_channel('welcome', False)
-        await ctx.send('Welcome messages disabled')
-
-    @config.command()
-    async def enable_log(self, ctx: commands.Context):
-        guild_config = GuildConfig(ctx.guild)
-        await guild_config.switch_info_channel('log', True)
-        await ctx.send('Log messages enabled.')
-
-    @config.command()
-    async def disable_log(self, ctx: commands.Context):
-        guild_config = GuildConfig(ctx.guild)
-        await guild_config.switch_info_channel('log', False)
-        await ctx.send('Log messages disabled.')
+    # General configuration
+    @commands.group(invoke_without_command=True, brief='Configure bot for this server')
+    async def config(self, ctx: commands.Context):
+        await ctx.send_help(ctx.command)
 
     @config.command()
     async def default_roles(self, ctx: commands.Context, *roles: discord.Role):
