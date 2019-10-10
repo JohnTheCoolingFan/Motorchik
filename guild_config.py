@@ -59,7 +59,7 @@ class GuildConfig:
 
     @default_roles.setter
     def default_roles(self, new_roles: Iterable[discord.Role]):
-        self.raw['default_roles'] = list((role.id for role in new_roles))
+        self.raw['default_roles'] = list({role.id for role in new_roles})
 
     @classmethod
     def check(cls, bot: commands.Bot, guild: discord.Guild = None):
