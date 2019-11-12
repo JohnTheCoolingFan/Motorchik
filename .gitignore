@@ -4,4 +4,5 @@ token.txt
 __pycache__
 .idea
 guilds/guild_[0-9]*.json
-users
+users/*
+!users/user_example.json
