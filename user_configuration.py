@@ -35,3 +35,6 @@ class UserConfiguration(commands.Cog):
         else:
             UserConfig.create_user_config(ctx.author)
             await ctx.send('Congratulations, {}, you are now in the bot\'s database!'.format(ctx.author.mention))
+
+def setup(bot: commands.Bot):
+    bot.add_cog(UserConfiguration(bot))
