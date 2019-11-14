@@ -13,18 +13,24 @@ class UserConfiguration(commands.Cog):
     @userconfig.command()
     async def notifications(self, ctx: commands.Context, new_notifications_setting: str):
         if UserConfig.check(ctx.author):
-            user_config = UserConfig(ctx.author)
-            user_config.notifications = new_notifications_setting
-            await ctx.send('{}, New notifications setting is \'{}\''.format(ctx.author.mention, new_notifications_setting))
+            if new_notifications_setting not in ['private', 'public', 'public-no-ping', 'disabled']:
+                await ctx.send('{}, wrong notifications setting:\'{}\''.format(ctx.author.mention, new_notifications_setting))
+            else:
+                user_config = UserConfig(ctx.author)
+                user_config.notifications = new_notifications_setting
+                await ctx.send('{}, New notifications setting is \'{}\''.format(ctx.author.mention, new_notifications_setting))
         else:
             await ctx.send('{}, you are currently not in bot\'s database. To add yourself, use `$userconfig setup` command.')
 
     @userconfig.command()
     async def notification_categories(self, ctx: commands.Context, *new_notification_categories: str):
         if UserConfig.check(ctx.author):
-            user_config = UserConfig(ctx.author)
-            user_config.notification_categories = new_notification_categories
-            await ctx.send('{}, New notification categories: {}'.format(ctx.author.mention, ', '.join(new_notification_categories)))
+            if set(new_notification_categories).issubset(['all', 'guild-levels', 'bot-levels']):
+                user_config = UserConfig(ctx.author)
+                user_config.notification_categories = new_notification_categories
+                await ctx.send('{}, New notification categories: {}'.format(ctx.author.mention, ', '.join(new_notification_categories)))
+            else:
+                await ctx.send('{}, wrong notification categories: {}'.format(ctx.author.mention, ', '.join(new_notification_categories)))
         else:
             await ctx.send('{}, you are currently not in bot\'s database. To add yourself, use `$userconfig setup` command.')
 
