@@ -21,6 +21,7 @@ class UserConfig:
     def notifications(self, new_notifications_setting: str):
         if new_notifications_setting in ['private', 'public', 'public-no-ping', 'disabled']:
             self.raw['notifications'] = new_notifications_setting
+            self.write()
         else:
             print('Invalid notifications setting was passed: \'{setting}\', User: {user}'.format(setting=new_notifications_setting, user=str(self.user)))
 
@@ -32,6 +33,7 @@ class UserConfig:
     def notification_categories(self, new_notification_categories: List[str]):
         if set(new_notification_categories).issubset(['all', 'guild-levels', 'bot-levels']):
             self.raw['notification_categories'] = new_notification_categories
+            self.write()
         else:
             print('Invalid list of new notification setting was passed for user {user}'.format(user=str(self.user)))
 
@@ -41,6 +43,7 @@ class UserConfig:
 
     def add_xp(self, xp_amount: int):
         self.raw['xp'] += xp_amount
+        self.write()
 
     @classmethod
     def check(cls, user: discord.User):
