@@ -10,7 +10,7 @@ class UserConfig:
 
     def __init__(self, user: discord.User):
         self.user = user
-        with open('user/user_{}.json'.format(user.id)) as user_config:
+        with open('users/user_{}.json'.format(user.id)) as user_config:
             self.raw = json.load(user_config)
 
     @property
