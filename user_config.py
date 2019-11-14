@@ -56,5 +56,5 @@ class UserConfig:
             json.dump(new_user_config, new_user_config_file)
 
     def write(self):
-        with open('users/user_{}'.format(self.user.id), 'w') as user_config:
+        with open('users/user_{}.json'.format(self.user.id), 'w') as user_config:
             json.dump(self.raw, user_config, indent=4, sort_keys=True)
