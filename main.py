@@ -1,4 +1,4 @@
-#! /usr/bin/python3.7
+#! /usr/bin/python3
 
 # TODO: make experience system
 # TODO: make role-level system and levelup/leveldown commands
