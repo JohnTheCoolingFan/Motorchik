@@ -30,5 +30,8 @@ class UserConfiguration(commands.Cog):
 
     @userconfig.command()
     async def setup(self, ctx: commands.Context):
-        UserConfig.create_user_config(ctx.author)
-        await ctx.send('Congratulations, {}, you are now in the bot\'s database!'.format(ctx.author.mention))
+        if UserConfig.check(ctx.author):
+            await ctx.send('{}, you are already in bot\'s database'.format(ctx.author.mention))
+        else:
+            UserConfig.create_user_config(ctx.author)
+            await ctx.send('Congratulations, {}, you are now in the bot\'s database!'.format(ctx.author.mention))
