@@ -6,7 +6,7 @@ class UserConfiguration(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.group()
+    @commands.group(invoke_without_command=True)
     async def userconfig(self, ctx: commands.Context):
         await ctx.send_help(ctx.command)
 
