@@ -10,7 +10,7 @@ class UserConfiguration(commands.Cog):
     async def userconfig(self, ctx: commands.Context):
         await ctx.send_help(ctx.command)
 
-    @userconfig.command()
+    @userconfig.command(brief='Change where and how to send notifications.', help='Change where and how to send notifications.\n\n\'private\': notifications are sent to user\'s DM.\n\'public\': notifications are sent to the same channel where action which invoked the notification was made (e.g. when level-up for sending a message). Notification will be deleted after 5 seconds.\n\'public-no-ping\': same as \'public\' but wothout mention\n\'disabled\': notifications are disabled.')
     async def notifications(self, ctx: commands.Context, new_notifications_setting: str):
         if UserConfig.check(ctx.author):
             if new_notifications_setting not in ['private', 'public', 'public-no-ping', 'disabled']:
@@ -22,7 +22,7 @@ class UserConfiguration(commands.Cog):
         else:
             await ctx.send('{} you are currently not in bot\'s database. To add yourself, use `$userconfig setup` command.')
 
-    @userconfig.command()
+    @userconfig.command(brief='Choose which notifications to receive', help='Choose which notifications to receive.\n\n\'all\': receive all notifications\n\'guild-levels\': receive notifications about guild level-ups (and level-downs)\n\'bot-levels\': receive notifications about bot level-ups (and level-downs)')
     async def notification_categories(self, ctx: commands.Context, *new_notification_categories: str):
         if UserConfig.check(ctx.author):
             if set(new_notification_categories).issubset(['all', 'guild-levels', 'bot-levels']):
@@ -34,7 +34,7 @@ class UserConfiguration(commands.Cog):
         else:
             await ctx.send('{} you are currently not in bot\'s database. To add yourself, use `$userconfig setup` command.')
 
-    @userconfig.command()
+    @userconfig.command(brief='Add user to bot\'s database.', help='Add user to bot\'s database.')
     async def setup(self, ctx: commands.Context):
         if UserConfig.check(ctx.author):
             await ctx.send('{} you are already in bot\'s database'.format(ctx.author.mention))
