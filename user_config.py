@@ -46,7 +46,7 @@ class UserConfig:
         self.write()
 
     @classmethod
-    def check(cls, user: discord.User):
+    def check(cls, user: discord.User) -> bool:
         return os.path.exists('users/user_{}.json'.format(user.id))
 
     @classmethod
