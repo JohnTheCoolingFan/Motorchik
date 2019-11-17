@@ -14,6 +14,7 @@ MOD_LIST_UBOT = ['Placeable-off-grid', 'No Artillery Map Reveal', 'Random Factor
 MOD_LIST_MOTORCHIK = ['PlaceableOffGrid', 'NoArtilleryMapReveal', 'RandomFactorioThings', 'PlutoniumEnergy', 'RealisticReactors']
 
 # TODO: make customizable mod-list, which will update automatically over time by editing messages
+# TODO: this cog needs some reorganization...
 
 
 class FactorioCog(commands.Cog, name='Factorio'):
