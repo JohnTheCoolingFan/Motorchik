@@ -1,6 +1,7 @@
 from discord.ext import commands
 import discord
 from guild_config import GuildConfig
+from user_config import UserConfig
 
 
 class Greetings(commands.Cog):
@@ -20,6 +21,11 @@ class Greetings(commands.Cog):
         guild_config = GuildConfig(member.guild)
         if guild_config.welcome_channel:
             await guild_config.welcome_channel.send('Goodbye, {0} (ID:{1})'.format(str(member), member.id))
+
+    async def cog_before_invoke(self, ctx: commands.Context):
+        if UserConfig.check(ctx.author):
+            userconfig = UserConfig(ctx.author)
+            userconfig.add_xp(1)
 
     @commands.command(description='\"Hello\" in English', brief='\"Hello\" in English', help='Returns \"Hello\" in English')
     async def hello(self, ctx: commands.Context):
