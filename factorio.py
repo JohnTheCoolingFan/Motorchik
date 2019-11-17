@@ -23,6 +23,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
         if UserConfig.check(ctx.author):
             userconfig = UserConfig(ctx.author)
             userconfig.add_xp(5)
+
         if mod_names:
             for modname in mod_names:
                 await ctx.send('>>'+modname+'<<', delete_after=1)
@@ -36,6 +37,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
         if UserConfig.check(ctx.author):
             userconfig = UserConfig(ctx.author)
             userconfig.add_xp(15)
+
         request = req.get('https://mods.factorio.com/api/mods/'+mod_name)
         if request.status_code == 200:
             json_req = request.json()
