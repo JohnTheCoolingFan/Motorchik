@@ -1,12 +1,8 @@
 from discord.ext import commands
 import discord
-
 import requests as req
-
 from bs4 import BeautifulSoup
-
 from dateutil import parser
-
 from colorthief import ColorThief
 from io import BytesIO
 
