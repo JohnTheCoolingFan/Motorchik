@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from dateutil import parser
 from colorthief import ColorThief
 from io import BytesIO
+from user_config import UserConfig
 
 MOD_LIST_UBOT = ['Placeable-off-grid', 'No Artillery Map Reveal', 'Random Factorio Things', 'Plutonium Energy', 'RealisticReactors Ingo']
 MOD_LIST_MOTORCHIK = ['PlaceableOffGrid', 'NoArtilleryMapReveal', 'RandomFactorioThings', 'PlutoniumEnergy', 'RealisticReactors']
@@ -19,6 +20,9 @@ class FactorioCog(commands.Cog, name='Factorio'):
 
     @commands.command(aliases=['modstat'], description='Info about mods', brief='Info about mods', help='Prints a bunch of commands for uBot to display info about mods')
     async def mods_statistics(self, ctx: commands.Context, *mod_names: str):
+        if UserConfig.check(ctx.author):
+            userconfig = UserConfig(ctx.author)
+            userconfig.add_xp(5)
         if mod_names:
             for modname in mod_names:
                 await ctx.send('>>'+modname+'<<', delete_after=1)
@@ -29,6 +33,9 @@ class FactorioCog(commands.Cog, name='Factorio'):
 
     @commands.command(aliases=['nmodstat'])
     async def new_mods_statistics(self, ctx: commands.Context, *, mod_name: str):
+        if UserConfig.check(ctx.author):
+            userconfig = UserConfig(ctx.author)
+            userconfig.add_xp(15)
         request = req.get('https://mods.factorio.com/api/mods/'+mod_name)
         if request.status_code == 200:
             json_req = request.json()
