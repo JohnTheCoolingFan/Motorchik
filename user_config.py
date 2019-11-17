@@ -53,7 +53,7 @@ class UserConfig:
     def create_user_config(cls, user: discord.User):
         with open('users/user_{}.json'.format(user.id), 'w') as new_user_config_file:
             new_user_config = dict(name=user.name, discriminator=user.discriminator, notifications='private', notification_categories=['all'], xp=10)
-            json.dump(new_user_config, new_user_config_file)
+            json.dump(new_user_config, new_user_config_file, indent=4, sort_keys=True)
 
     def write(self):
         with open('users/user_{}.json'.format(self.user.id), 'w') as user_config:
