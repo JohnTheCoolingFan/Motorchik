@@ -52,7 +52,7 @@ class UserConfig:
     @classmethod
     def create_user_config(cls, user: discord.User):
         with open('users/user_{}.json'.format(user.id), 'w') as new_user_config_file:
-            new_user_config = dict(name=user.name, discriminator=user.discriminator, notifications='private', notification_categories=['all'], xp=10)
+            new_user_config = dict(name=user.name, discriminator=int(user.discriminator), notifications='private', notification_categories=['all'], xp=10)
             json.dump(new_user_config, new_user_config_file, indent=4, sort_keys=True)
 
     def write(self):
