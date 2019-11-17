@@ -66,7 +66,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
                 await ctx.send(embed=embed)
 
     @staticmethod
-    def find_mod(mod_name: str) -> object:
+    def find_mod(mod_name: str) -> str:
         request = req.get('https://mods.factorio.com/query/'+mod_name.replace(' ', '%20'))
         if request.status_code == 200:
             soup = BeautifulSoup(request.text, 'html.parser')
