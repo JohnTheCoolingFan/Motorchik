@@ -11,8 +11,8 @@ Per-server configuration system is still en development, but working (not workin
   - Greeting message on member join.
   - Message when member leaves
 * Factorio stuff
-  - Get a mod's statistics and disaply as embed.
-  - Send a list of mod statistics info (the list can't be changed for `$new_mods_statistics`, which is a Motorchik's realisation. `$mods_statistics` require [µBot](https://github.com/arielbeje/uBot) at the server)
+  - Get a mod (or mods) statistics and display as embed.
+  - Send a list of mod statistics info.
 * Configuration
   - Motorchik is highly configurable for users and servers (guilds).
   
