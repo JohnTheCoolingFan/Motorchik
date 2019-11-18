@@ -2,7 +2,7 @@
 Motorchik, discord bot written in python.
 
 ## Longer about
-Motorchik is a discord bot, written in python using ![discord.py](https://github.com/Rapptz/discord.py).
+Motorchik is a discord bot, written in python using [discord.py](https://github.com/Rapptz/discord.py).
 At current state Motorchik provides simple tools for discord servers, such as delete a number of messages, ban or kick someone, give default roles to new members, etc.
 Per-server configuration system is still en development, but working (not working: command black-/whitelisting). Also pr-user configuration system is in development and kind of working (`user-config` branch).
 
@@ -12,7 +12,7 @@ Per-server configuration system is still en development, but working (not workin
   - Message when member leaves
 * Factorio stuff
   - Get a mod's statistics and disaply as embed.
-  - Send a list of mod statistics info (the list can't be changed for `$new_mods_statistics`, which is a Motorchik's realisation. `$mods_statistics` require ![µBot](https://github.com/arielbeje/uBot) at the server)
+  - Send a list of mod statistics info (the list can't be changed for `$new_mods_statistics`, which is a Motorchik's realisation. `$mods_statistics` require [µBot](https://github.com/arielbeje/uBot) at the server)
 * Configuration
   - Motorchik is highly configurable for users and servers (guilds).
   
