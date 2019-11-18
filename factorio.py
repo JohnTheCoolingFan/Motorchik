@@ -81,7 +81,8 @@ class FactorioCog(commands.Cog, name='Factorio'):
 
     @commands.command()
     async def modlist(self, ctx: commands.Context):
-        await ctx.invoke(self.newer_mods_statistics, mods_names=MOD_LIST_MOTORCHIK)
+        await ctx.invoke(self.newer_mods_statistics, *MOD_LIST_MOTORCHIK)
+        await ctx.message.delete()
 
 
 def setup(bot: commands.Bot):
