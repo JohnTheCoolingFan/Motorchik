@@ -65,6 +65,29 @@ class FactorioCog(commands.Cog, name='Factorio'):
                 embed = discord.Embed(title='Mod not found', description='Failed to find mod \'{}\''.format(mod_name), color=discord.Color.from_rgb(255, 10, 10))
                 await ctx.send(embed=embed)
 
+    async def get_mods_info(self, mod_names: list) -> list:
+        result = []
+        for mod_name in mod_names:
+            request = req.get('https://mods.factorio.com/api/mods/'+mod_name)
+            if request.status_code == 200:
+                json_req = request.json()
+                latest_release = sorted(json_req['releases'], key=lambda release: release['version'], reverse=True)[0]
+                if json_req['thumbnail'] != '/assets/.thumb.png':
+                    thumb_color = discord.Color.from_rgb(*ColorThief(BytesIO(req.get('https://mods-data.factorio.com'+json_req['thumbnail']).content)).get_color())
+                    thumbnail_url = 'https://mods-data.factorio.com'+json_req['thumbnail']
+                else:
+                    thumb_color = discord.Color.from_rgb(47, 137, 197)
+                    thumbnail_url = ''
+                result.append(dict(title=json_req['title'], description=json_req['summary'], url='https://mods.factorio.com/'+mod_name,
+                    timestamp=parser.isoparse(latest_release['released_at']), color=thumb_color, thumbnail_url=thumbnail_url, game_version=latest_release['info_json']['factorio_version'],
+                    download_official='https://mods.factorio.com'+latest_release['download_url'], download_launcher='https://factorio-launcher-mods.storage.googleapis.com/{}/{}.zip'.format(
+                        mod_name, latest_release['version']), latest_version=latest_release['version'], downloads_count=json_req['downloads_count'], author=json_req['owner']))
+            else:
+                new_mod_name = self.find_mod(mod_name)
+                if new_mod_name:
+                    result.append(*self.get_mods_info([new_mod_name]))
+        return result
+
     @staticmethod
     def find_mod(mod_name: str) -> str:
         request = req.get('https://mods.factorio.com/query/'+mod_name.replace(' ', '%20'))
