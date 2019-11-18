@@ -4,7 +4,7 @@ Motorchik, discord bot written in python.
 ## Longer about
 Motorchik is a discord bot, written in python using [discord.py](https://github.com/Rapptz/discord.py).
 At current state Motorchik provides simple tools for discord servers, such as delete a number of messages, ban or kick someone, give default roles to new members, etc.
-Per-server configuration system is still en development, but working (not working: command black-/whitelisting). Also per-user configuration system is in development and kind of working (`user-config` branch).
+Per-server configuration system is still en development, but working (not working: command black-/whitelisting). Also per-user configuration system is in development and kind of working.
 
 ## Features
 * Misc
@@ -44,7 +44,7 @@ Per-server configuration system is still en development, but working (not workin
   
   [Service]
   ExecStart=/path/to/Motorchik/main.py
-  WorkingDirectory=/path/to/pythonworks/Motorchik
+  WorkingDirectory=/path/to/Motorchik
   
   [Install]
   WantedBy=default.target
@@ -54,7 +54,7 @@ Per-server configuration system is still en development, but working (not workin
   $ systemctl --user enable Motorchik.service
   $ systemctl --user start Motorchik.service
   ```
-  Everything will be logged to STDIN, so you can view entire bot's log with:
+  Everything will be logged to STDOUT, so you can view entire bot's log with:
   ```
   $ journalctl --user -u Motorchik.service
   ```
