@@ -9,10 +9,6 @@ class GuildConfig:
     guild: discord.Guild
     raw: dict
     commands_names: List[str]
-    welcome_channel: Optional[discord.TextChannel]
-    log_channel: Optional[discord.TextChannel]
-    reports_channel: Optional[discord.TextChannel]
-    default_roles: List[discord.Role]
 
     def __init__(self, guild: discord.Guild):
         self.guild = guild

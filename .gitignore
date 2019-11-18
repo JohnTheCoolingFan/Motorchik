@@ -3,5 +3,7 @@ token.txt
 *Tagbar*
 __pycache__
 .idea
-guilds/guild_[0-9]*.json
-users
+guilds/*
+!guilds/guild_example.json
+users/*
+!users/user_example.json

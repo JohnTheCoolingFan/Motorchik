@@ -1,4 +1,4 @@
-#! /usr/bin/python3.7
+#! /usr/bin/python3
 
 # TODO: make experience system
 # TODO: make role-level system and levelup/leveldown commands
@@ -44,6 +44,7 @@ bot.load_extension('reports')
 bot.load_extension('configuration')
 bot.load_extension('miscellaneous')
 bot.load_extension('service_tools')
+bot.load_extension('user_configuration')
 
 with open('token.txt', 'r') as token_file:
     bot.run(token_file.read().rstrip())
