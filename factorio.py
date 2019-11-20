@@ -55,7 +55,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
                 else:
                     thumb_color = discord.Color.from_rgb(47, 137, 197)
                     thumbnail_url = ''
-                result.append(dict(title=json_req['title'], description=json_req['summary'], url='https://mods.factorio.com/'+mod_name,
+                result.append(dict(title=json_req['title'], description=json_req['summary'], url='https://mods.factorio.com/mod/'+mod_name,
                     timestamp=parser.isoparse(latest_release['released_at']), color=thumb_color, thumbnail_url=thumbnail_url, game_version=latest_release['info_json']['factorio_version'],
                     download_official='https://mods.factorio.com'+latest_release['download_url'], download_launcher='https://factorio-launcher-mods.storage.googleapis.com/{}/{}.zip'.format(
                         mod_name, latest_release['version']), latest_version=latest_release['version'], downloads_count=json_req['downloads_count'], author=json_req['owner']))
