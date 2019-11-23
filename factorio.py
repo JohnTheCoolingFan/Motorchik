@@ -17,7 +17,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
         self.bot = bot
 
     @commands.command(aliases=['nnmodstat'])
-    async def newer_mods_statistics(self, ctx: commands.Context, *mods_names):
+    async def mods_statistics(self, ctx: commands.Context, *mods_names):
         if UserConfig.check(ctx.author):
             userconfig = UserConfig(ctx.author)
             userconfig.add_xp(5*len(mods_names))
@@ -81,7 +81,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
 
     @commands.command()
     async def modlist(self, ctx: commands.Context):
-        await ctx.invoke(self.newer_mods_statistics, *MOD_LIST_MOTORCHIK)
+        await ctx.invoke(self.mods_statistics, *MOD_LIST_MOTORCHIK)
         await ctx.message.delete()
 
 
