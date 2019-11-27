@@ -7,7 +7,7 @@ class Moderation(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.command(aliases=['clear'], description='Clear chat', brief='Clear chat', help='Deletes specified count of messages in this channel. Can be used only by members with messages managing permission.')
+    @commands.command(aliases=['clear', 'c'], description='Clear chat', brief='Clear chat', help='Deletes specified count of messages in this channel. Can be used only by members with messages managing permission.')
     @commands.has_permissions(manage_messages=True)
     async def clearchat(self, ctx: commands.Context, messages_count: int):
         await ctx.message.delete()
