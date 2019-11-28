@@ -15,10 +15,10 @@ class Moderation(commands.Cog):
         await ctx.send('Deleted {} message(s)'.format(len(deleted)), delete_after=3)
 
     @commands.has_permissions(ban_members=True)
-    @commands.command(case_sensitive=False, description='Ban member')
-    async def ban(self, ctx: commands.Context, member: discord.Member, reason: str = 'Not provided'):
+    @commands.command(case_sensitive=False, description='Ban member', help='Ban specified member. Set delete_message_days to 0 to not delete any messages.')
+    async def ban(self, ctx: commands.Context, member: discord.Member, reason: str = 'Not provided', delete_message_days: int = 0):
         guild_config = GuildConfig(ctx.guild)
-        await member.ban(reason=reason, delete_message_days=0)
+        await member.ban(reason=reason, delete_message_days=delete_message_days)
         await ctx.send('Banned member '+str(member))
         if guild_config.log_channel:
             await guild_config.log_channel.send('Banned {0}\nReason: {1}'.format(str(member), reason))
