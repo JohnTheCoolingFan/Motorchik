@@ -1,5 +1,4 @@
-# TODO: add a report system (report user or report message)
-# TODO: add setting to report with emoji
+# TODO: make reports
 
 from discord.ext import commands
 from guild_config import GuildConfig

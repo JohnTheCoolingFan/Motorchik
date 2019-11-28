@@ -1,3 +1,5 @@
+# TODO: Delete this or make this useful
+
 from discord.ext import commands
 
 
