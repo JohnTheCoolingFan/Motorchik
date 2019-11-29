@@ -16,7 +16,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.command(aliases=['nnmodstat'])
+    @commands.command(aliases=['modstat', 'ms'])
     async def mods_statistics(self, ctx: commands.Context, *mods_names):
         if UserConfig.check(ctx.author):
             userconfig = UserConfig(ctx.author)
@@ -79,7 +79,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
         else:
             return ''
 
-    @commands.command()
+    @commands.command(aliases=['ml'])
     async def modlist(self, ctx: commands.Context):
         await ctx.invoke(self.mods_statistics, *MOD_LIST_MOTORCHIK)
         await ctx.message.delete()
