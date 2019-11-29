@@ -88,6 +88,10 @@ class GuildConfig:
     def get_member_record(self, member: discord.Member) -> self.MemberRecord:
         return self.MemberRecord(member, self.raw['members'][str(member.id)])
 
+    def process_message(self, message: discord.Message):
+        member_record = self.get_member_record(message.author)
+        member_record.add_xp(len(message.content) // 10 + 1)
+
     @classmethod
     def create_guild_config(cls, guild: discord.Guild):
         print('Creating guild config file for ID:{}'.format(guild.id))
