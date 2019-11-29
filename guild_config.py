@@ -60,8 +60,8 @@ class GuildConfig:
     @classmethod
     def check(cls, bot: commands.Bot, guild: discord.Guild = None):
         if guild is None:
-            for guild in bot.guilds:
-                cls.check(bot, guild)
+            for _guild in bot.guilds:
+                cls.check(bot, _guild)
         else:
             if not os.path.exists('guilds/guild_{}.json'.format(guild.id)):
                 cls.create_guild_config(guild)
@@ -72,6 +72,21 @@ class GuildConfig:
                     print('Config for command "{0}" not found in config of guild ID:{1}'.format(command.name, guild_config.guild.id))
                     guild_config.raw['commands'][command.name] = dict(whitelist=[], blacklist=[], enabled=True)
             guild_config.write()
+
+    class MemberRecord:
+        def __init__(self, member: discord.Member, data: dict):
+            self.member = member
+            self.data = data
+
+        @property
+        def xp(self) -> int:
+            return self.data['xp']
+
+        def add_xp(self, xp_count):
+            self.data['xp'] += xp_count
+
+    def get_member_record(self, member: discord.Member) -> self.MemberRecord:
+        return self.MemberRecord(member, self.raw['members'][str(member.id)])
 
     @classmethod
     def create_guild_config(cls, guild: discord.Guild):
