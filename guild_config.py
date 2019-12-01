@@ -85,7 +85,7 @@ class GuildConfig:
         def add_xp(self, xp_count):
             self.data['xp'] += xp_count
 
-    def get_member_record(self, member: discord.Member) -> self.MemberRecord:
+    def get_member_record(self, member: discord.Member): # -> self.MemberRecord:
         return self.MemberRecord(member, self.raw['members'][str(member.id)])
 
     def process_message(self, message: discord.Message):
