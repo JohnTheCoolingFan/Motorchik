@@ -92,8 +92,8 @@ class GuildConfig:
         member_record = self.get_member_record(message.author)
         member_record.add_xp(len(message.content) // 10 + 1)
 
-    @classmethod
-    def create_guild_config(cls, guild: discord.Guild):
+    @staticmethod
+    def create_guild_config(guild: discord.Guild):
         print('Creating guild config file for ID:{}'.format(guild.id))
         with open('guilds/guild_{}.json'.format(guild.id), 'w') as new_guild_config_file:
             default_channel = guild.system_channel.id if guild.system_channel is not None else guild.text_channels[0].id
