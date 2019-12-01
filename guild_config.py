@@ -98,7 +98,12 @@ class GuildConfig:
         with open('guilds/guild_{}.json'.format(guild.id), 'w') as new_guild_config_file:
             default_channel = guild.system_channel.id if guild.system_channel is not None else guild.text_channels[0].id
             default_info_channel = dict(channel_id=default_channel, enabled=False)
-            new_guild_config = dict(name=guild.name, welcome=default_info_channel, log=default_info_channel, reports=default_info_channel, default_roles=[], commands=dict())
+            new_guild_config = dict(name=guild.name,
+                    welcome=default_info_channel,
+                    log=default_info_channel,
+                    reports=default_info_channel,
+                    default_roles=[],
+                    commands=dict())
             json.dump(new_guild_config, new_guild_config_file, sort_keys=True, indent=4)
 
     def write(self):
