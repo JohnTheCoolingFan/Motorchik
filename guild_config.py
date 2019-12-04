@@ -74,19 +74,19 @@ class GuildConfig:
             guild_config.write()
 
     class MemberRecord:
-        def __init__(self, member: discord.Member, data: dict):
+        def __init__(self, member: discord.Member, xp: int):
             self.member = member
-            self.data = data
+            self.xp = xp
 
         @property
         def xp(self) -> int:
-            return self.data['xp']
+            return self.xp
 
         def add_xp(self, xp_count):
-            self.data['xp'] += xp_count
+            self.xp += xp_count
 
     def get_member_record(self, member: discord.Member) -> MemberRecord: # pylint: disable=undefined-variable
-        return self.MemberRecord(member, self.raw['members'][str(member.id)])
+        return self.MemberRecord(member, self.raw['members-xp'][str(member.id)])
 
     def process_message(self, message: discord.Message):
         member_record = self.get_member_record(message.author)
