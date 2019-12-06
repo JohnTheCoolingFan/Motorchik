@@ -77,6 +77,9 @@ class GuildConfig:
         self.raw['members'][str(member.id)] += xp_count
         self.write()
 
+    def get_xp(self, member: discord.Member) -> int:
+        return self.raw['members'][str(member.id)]
+
     def process_message(self, ctx: commands.Context):
         self.add_xp(ctx.author, len(ctx.message.content) // 10 + 1)
         # TODO: write timestamp to somewhere (log, for example) and use it to protect from spam xp-farming and for xp earned recently
