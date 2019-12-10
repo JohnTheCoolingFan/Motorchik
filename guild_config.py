@@ -3,6 +3,7 @@ import discord
 import json
 import os.path
 from typing import List, Iterable, Optional
+import datetime
 
 
 class GuildConfig:
@@ -129,3 +130,16 @@ class GuildConfig:
     @property
     def json(self) -> str:
         return json.dumps(self.raw, sort_keys=True, indent=4)
+
+class XpLog:
+    def __init__(self):
+        pass
+
+    @classmethod
+    def log_message(cls, created_at: datetime.datetime, guild_id: int, message_id: int, authod_id: int, xp_count: int):
+        log_line = '{timestamp} {guild_id} {message_id} {author_id} {xp_count}'.format(
+                timestamp=created_at.timestamp(),
+                guild_id=guild_id,
+                message_id=message_id,
+                authod_id=authod_id,
+                xp_count=xp_count)
