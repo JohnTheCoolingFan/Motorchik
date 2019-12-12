@@ -6,6 +6,8 @@ from guild_config import GuildConfig
 class Moderation(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+    # TODO: add on_member_ban listener
+    # TODO: move these listeners to InfoChannels
 
     @commands.has_permissions(manage_messages=True)
     @commands.command(aliases=['clear', 'cl'], description='Clear chat', brief='Clear chat', help='Deletes specified count of messages in this channel. Can be used only by members with messages managing permission.')
