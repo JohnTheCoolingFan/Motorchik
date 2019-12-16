@@ -136,10 +136,9 @@ class XpLog:
         pass
 
     @classmethod
-    def log_message(cls, created_at: datetime.datetime, guild_id: int, message_id: int, authod_id: int, xp_count: int):
-        log_line = '{timestamp} {guild_id} {message_id} {author_id} {xp_count}'.format(
+    def log_message(cls, created_at: datetime.datetime, message_id: int, authod_id: int, xp_count: int):
+        log_line = '{timestamp} {message_id} {author_id} {xp_count}'.format(
                 timestamp=created_at.timestamp(),
-                guild_id=guild_id,
                 message_id=message_id,
                 authod_id=authod_id,
                 xp_count=xp_count)
