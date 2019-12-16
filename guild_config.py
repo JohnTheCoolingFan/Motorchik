@@ -81,9 +81,9 @@ class GuildConfig:
     def get_xp(self, member: discord.Member) -> int:
         return self.raw['members'][str(member.id)]
 
-    def process_message(self, ctx: commands.Context):
-        self.add_xp(ctx.author, len(ctx.message.content) // 10 + 1)
-        XpLog.log_message(ctx.message.created_at, ctx.message.id, ctx.message.author.id, (len(ctx.message.content)//10)+1, ctx.guild.id)
+    def process_message(self, message: discord.Message):
+        self.add_xp(message.author, len(message.content) // 10 + 1)
+        XpLog.log_message(message.created_at, message.id, message.author.id, (len(message.content)//10)+1, message.guild.id)
 
     @staticmethod
     def create_guild_config(guild: discord.Guild):
