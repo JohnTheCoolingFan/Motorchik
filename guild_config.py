@@ -83,7 +83,7 @@ class GuildConfig:
 
     def process_message(self, ctx: commands.Context):
         self.add_xp(ctx.author, len(ctx.message.content) // 10 + 1)
-        # TODO: write timestamp to somewhere (log, for example) and use it to protect from spam xp-farming and for xp earned recently
+        XpLog.log_message(ctx.message.created_at, ctx.message.id, ctx.message.author.id, (len(ctx.message.content)//10)+1, ctx.guild.id)
 
     @staticmethod
     def create_guild_config(guild: discord.Guild):
