@@ -2,8 +2,9 @@ from discord.ext import commands
 import discord
 import json
 import os.path
-from typing import List, Iterable, Optional
 import datetime
+from math import round
+from typing import List, Iterable, Optional
 
 
 class GuildConfig:
@@ -141,7 +142,7 @@ class XpLog:
     @classmethod
     def log_message(cls, created_at: datetime.datetime, message_id: int, author_id: int, xp_count: int, guild_id: int):
         log_line = '{timestamp} {message_id} {author_id} {xp_count}\n'.format(
-                timestamp=created_at.timestamp(),
+                timestamp=round(created_at.timestamp()),
                 message_id=message_id,
                 author_id=author_id,
                 xp_count=xp_count)
