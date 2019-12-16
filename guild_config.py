@@ -84,8 +84,9 @@ class GuildConfig:
         return self.raw['members'][str(member.id)]
 
     def process_message(self, message: discord.Message):
-        self.add_xp(message.author, len(message.content) // 10 + 1)
-        XpLog.log_message(message.created_at, message.id, message.author.id, (len(message.content)//10)+1, message.guild.id)
+        if not message.author.bot:
+            self.add_xp(message.author, len(message.content) // 10 + 1)
+            XpLog.log_message(message.created_at, message.id, message.author.id, (len(message.content)//10)+1, message.guild.id)
 
     @staticmethod
     def create_guild_config(guild: discord.Guild):
