@@ -75,6 +75,8 @@ class GuildConfig:
             guild_config.write()
 
     def add_xp(self, member: discord.Member, xp_count: int):
+        if str(member.id) not in self.raw['members']:
+            self.raw['members'][str(member.id)] = 0
         self.raw['members'][str(member.id)] += xp_count
         self.write()
 
@@ -137,10 +139,10 @@ class XpLog:
 
     @classmethod
     def log_message(cls, created_at: datetime.datetime, message_id: int, author_id: int, xp_count: int, guild_id: int):
-        log_line = '{timestamp} {message_id} {author_id} {xp_count}'.format(
+        log_line = '{timestamp} {message_id} {author_id} {xp_count}\n'.format(
                 timestamp=created_at.timestamp(),
                 message_id=message_id,
                 author_id=author_id,
                 xp_count=xp_count)
-        with open('xplog/log_{}'.format(guild_id), 'a+') as xplog_file:
+        with open('xplog/log_{}.txt'.format(guild_id), 'a+') as xplog_file:
             xplog_file.write(log_line)
