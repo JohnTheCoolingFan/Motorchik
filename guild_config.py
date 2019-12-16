@@ -142,5 +142,5 @@ class XpLog:
                 message_id=message_id,
                 author_id=author_id,
                 xp_count=xp_count)
-        with open('xplog/log_{}'.format(guild_id), 'w') as xplog_file:
+        with open('xplog/log_{}'.format(guild_id), 'a+') as xplog_file:
             xplog_file.write(log_line)
