@@ -136,9 +136,11 @@ class XpLog:
         pass
 
     @classmethod
-    def log_message(cls, created_at: datetime.datetime, message_id: int, authod_id: int, xp_count: int):
+    def log_message(cls, created_at: datetime.datetime, message_id: int, author_id: int, xp_count: int, guild_id: int):
         log_line = '{timestamp} {message_id} {author_id} {xp_count}'.format(
                 timestamp=created_at.timestamp(),
                 message_id=message_id,
-                authod_id=authod_id,
+                author_id=author_id,
                 xp_count=xp_count)
+        with open('xplog/log_{}'.format(guild_id), 'w') as xplog_file:
+            xplog_file.write(log_line)
