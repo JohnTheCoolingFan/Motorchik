@@ -1,5 +1,5 @@
-from discord.ext import commands
 import discord
+from discord.ext import commands
 from guild_config import GuildConfig
 
 from io import StringIO as StrIO
