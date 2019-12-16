@@ -3,7 +3,7 @@ import discord
 import json
 import os.path
 import datetime
-from math import round
+import math
 from typing import List, Iterable, Optional
 
 
@@ -142,7 +142,7 @@ class XpLog:
     @classmethod
     def log_message(cls, created_at: datetime.datetime, message_id: int, author_id: int, xp_count: int, guild_id: int):
         log_line = '{timestamp} {message_id} {author_id} {xp_count}\n'.format(
-                timestamp=round(created_at.timestamp()),
+                timestamp=math.floor(created_at.timestamp()),
                 message_id=message_id,
                 author_id=author_id,
                 xp_count=xp_count)
