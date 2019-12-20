@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 from guild_config import GuildConfig
 
-class GuildXp(commands.Cog):
+class XpLogCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
@@ -13,4 +13,4 @@ class GuildXp(commands.Cog):
             guildconfig.process_message(message)
 
 def setup(bot: commands.Bot):
-    bot.add_cog(GuildXp(bot))
+    bot.add_cog(XpLogCog(bot))
