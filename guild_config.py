@@ -135,9 +135,23 @@ class GuildConfig:
     def json(self) -> str:
         return json.dumps(self.raw, sort_keys=True, indent=4)
 
+class XpLogEntry:
+    def __init__(self, line: dict):
+        self.timestamp = datetime.datetime.fromtimestamp(line['timestamp'])
+        self.message_id = line['message_id']
+        self.author_id = line['autthor_id']
+        self.xp = line['xp']
+
 class XpLog:
-    def __init__(self):
-        pass
+    entries: List[XpLogEntry]
+
+    def __init__(self, guild: discord.Guild):
+        self.guild = guild
+        with open('xplog/log_{}.txt'.format(guild.id), 'r') as xplog_file:
+            parsed_file = self.parse_str(xplog_file.read())
+            self.entries = []
+            for line in parsed_file:
+                self.entries.append(XpLogEntry(line))
 
     @classmethod
     def log_message(cls, created_at: datetime.datetime, message_id: int, author_id: int, xp_count: int, guild_id: int):
@@ -148,3 +162,18 @@ class XpLog:
                 xp_count=xp_count)
         with open('xplog/log_{}.txt'.format(guild_id), 'a+') as xplog_file:
             xplog_file.write(log_line)
+
+    @staticmethod
+    def parse_str(input_str: str) -> List[dict]:
+        lines = input_str.split('\n')
+        clear_lines = [x for x in lines if not x.startswith('#')]
+        result = []
+        for _, line in enumerate(clear_lines):
+            split_line = line.split(' ')
+            result.append(dict(
+                timestamp=int(split_line[0]),
+                message_id = int(split_line[1]),
+                author_id = int(split_line[2]),
+                xp=int(split_line[3])
+                ))
+        return result
