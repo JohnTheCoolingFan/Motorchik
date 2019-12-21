@@ -87,7 +87,7 @@ class GuildConfig:
     def process_message(self, message: discord.Message):
         if not message.author.bot:
             self.add_xp(message.author, len(message.content) // 10 + 1)
-            XpLog.log_message(message.created_at, message.id, message.author.id, (len(message.content)//10)+1, message.guild.id)
+            XpLog.log_message_raw(message.created_at, message.id, message.author.id, (len(message.content)//10)+1, message.guild.id)
 
     @staticmethod
     def create_guild_config(guild: discord.Guild):
@@ -153,8 +153,23 @@ class XpLog:
             for line in parsed_file:
                 self.entries.append(XpLogEntry(line))
 
+    def log_message(self, message: discord.Message, xp):
+        self.entries.append(XpLogEntry(dict(
+            timestamp = math.floor(message.created_at.timestamp()),
+            message_id = message.id,
+            author_id = message.author.id,
+            xp = xp
+            )))
+        self.log_message_raw(
+            message.created_at,
+            message.id,
+            message.author.id,
+            xp,
+            message.guild.id
+            )
+
     @classmethod
-    def log_message(cls, created_at: datetime.datetime, message_id: int, author_id: int, xp_count: int, guild_id: int):
+    def log_message_raw(cls, created_at: datetime.datetime, message_id: int, author_id: int, xp_count: int, guild_id: int):
         log_line = '{timestamp} {message_id} {author_id} {xp_count}\n'.format(
                 timestamp=math.floor(created_at.timestamp()),
                 message_id=message_id,
@@ -171,9 +186,9 @@ class XpLog:
         for _, line in enumerate(clear_lines):
             split_line = line.split(' ')
             result.append(dict(
-                timestamp=int(split_line[0]),
+                timestamp = int(split_line[0]),
                 message_id = int(split_line[1]),
                 author_id = int(split_line[2]),
-                xp=int(split_line[3])
+                xp = int(split_line[3])
                 ))
         return result
