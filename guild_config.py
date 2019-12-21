@@ -166,7 +166,10 @@ class XpLog:
             message.author.id,
             xp,
             message.guild.id
-            )
+        )
+
+    def remove_entries(self, message_ids: Optional[List[int]]):
+        pass
 
     @classmethod
     def log_message_raw(cls, created_at: datetime.datetime, message_id: int, author_id: int, xp_count: int, guild_id: int):
