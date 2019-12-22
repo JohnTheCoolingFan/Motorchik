@@ -158,18 +158,31 @@ class XpLog:
             timestamp = math.floor(message.created_at.timestamp()),
             message_id = message.id,
             author_id = message.author.id,
-            xp = xp
-            )))
+            xp = xp)))
         self.log_message_raw(
             message.created_at,
             message.id,
             message.author.id,
             xp,
-            message.guild.id
-        )
+            message.guild.id)
 
     def remove_entries(self, message_ids: Optional[List[int]]):
         pass
+
+    def edit_entry(self, message_id: int):
+        pass
+
+    def write(self):
+        result = ['#timestamp message id         author id          earned xp']
+        for entry in self.entries:
+            result.append('{timestamp} {message_id} {author_id} {xp}'.format(
+                timestamp = entry.timestamp.timestamp(),
+                message_id = entry.message_id,
+                author_id = entry.author_id,
+                xp = entry.xp))
+        result_str = '\n'.join(result)
+        with open('xplog/log_{}.txt'.format(self.guild.id), 'w') as xplog_file:
+            xplog_file.write(result_str)
 
     @classmethod
     def log_message_raw(cls, created_at: datetime.datetime, message_id: int, author_id: int, xp_count: int, guild_id: int):
