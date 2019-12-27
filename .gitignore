@@ -9,3 +9,4 @@ users/*
 !users/user_example.json
 xplog/*
 !xplog/log_example.txt
+latest_connection.txt
