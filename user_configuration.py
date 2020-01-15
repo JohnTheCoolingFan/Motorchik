@@ -44,7 +44,7 @@ class UserConfiguration(commands.Cog):
             UserConfig.create_user_config(ctx.author)
             await ctx.send('Congratulations {} you are now in the bot\'s database!'.format(ctx.author.mention))
 
-    @userconfig.command(brief='Info about user')
+    @commands.command(brief='Info about user')
     async def userinfo(self, ctx: commands.Context, member: Optional[discord.Member]):
         guild_config = GuildConfig(ctx.guild)
         member_xp = guild_config.get_xp(member)
