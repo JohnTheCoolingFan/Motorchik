@@ -9,7 +9,8 @@ Per-server configuration system is still en development, but working (not workin
 ## Features
 * Misc
   - Greeting message on member join.
-  - Message when member leaves
+  - Message when member leaves.
+  - Members xp.
 * Factorio stuff
   - Get a mod (or mods) statistics and display as embed.
   - Send a list of mod statistics info.
@@ -35,7 +36,7 @@ Per-server configuration system is still en development, but working (not workin
   ./main.py
   ```
 ### 4. Autostart
-  You can use any type of auto-starting. My PC runs linux and I use systemd unit to run it aoutomatically
+  You can use any type of auto-starting. My PC runs linux and I use systemd unit to run it automatically
   `~/.config/systemd/user/Motorchik.service`
   ```ini
   [Unit]
