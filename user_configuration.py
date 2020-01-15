@@ -46,6 +46,8 @@ class UserConfiguration(commands.Cog):
 
     @commands.command(brief='Info about user')
     async def userinfo(self, ctx: commands.Context, member: Optional[discord.Member]):
+        if member is None:
+            member = ctx.author
         guild_config = GuildConfig(ctx.guild)
         member_xp = guild_config.get_xp(member)
         await ctx.send('{member.mention} xp is {member_xp}'.format(member=member, member_xp=member_xp))
