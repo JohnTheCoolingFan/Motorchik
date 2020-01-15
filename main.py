@@ -1,7 +1,9 @@
 #! /usr/bin/python3
 
 # TODO: make experience system
-# TODO: make role-level system and levelup/leveldown commands
+# TODO: make role-level system
+# TODO: levelup/leveldown commands
+# TODO: make expandable InfoChannels system
 
 import discord
 from discord.ext import commands
@@ -45,6 +47,7 @@ bot.load_extension('configuration')
 bot.load_extension('miscellaneous')
 bot.load_extension('service_tools')
 bot.load_extension('user_configuration')
+bot.load_extension('xp_log')
 
 with open('token.txt', 'r') as token_file:
     bot.run(token_file.read().rstrip())

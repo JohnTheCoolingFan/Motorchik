@@ -2,6 +2,8 @@ from discord.ext import commands
 import discord
 import json
 import os.path
+import datetime
+import math
 from typing import List, Iterable, Optional
 
 
@@ -60,8 +62,8 @@ class GuildConfig:
     @classmethod
     def check(cls, bot: commands.Bot, guild: discord.Guild = None):
         if guild is None:
-            for guild in bot.guilds:
-                cls.check(bot, guild)
+            for _guild in bot.guilds:
+                cls.check(bot, _guild)
         else:
             if not os.path.exists('guilds/guild_{}.json'.format(guild.id)):
                 cls.create_guild_config(guild)
@@ -73,13 +75,32 @@ class GuildConfig:
                     guild_config.raw['commands'][command.name] = dict(whitelist=[], blacklist=[], enabled=True)
             guild_config.write()
 
-    @classmethod
-    def create_guild_config(cls, guild: discord.Guild):
+    def add_xp(self, member: discord.Member, xp_count: int):
+        if str(member.id) not in self.raw['members']:
+            self.raw['members'][str(member.id)] = 0
+        self.raw['members'][str(member.id)] += xp_count
+        self.write()
+
+    def get_xp(self, member: discord.Member) -> int:
+        return self.raw['members'][str(member.id)]
+
+    def process_message(self, message: discord.Message):
+        if not message.author.bot:
+            self.add_xp(message.author, len(message.content) // 10 + 1)
+            XpLog.log_message_raw(message.created_at, message.id, message.author.id, (len(message.content)//10)+1, message.guild.id)
+
+    @staticmethod
+    def create_guild_config(guild: discord.Guild):
         print('Creating guild config file for ID:{}'.format(guild.id))
         with open('guilds/guild_{}.json'.format(guild.id), 'w') as new_guild_config_file:
             default_channel = guild.system_channel.id if guild.system_channel is not None else guild.text_channels[0].id
             default_info_channel = dict(channel_id=default_channel, enabled=False)
-            new_guild_config = dict(name=guild.name, welcome=default_info_channel, log=default_info_channel, reports=default_info_channel, default_roles=[], commands=dict())
+            new_guild_config = dict(name=guild.name,
+                    welcome=default_info_channel,
+                    log=default_info_channel,
+                    reports=default_info_channel,
+                    default_roles=[],
+                    commands=dict())
             json.dump(new_guild_config, new_guild_config_file, sort_keys=True, indent=4)
 
     def write(self):
@@ -113,3 +134,77 @@ class GuildConfig:
     @property
     def json(self) -> str:
         return json.dumps(self.raw, sort_keys=True, indent=4)
+
+class XpLogEntry:
+    def __init__(self, line: dict):
+        self.timestamp = datetime.datetime.fromtimestamp(line['timestamp'])
+        self.message_id = line['message_id']
+        self.author_id = line['autthor_id']
+        self.xp = line['xp']
+
+class XpLog:
+    entries: List[XpLogEntry]
+
+    def __init__(self, guild: discord.Guild):
+        self.guild = guild
+        with open('xplog/log_{}.txt'.format(guild.id), 'r') as xplog_file:
+            parsed_file = self.parse_str(xplog_file.read())
+            self.entries = []
+            for line in parsed_file:
+                self.entries.append(XpLogEntry(line))
+
+    def log_message(self, message: discord.Message, xp):
+        self.entries.append(XpLogEntry(dict(
+            timestamp = math.floor(message.created_at.timestamp()),
+            message_id = message.id,
+            author_id = message.author.id,
+            xp = xp)))
+        self.log_message_raw(
+            message.created_at,
+            message.id,
+            message.author.id,
+            xp,
+            message.guild.id)
+
+    def remove_entries(self, message_ids: Optional[List[int]]):
+        pass
+
+    def edit_entry(self, message_id: int):
+        pass
+
+    def write(self):
+        result = ['#timestamp message id         author id          earned xp']
+        for entry in self.entries:
+            result.append('{timestamp} {message_id} {author_id} {xp}'.format(
+                timestamp = entry.timestamp.timestamp(),
+                message_id = entry.message_id,
+                author_id = entry.author_id,
+                xp = entry.xp))
+        result_str = '\n'.join(result)
+        with open('xplog/log_{}.txt'.format(self.guild.id), 'w') as xplog_file:
+            xplog_file.write(result_str)
+
+    @classmethod
+    def log_message_raw(cls, created_at: datetime.datetime, message_id: int, author_id: int, xp_count: int, guild_id: int):
+        log_line = '{timestamp} {message_id} {author_id} {xp_count}\n'.format(
+                timestamp=math.floor(created_at.timestamp()),
+                message_id=message_id,
+                author_id=author_id,
+                xp_count=xp_count)
+        with open('xplog/log_{}.txt'.format(guild_id), 'a+') as xplog_file:
+            xplog_file.write(log_line)
+
+    @staticmethod
+    def parse_str(input_str: str) -> List[dict]:
+        lines = input_str.split('\n')
+        clear_lines = [x for x in lines if not x.startswith('#')]
+        result = []
+        for _, line in enumerate(clear_lines):
+            split_line = line.split(' ')
+            result.append(dict(
+                timestamp = int(split_line[0]),
+                message_id = int(split_line[1]),
+                author_id = int(split_line[2]),
+                xp = int(split_line[3])
+                ))
+        return result

@@ -1,6 +1,8 @@
 from discord.ext import commands
-#import discord
+import discord
 from user_config import UserConfig
+from typing import Optional
+from guild_config import GuildConfig
 
 class UserConfiguration(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -41,6 +43,14 @@ class UserConfiguration(commands.Cog):
         else:
             UserConfig.create_user_config(ctx.author)
             await ctx.send('Congratulations {} you are now in the bot\'s database!'.format(ctx.author.mention))
+
+    @commands.command(brief='Info about user')
+    async def userinfo(self, ctx: commands.Context, member: Optional[discord.Member]):
+        if member is None:
+            member = ctx.author
+        guild_config = GuildConfig(ctx.guild)
+        member_xp = guild_config.get_xp(member)
+        await ctx.send('{member.mention} xp is {member_xp}'.format(member=member, member_xp=member_xp))
 
 def setup(bot: commands.Bot):
     bot.add_cog(UserConfiguration(bot))
