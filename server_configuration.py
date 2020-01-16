@@ -5,7 +5,7 @@ from guild_config import GuildConfig
 from io import StringIO as StrIO
 
 
-class Configuration(commands.Cog):
+class ServerConfiguration(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
@@ -143,4 +143,4 @@ class Configuration(commands.Cog):
 
 
 def setup(bot: commands.Bot):
-    bot.add_cog(Configuration(bot))
+    bot.add_cog(ServerConfiguration(bot))
