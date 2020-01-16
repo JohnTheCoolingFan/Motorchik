@@ -9,7 +9,7 @@ class XpLogCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
-        if message.guild and message.guild.id == 370167294439063564: # Temporary restriction because still testing
+        if message.guild:
             guildconfig = GuildConfig(message.guild)
             guildconfig.process_message(message)
 
