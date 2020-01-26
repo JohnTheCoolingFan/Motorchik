@@ -4,6 +4,7 @@ from user_config import UserConfig
 from typing import Optional
 from guild_config import GuildConfig
 
+
 class UserConfiguration(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -51,6 +52,7 @@ class UserConfiguration(commands.Cog):
         guild_config = GuildConfig(ctx.guild)
         member_xp = guild_config.get_xp(member)
         await ctx.send('{member.mention} xp is {member_xp}'.format(member=member, member_xp=member_xp))
+
 
 def setup(bot: commands.Bot):
     bot.add_cog(UserConfiguration(bot))
