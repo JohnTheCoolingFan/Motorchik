@@ -16,7 +16,7 @@ Per-server configuration system is still en development, but working (not workin
   - Send a list of mod statistics info.
 * Configuration
   - Motorchik is highly configurable for users and servers (guilds).
-  
+ 
 ## How to use / Installation
 ### 1. Clone this repo to your local machine
 ### 2. Make sure you have `discord.py`, `python-dateutil`, `bs4` and `colorthief`:
