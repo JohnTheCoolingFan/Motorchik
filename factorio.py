@@ -32,7 +32,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
             embed = discord.Embed(title='Mod not found', description='Failed to find mods',
                                   color=discord.Color.from_rgb(255, 10, 10))
             await ctx.send(embed=embed)
-    
+
     @staticmethod
     async def send_mod_embed(ctx: commands.Context, mod_data: dict):
         embed = discord.Embed(title=mod_data['title'], description=mod_data['description'], url=mod_data['url'],
