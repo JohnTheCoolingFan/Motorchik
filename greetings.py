@@ -43,6 +43,14 @@ class Greetings(commands.Cog):
     async def guten(self, ctx: commands.Context):
         await ctx.send('tag')
 
+    @commands.command(hidden=True, aliases=['живой?'])
+    async def is_alive_rus(self, ctx: commands.Context):
+        await ctx.send('Да')
+
+    @commands.command(hidden=True, aliases=['youok?'])
+    async def is_alive_eng(self, ctx: commands.Context):
+        await ctx.send('yes')
+
 
 def setup(bot):
     bot.add_cog(Greetings(bot))
