@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from dateutil import parser
 from colorthief import ColorThief
 from io import BytesIO
+from natsort import natsorted
 from user_config import UserConfig
 from typing import Iterable
 
@@ -56,7 +57,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
             request = req.get('https://mods.factorio.com/api/mods/' + mod_name)
             if request.status_code == 200:
                 json_req = request.json()
-                latest_release = sorted(json_req['releases'], key=lambda release: release['version'], reverse=True)[0]
+                latest_release = natsorted(json_req['releases'], key=lambda release: release['version'], reverse=True)[0]
                 if json_req['thumbnail'] != '/assets/.thumb.png':
                     thumb_color = discord.Color.from_rgb(*ColorThief(
                         BytesIO(req.get('https://mods-data.factorio.com' + json_req['thumbnail']).content)).get_color())
