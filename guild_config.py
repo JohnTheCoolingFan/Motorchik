@@ -8,6 +8,7 @@ from typing import List, Iterable, Optional
 
 GUILD_CONFIG_ENTRIES_TYPES = dict(commands=dict,
                                   default_roles=list,
+                                  levels=dict,
                                   log=dict,
                                   members=dict,
                                   name=str,
@@ -24,6 +25,11 @@ class GuildConfig:
         with open('guilds/guild_{}.json'.format(guild.id), 'r') as guild_config_file:
             self.raw = json.load(guild_config_file)
         self.commands_names = self.raw['commands'].keys()
+
+    class GuildLevel:
+        def __init__(self, index: int, role: discord.Role):
+            self.index = index,
+            self.role = role
 
     @property
     def welcome_channel(self) -> Optional[discord.TextChannel]:
