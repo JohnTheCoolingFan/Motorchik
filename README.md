@@ -19,13 +19,13 @@ Per-server configuration system is still en development, but working (not workin
  
 ## How to use / Installation
 ### 1. Clone this repo to your local machine
-### 2. Make sure you have `discord.py`, `python-dateutil`, `bs4` and `colorthief`:
+### 2. Make sure you have `discord.py`, `python-dateutil`, `bs4`, `natsort` and `colorthief`:
   ```
-  # python3 -m pip install discord.py python-dateutil bs4 colorthief
+  # python3 -m pip install discord.py python-dateutil bs4 natsort colorthief
   ```
   or
   ```
-  $ python3 -m pip install --user discord.py python-dateutil bs4 colorthief
+  $ python3 -m pip install --user discord.py python-dateutil bs4 natsort colorthief
   ```
 ### 3. Run `main.py`
   ```sh
