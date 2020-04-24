@@ -14,8 +14,8 @@ class GuildConfig:
 
     def __init__(self, guild: discord.Guild):
         self.guild = guild
-        with open('guilds/guild_{}.json'.format(guild.id), 'r') as guild_config:
-            self.raw = json.load(guild_config)
+        with open('guilds/guild_{}.json'.format(guild.id), 'r') as guild_config_file:
+            self.raw = json.load(guild_config_file)
         self.commands_names = self.raw['commands'].keys()
 
     @property
