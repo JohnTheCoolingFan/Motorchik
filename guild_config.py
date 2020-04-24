@@ -6,6 +6,13 @@ import datetime
 import math
 from typing import List, Iterable, Optional
 
+GUILD_CONFIG_ENTRIES_TYPES = dict(commands=dict,
+                                  default_roles=list,
+                                  log=dict,
+                                  members=dict,
+                                  name=str,
+                                  reports=dict,
+                                  welcome=dict)
 
 class GuildConfig:
     guild: discord.Guild
@@ -61,6 +68,9 @@ class GuildConfig:
 
     @classmethod
     def check(cls, bot: commands.Bot, guild: discord.Guild = None):
+        def check_for_entry(entry: str, guild_config_to_check: cls, entry_type):
+            if entry not in guild_config_to_check.raw:
+                guild_config_to_check.raw[entry] = entry_type()
         if guild is None:
             for _guild in bot.guilds:
                 cls.check(bot, _guild)
@@ -69,6 +79,8 @@ class GuildConfig:
                 cls.create_guild_config(guild)
             guild_config = cls(guild)
             print('Checking config of guild ID:{}'.format(guild.id))
+            for entry_name in GUILD_CONFIG_ENTRIES_TYPES:
+                check_for_entry(entry_name, guild_config, GUILD_CONFIG_ENTRIES_TYPES[entry_name])
             for command in bot.commands:
                 if command.name not in guild_config.raw['commands'].keys():
                     print('Config for command "{0}" not found in config of guild ID:{1}'.format(command.name, guild_config.guild.id))
@@ -100,7 +112,9 @@ class GuildConfig:
                     log=default_info_channel,
                     reports=default_info_channel,
                     default_roles=[],
-                    commands=dict())
+                    commands=dict(),
+                    members=dict(),
+                    levels=dict())
             json.dump(new_guild_config, new_guild_config_file, sort_keys=True, indent=4)
 
     def write(self):
