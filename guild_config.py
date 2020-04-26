@@ -25,13 +25,20 @@ class GuildConfig:
     guild: discord.Guild
     raw: dict
     commands_names: List[str]
-    #levels: List[GuildLevel]
+    levels: List[GuildLevel]
 
     def __init__(self, guild: discord.Guild):
         self.guild = guild
         with open('guilds/guild_{}.json'.format(guild.id), 'r') as guild_config_file:
             self.raw = json.load(guild_config_file)
         self.commands_names = self.raw['commands'].keys()
+        self.levels = []
+        for level_index_str in self.raw['levels']:
+            self.levels.append(GuildLevel(int(level_index_str),
+                                          guild.get_role(self.raw['levels'][level_index_str]['id']),
+                                          self.raw['levels'][level_index_str]['auto_level_up']
+                                          )
+                               )
 
     @property
     def welcome_channel(self) -> Optional[discord.TextChannel]:
