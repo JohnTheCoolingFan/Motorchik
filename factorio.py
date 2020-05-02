@@ -8,6 +8,7 @@ from io import BytesIO
 from natsort import natsorted
 from user_config import UserConfig
 from typing import Iterable
+import asyncio
 
 MOD_LIST_MOTORCHIK = ['PlaceableOffGrid', 'NoArtilleryMapReveal', 'RandomFactorioThings', 'PlutoniumEnergy', 'RealisticReactors']
 
@@ -28,7 +29,8 @@ class FactorioCog(commands.Cog, name='Factorio'):
         mods_data = await self.get_mods_info(mods_names)
         if mods_data:
             for mod_data in mods_data:
-                await self.send_mod_embed(ctx, mod_data)
+                send_embed_task = asyncio.create_task(self.send_mod_embed(ctx, mod_data))
+                await send_embed_task
         else:
             embed = discord.Embed(title='Mod not found', description='Failed to find mods',
                                   color=discord.Color.from_rgb(255, 10, 10))
