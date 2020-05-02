@@ -7,7 +7,7 @@ from colorthief import ColorThief
 from io import BytesIO
 from natsort import natsorted
 from user_config import UserConfig
-from typing import Iterable
+from typing import Iterable, Optional
 import asyncio
 
 MOD_LIST_MOTORCHIK = ['PlaceableOffGrid', 'NoArtilleryMapReveal', 'RandomFactorioThings', 'PlutoniumEnergy', 'RealisticReactors']
@@ -26,15 +26,21 @@ class FactorioCog(commands.Cog, name='Factorio'):
             userconfig = UserConfig(ctx.author)
             userconfig.add_xp(5 * len(mods_names))
 
-        mods_data = await self.get_mods_info(mods_names)
-        if mods_data:
-            for mod_data in mods_data:
-                send_embed_task = asyncio.create_task(self.send_mod_embed(ctx, mod_data))
-                await send_embed_task
-        else:
-            embed = discord.Embed(title='Mod not found', description='Failed to find mods',
-                                  color=discord.Color.from_rgb(255, 10, 10))
-            await ctx.send(embed=embed)
+        mod_info_tasks = []
+        for mod_name in mods_names:
+            mod_info_tasks.append(asyncio.create_task(self.get_mod_info(mod_name)))
+
+        send_mod_embed_tasks = []
+        for mod_info_future in asyncio.as_completed(mod_info_tasks):
+            mod_info = await mod_info_future
+            if mod_info:
+                send_mod_embed_tasks.append(asyncio.create_task(self.send_mod_embed(ctx, mod_info)))
+            else:
+                embed = discord.Embed(title='Mod not found', description='Failed to find mod',
+                                      color=discord.Color.from_rgb(255, 10, 10))
+                send_mod_embed_tasks.append(asyncio.create_task(ctx.send(embed=embed)))
+
+        await asyncio.wait(send_mod_embed_tasks)
 
     @staticmethod
     async def send_mod_embed(ctx: commands.Context, mod_data: dict):
@@ -53,13 +59,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
                         value='[{author}](https://mods.factorio.com/user/{author})'.format(author=mod_data['author']))
         await ctx.send(embed=embed)
 
-    async def get_mods_info(self, mod_names: Iterable) -> list:
-        result = []
-        for mod_name in mod_names:
-            result.append(await asyncio.create_task(self.get_mod_info(mod_name)))
-        return result
-
-    async def get_mod_info(self, mod_name: str) -> dict:
+    async def get_mod_info(self, mod_name: str) -> Optional[dict]:
         request = req.get('https://mods.factorio.com/api/mods/' + mod_name)
         if request.status_code == 200:
             json_req = request.json()
@@ -84,6 +84,8 @@ class FactorioCog(commands.Cog, name='Factorio'):
             new_mod_name = await asyncio.create_task(self.find_mod(mod_name))
             if new_mod_name:
                 return await asyncio.create_task(self.get_mod_info(new_mod_name))
+            else:
+                return None
 
     @staticmethod
     async def find_mod(mod_name: str) -> str:
@@ -101,8 +103,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
 
     @commands.command(aliases=['ml'])
     async def modlist(self, ctx: commands.Context):
-        await ctx.invoke(self.mods_statistics, *MOD_LIST_MOTORCHIK)
-        await ctx.message.delete()
+        await asyncio.wait({ctx.message.delete(), ctx.invoke(self.mods_statistics, *MOD_LIST_MOTORCHIK)})
 
 
 def setup(bot: commands.Bot):
