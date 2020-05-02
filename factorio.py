@@ -56,31 +56,34 @@ class FactorioCog(commands.Cog, name='Factorio'):
     async def get_mods_info(self, mod_names: Iterable) -> list:
         result = []
         for mod_name in mod_names:
-            request = req.get('https://mods.factorio.com/api/mods/' + mod_name)
-            if request.status_code == 200:
-                json_req = request.json()
-                latest_release = natsorted(json_req['releases'], key=lambda release: release['version'], reverse=True)[0]
-                if json_req['thumbnail'] != '/assets/.thumb.png':
-                    thumb_color = discord.Color.from_rgb(*ColorThief(
-                        BytesIO(req.get('https://mods-data.factorio.com' + json_req['thumbnail']).content)).get_color())
-                    thumbnail_url = 'https://mods-data.factorio.com' + json_req['thumbnail']
-                else:
-                    thumb_color = discord.Color.from_rgb(47, 137, 197)
-                    thumbnail_url = ''
-                result.append(dict(title=json_req['title'], description=json_req['summary'],
-                                   url='https://mods.factorio.com/mod/' + mod_name,
-                                   timestamp=parser.isoparse(latest_release['released_at']), color=thumb_color,
-                                   thumbnail_url=thumbnail_url,
-                                   game_version=latest_release['info_json']['factorio_version'],
-                                   download_official='https://mods.factorio.com' + latest_release['download_url'],
-                                   download_launcher='https://factorio-launcher-mods.storage.googleapis.com/{}/{}.zip'.format(
-                                       mod_name, latest_release['version']), latest_version=latest_release['version'],
-                                   downloads_count=json_req['downloads_count'], author=json_req['owner']))
-            else:
-                new_mod_name = await self.find_mod(mod_name)
-                if new_mod_name:
-                    result.append(*await self.get_mods_info([new_mod_name]))
+            result.append(await asyncio.create_task(self.get_mod_info(mod_name)))
         return result
+
+    async def get_mod_info(self, mod_name: str) -> dict:
+        request = req.get('https://mods.factorio.com/api/mods/' + mod_name)
+        if request.status_code == 200:
+            json_req = request.json()
+            latest_release = natsorted(json_req['releases'], key=lambda release: release['version'], reverse=True)[0]
+            if json_req['thumbnail'] != '/assets/.thumb.png':
+                thumb_color = discord.Color.from_rgb(*ColorThief(
+                    BytesIO(req.get('https://mods-data.factorio.com' + json_req['thumbnail']).content)).get_color())
+                thumbnail_url = 'https://mods-data.factorio.com' + json_req['thumbnail']
+            else:
+                thumb_color = discord.Color.from_rgb(47, 137, 197)
+                thumbnail_url = ''
+            return dict(title=json_req['title'], description=json_req['summary'],
+                               url='https://mods.factorio.com/mod/' + mod_name,
+                               timestamp=parser.isoparse(latest_release['released_at']), color=thumb_color,
+                               thumbnail_url=thumbnail_url,
+                               game_version=latest_release['info_json']['factorio_version'],
+                               download_official='https://mods.factorio.com' + latest_release['download_url'],
+                               download_launcher='https://factorio-launcher-mods.storage.googleapis.com/{}/{}.zip'.format(
+                                   mod_name, latest_release['version']), latest_version=latest_release['version'],
+                               downloads_count=json_req['downloads_count'], author=json_req['owner'])
+        else:
+            new_mod_name = await asyncio.create_task(self.find_mod(mod_name))
+            if new_mod_name:
+                return await asyncio.create_task(self.get_mod_info(new_mod_name))
 
     @staticmethod
     async def find_mod(mod_name: str) -> str:
