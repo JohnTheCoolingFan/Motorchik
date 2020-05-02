@@ -7,7 +7,7 @@ from colorthief import ColorThief
 from io import BytesIO
 from natsort import natsorted
 from user_config import UserConfig
-from typing import Iterable, Optional
+from typing import Optional
 import asyncio
 
 MOD_LIST_MOTORCHIK = ['PlaceableOffGrid', 'NoArtilleryMapReveal', 'RandomFactorioThings', 'PlutoniumEnergy', 'RealisticReactors']
