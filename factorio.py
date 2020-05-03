@@ -39,7 +39,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
         for mod_name in mods_names:
             mod_process_tasks.append(asyncio.create_task(process_mod(mod_name)))
 
-        asyncio.wait(mod_process_tasks)
+        await asyncio.wait(mod_process_tasks)
 
     @staticmethod
     async def construct_mod_embed(mod_data: dict) -> discord.Embed:
