@@ -16,7 +16,6 @@ MOD_LIST_MOTORCHIK = ['PlaceableOffGrid', 'NoArtilleryMapReveal', 'RandomFactori
 
 
 class FactorioCog(commands.Cog, name='Factorio'):
-    failed_mod_embed = discord.Embed(title='Mod not found', description='Failed to find mod', color=discord.Color.from_rgb(255, 10, 10))
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -30,10 +29,10 @@ class FactorioCog(commands.Cog, name='Factorio'):
         async def process_mod(mod_name: str):
 
             mod_data = await self.get_mod_info(mod_name)
-            if mod_data:
+            if mod_data['success']:
                 embed = await self.construct_mod_embed(mod_data)
             else:
-                embed = self.failed_mod_embed
+                embed = await self.failed_mod_embed(mod_data)
             await ctx.send(embed=embed)
 
         mod_process_tasks = []
@@ -57,6 +56,11 @@ class FactorioCog(commands.Cog, name='Factorio'):
         embed.add_field(name='Downloaded', value=str(mod_data['downloads_count']) + ' times')
         embed.add_field(name='Author',
                         value='[{author}](https://mods.factorio.com/user/{author})'.format(author=mod_data['author']))
+        return embed
+
+    @staticmethod
+    async def failed_mod_embed(mod_data: dict) -> discord.Embed:
+        embed = discord.Embed(title='Mod not found', description='Failed to find {}'.format(mod_data['mod_name']), color=discord.Color.from_rgb(255, 10, 10))
         return embed
 
     async def get_mod_info(self, mod_name: str) -> dict:
