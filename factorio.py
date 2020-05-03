@@ -61,7 +61,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
         return embed
 
 
-    async def get_mod_info(self, mod_name: str) -> Optional[dict]:
+    async def get_mod_info(self, mod_name: str) -> dict:
         MODPORTAL_URL = 'https://mods.factorio.com'
         LAUNCHER_URL = 'https://factorio-launcher-mods.storage.googleapis.com/{}/{}.zip'
 
@@ -87,13 +87,15 @@ class FactorioCog(commands.Cog, name='Factorio'):
                         download_launcher=LAUNCHER_URL.format(mod_name,latest_release['version']),
                         latest_version=latest_release['version'],
                         downloads_count=json_req['downloads_count'],
-                        author=json_req['owner'])
+                        author=json_req['owner'],
+                        success=True,
+                        mod_name=mod_name)
         else:
             new_mod_name = await asyncio.create_task(self.find_mod(mod_name))
             if new_mod_name:
                 return await asyncio.create_task(self.get_mod_info(new_mod_name))
             else:
-                return None
+                return dict(success=False, mod_name=mod_name)
 
     @staticmethod
     async def find_mod(mod_name: str) -> str:
