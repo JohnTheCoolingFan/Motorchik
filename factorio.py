@@ -7,7 +7,6 @@ from colorthief import ColorThief
 from io import BytesIO
 from natsort import natsorted
 from user_config import UserConfig
-from typing import Optional
 import asyncio
 
 MOD_LIST_MOTORCHIK = ['PlaceableOffGrid', 'NoArtilleryMapReveal', 'RandomFactorioThings', 'PlutoniumEnergy', 'RealisticReactors']
@@ -59,7 +58,6 @@ class FactorioCog(commands.Cog, name='Factorio'):
         embed.add_field(name='Author',
                         value='[{author}](https://mods.factorio.com/user/{author})'.format(author=mod_data['author']))
         return embed
-
 
     async def get_mod_info(self, mod_name: str) -> dict:
         MODPORTAL_URL = 'https://mods.factorio.com'
