@@ -17,6 +17,8 @@ MOD_LIST_MOTORCHIK = ['PlaceableOffGrid', 'NoArtilleryMapReveal', 'RandomFactori
 
 
 class FactorioCog(commands.Cog, name='Factorio'):
+    failed_mod_embed = discord.Embed(title='Mod not found', description='Failed to find mod', color=discord.Color.from_rgb(255, 10, 10))
+
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
@@ -26,24 +28,23 @@ class FactorioCog(commands.Cog, name='Factorio'):
             userconfig = UserConfig(ctx.author)
             userconfig.add_xp(5 * len(mods_names))
 
-        mod_info_tasks = []
-        for mod_name in mods_names:
-            mod_info_tasks.append(asyncio.create_task(self.get_mod_info(mod_name)))
+        async def process_mod(mod_name: str):
 
-        send_mod_embed_tasks = []
-        for mod_info_future in asyncio.as_completed(mod_info_tasks):
-            mod_info = await mod_info_future
-            if mod_info:
-                send_mod_embed_tasks.append(asyncio.create_task(self.send_mod_embed(ctx, mod_info)))
+            mod_data = await self.get_mod_info(mod_name)
+            if mod_data:
+                embed = await self.construct_mod_embed(mod_data)
             else:
-                embed = discord.Embed(title='Mod not found', description='Failed to find mod',
-                                      color=discord.Color.from_rgb(255, 10, 10))
-                send_mod_embed_tasks.append(asyncio.create_task(ctx.send(embed=embed)))
+                embed = self.failed_mod_embed
+            await ctx.send(embed=embed)
 
-        await asyncio.wait(send_mod_embed_tasks)
+        mod_process_tasks = []
+        for mod_name in mods_names:
+            mod_process_tasks.append(asyncio.create_task(process_mod(mod_name)))
+
+        asyncio.wait(mod_process_tasks)
 
     @staticmethod
-    async def send_mod_embed(ctx: commands.Context, mod_data: dict):
+    async def construct_mod_embed(mod_data: dict) -> discord.Embed:
         embed = discord.Embed(title=mod_data['title'], description=mod_data['description'], url=mod_data['url'],
                               timestamp=mod_data['timestamp'], color=mod_data['color'])
         embed.set_footer(text='Latest update was released at:')
@@ -57,7 +58,8 @@ class FactorioCog(commands.Cog, name='Factorio'):
         embed.add_field(name='Downloaded', value=str(mod_data['downloads_count']) + ' times')
         embed.add_field(name='Author',
                         value='[{author}](https://mods.factorio.com/user/{author})'.format(author=mod_data['author']))
-        await ctx.send(embed=embed)
+        return embed
+
 
     async def get_mod_info(self, mod_name: str) -> Optional[dict]:
         request = req.get('https://mods.factorio.com/api/mods/' + mod_name)
