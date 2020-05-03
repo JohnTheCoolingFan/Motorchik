@@ -62,6 +62,9 @@ class FactorioCog(commands.Cog, name='Factorio'):
 
 
     async def get_mod_info(self, mod_name: str) -> Optional[dict]:
+        MODPORTAL_URL = 'https://mods.factorio.com'
+        LAUNCHER_URL = 'https://factorio-launcher-mods.storage.googleapis.com/{}/{}.zip'
+
         request = req.get('https://mods.factorio.com/api/mods/' + mod_name)
         if request.status_code == 200:
             json_req = request.json()
@@ -73,15 +76,18 @@ class FactorioCog(commands.Cog, name='Factorio'):
             else:
                 thumb_color = discord.Color.from_rgb(47, 137, 197)
                 thumbnail_url = ''
-            return dict(title=json_req['title'], description=json_req['summary'],
-                               url='https://mods.factorio.com/mod/' + mod_name,
-                               timestamp=parser.isoparse(latest_release['released_at']), color=thumb_color,
-                               thumbnail_url=thumbnail_url,
-                               game_version=latest_release['info_json']['factorio_version'],
-                               download_official='https://mods.factorio.com' + latest_release['download_url'],
-                               download_launcher='https://factorio-launcher-mods.storage.googleapis.com/{}/{}.zip'.format(
-                                   mod_name, latest_release['version']), latest_version=latest_release['version'],
-                               downloads_count=json_req['downloads_count'], author=json_req['owner'])
+            return dict(title=json_req['title'],
+                        description=json_req['summary'],
+                        url=MODPORTAL_URL + '/mod/' + mod_name,
+                        timestamp=parser.isoparse(latest_release['released_at']),
+                        color=thumb_color,
+                        thumbnail_url=thumbnail_url,
+                        game_version=latest_release['info_json']['factorio_version'],
+                        download_official=MODPORTAL_URL + latest_release['download_url'],
+                        download_launcher=LAUNCHER_URL.format(mod_name,latest_release['version']),
+                        latest_version=latest_release['version'],
+                        downloads_count=json_req['downloads_count'],
+                        author=json_req['owner'])
         else:
             new_mod_name = await asyncio.create_task(self.find_mod(mod_name))
             if new_mod_name:
