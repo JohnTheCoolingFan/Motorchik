@@ -22,7 +22,9 @@ class FunCommands(commands.Cog, name='Fun'):
 
     @commands.command()
     async def ping(self, ctx):
-        await ctx.send('pong')
+        pong = await ctx.send('pong!')
+        time_diff = pong.created_at - ctx.message.created_at
+        await pong.edit(content='pong!\nTime delta is {0} ms'.format(time_diff.microseconds/1000))
 
     @commands.command(hidden=True, aliases=['UDODCOMMUNIST', 'Удод_Коммунист', 'УДОД'])
     async def udod_communist(self, ctx):
