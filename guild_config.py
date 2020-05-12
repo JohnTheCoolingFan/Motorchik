@@ -17,8 +17,8 @@ GUILD_CONFIG_ENTRIES_TYPES = dict(commands=dict,
 
 class GuildLevel:
     def __init__(self, index: int, role: discord.Role, auto_level_up: bool):
-        self.index = index,
-        self.role = role,
+        self.index = index
+        self.role = role
         self.auto_level_up = auto_level_up
 
 class GuildConfig:
