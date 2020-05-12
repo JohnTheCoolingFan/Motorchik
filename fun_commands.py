@@ -26,7 +26,7 @@ class FunCommands(commands.Cog, name='Fun'):
         time_diff = pong.created_at - ctx.message.created_at
         await pong.edit(content='pong!\nTime delta is {0} ms'.format(time_diff.microseconds/1000))
 
-    @commands.command(hidden=True, aliases=['UDODCOMMUNIST', 'Удод_Коммунист', 'УДОД'])
+    @commands.command(hidden=True, aliases=['UDOD_COMMUNIST', 'UDOD', 'УДОД_КОММУНИСТ', 'Удод_Коммунист', 'УДОД', 'Удод', 'удод'])
     async def udod_communist(self, ctx):
         await ctx.send('https://www.youtube.com/watch?v=YHR5_IvC8Gw')
 
