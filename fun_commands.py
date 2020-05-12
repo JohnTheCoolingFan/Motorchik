@@ -15,7 +15,7 @@ class FunCommands(commands.Cog, name='Fun'):
     async def spin(self, ctx):
         await ctx.send('https://www.youtube.com/watch?v=PGNiXGX2nLU')
 
-    @commands.command(aliases=['XcQ'], help='You\'ve got RICKROLLED, LUL')
+    @commands.command(aliases=['XcQ'], help='A very interesting video you should consider watching')
     async def rickroll(self, ctx):
         await ctx.send('<https://www.youtube.com/watch?v=dQw4w9WgXcQ>')
         await ctx.send('<:kappa_jtcf:546748910765604875>')
