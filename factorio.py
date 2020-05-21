@@ -11,6 +11,9 @@ import asyncio
 
 MOD_LIST_MOTORCHIK = ['PlaceableOffGrid', 'NoArtilleryMapReveal', 'RandomFactorioThings', 'PlutoniumEnergy', 'RealisticReactors']
 
+MODPORTAL_URL = 'https://mods.factorio.com'
+LAUNCHER_URL = 'https://factorio-launcher-mods.storage.googleapis.com/{}/{}.zip'
+
 
 # TODO: make customizable mod-list, which will update automatically over time by editing messages
 
@@ -64,10 +67,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
         return embed
 
     async def get_mod_info(self, mod_name: str) -> dict:
-        MODPORTAL_URL = 'https://mods.factorio.com'
-        LAUNCHER_URL = 'https://factorio-launcher-mods.storage.googleapis.com/{}/{}.zip'
-
-        request = req.get('https://mods.factorio.com/api/mods/' + mod_name)
+        request = req.get(MODPORTAL_URL + '/api/mods/' + mod_name)
         if request.status_code == 200:
             json_req = request.json()
             latest_release = natsorted(json_req['releases'], key=lambda release: release['version'], reverse=True)[0]
@@ -101,7 +101,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
 
     @staticmethod
     async def find_mod(mod_name: str) -> str:
-        request = req.get('https://mods.factorio.com/query/' + mod_name.replace(' ', '%20'))
+        request = req.get(MODPORTAL_URL + '/query/' + mod_name.replace(' ', '%20'))
         if request.status_code == 200:
             soup = BeautifulSoup(request.text, 'html.parser')
             mod_card = soup.find('div', {'class': 'mod-card'})
