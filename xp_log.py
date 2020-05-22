@@ -17,7 +17,7 @@ class XpLogCog(commands.Cog):
     @commands.Cog.listener()
     async def on_disconnect(self):
         with open('latest_connection.txt', 'w') as timestamp_file:
-            timestamp_file.write(datetime.datetime.now().timestamp())
+            timestamp_file.write(str(datetime.datetime.now().timestamp()))
 
 
 def setup(bot: commands.Bot):
