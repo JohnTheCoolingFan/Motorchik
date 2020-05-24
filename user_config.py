@@ -55,6 +55,15 @@ class UserConfig:
             new_user_config = dict(name=user.name, discriminator=int(user.discriminator), notifications='private', notification_categories=['all'], xp=10)
             json.dump(new_user_config, new_user_config_file, indent=4, sort_keys=True)
 
+    @classmethod
+    async def create_and_add_xp(cls, user: discord.User, xp_amount: int) -> cls:
+        if cls.check(user):
+            user_config = cls(user)
+            user_config.add_xp(xp_amount)
+            return user_config
+        else:
+            return None
+
     def write(self):
         with open('users/user_{}.json'.format(self.user.id), 'w') as user_config:
             json.dump(self.raw, user_config, indent=4, sort_keys=True)
