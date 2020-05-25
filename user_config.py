@@ -56,7 +56,7 @@ class UserConfig:
             json.dump(new_user_config, new_user_config_file, indent=4, sort_keys=True)
 
     @classmethod
-    async def create_and_add_xp(cls, user: discord.User, xp_amount: int) -> cls:
+    async def create_and_add_xp(cls, user: discord.User, xp_amount: int):
         if cls.check(user):
             user_config = cls(user)
             user_config.add_xp(xp_amount)
