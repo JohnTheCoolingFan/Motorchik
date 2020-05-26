@@ -1,8 +1,7 @@
 #! /usr/bin/python3
 
 # TODO: make experience system
-# TODO: make role-level system
-# TODO: levelup/leveldown commands
+# TODO: make role-level system with levelup/leveldown system
 # TODO: make expandable InfoChannels system
 
 import discord
@@ -35,7 +34,7 @@ async def on_guild_update(guild_before: discord.Guild, guild_after: discord.Guil
 @bot.event
 async def on_ready():
     print('Logged in as {0.user}'.format(bot))
-    GuildConfig.check(bot)
+    await GuildConfig.check(bot)
 
 #bot.load_extension('error_handling')
 bot.load_extension('factorio')
