@@ -4,7 +4,9 @@ import json
 import os.path
 import datetime
 import math
+import asyncio
 from typing import List, Iterable, Optional
+
 
 GUILD_CONFIG_ENTRIES_TYPES = dict(commands=dict,
                                   default_roles=list,
@@ -82,13 +84,12 @@ class GuildConfig:
         self.raw['default_roles'] = list({role.id for role in new_roles})
 
     @classmethod
-    def check(cls, bot: commands.Bot, guild: discord.Guild = None):
+    async def check(cls, bot: commands.Bot, guild: discord.Guild = None):
         def check_for_entry(entry: str, guild_config_to_check: cls, entry_type):
             if entry not in guild_config_to_check.raw:
                 guild_config_to_check.raw[entry] = entry_type()
         if guild is None:
-            for _guild in bot.guilds:
-                cls.check(bot, _guild)
+            await asyncio.wait([cls.check(bot, _guild) for _guild in bot.guilds()])
         else:
             if not os.path.exists('guilds/guild_{}.json'.format(guild.id)):
                 cls.create_guild_config(guild)
