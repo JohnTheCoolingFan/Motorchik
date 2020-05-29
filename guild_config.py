@@ -7,15 +7,15 @@ import math
 import asyncio
 from typing import List, Iterable, Optional
 
+def info_channels():
+    return dict(log=dict(), welcome=dict())
 
 GUILD_CONFIG_ENTRIES_TYPES = dict(commands=dict,
                                   default_roles=list,
                                   levels=dict,
-                                  log=dict,
                                   members=dict,
                                   name=str,
-                                  reports=dict,
-                                  welcome=dict)
+                                  info_channels=info_channels)
 
 class GuildLevel:
     def __init__(self, index: int, role: discord.Role, auto_level_up: bool):
@@ -44,36 +44,25 @@ class GuildConfig:
 
     @property
     def welcome_channel(self) -> Optional[discord.TextChannel]:
-        if self.raw['welcome']['enabled']:
+        if self.raw['info_channels']['welcome']['enabled']:
             return self.guild.get_channel(self.raw['welcome']['channel_id'])
         else:
             return None
 
     @welcome_channel.setter
     def welcome_channel(self, new_channel: discord.TextChannel):
-        self.raw['welcome']['channel_id'] = new_channel.id
+        self.raw['info_channels']['welcome']['channel_id'] = new_channel.id
 
     @property
     def log_channel(self) -> Optional[discord.TextChannel]:
-        if self.raw['log']['enabled']:
+        if self.raw['info_channels']['log']['enabled']:
             return self.guild.get_channel(self.raw['log']['channel_id'])
         else:
             return None
 
     @log_channel.setter
     def log_channel(self, new_channel: discord.TextChannel):
-        self.raw['log']['channel_id'] = new_channel.id
-
-    @property
-    def reports_channel(self) -> Optional[discord.TextChannel]:
-        if self.raw['reports']['enabled']:
-            return self.guild.get_channel(self.raw['welcome']['channel_id'])
-        else:
-            return None
-
-    @reports_channel.setter
-    def reports_channel(self, new_channel: discord.TextChannel):
-        self.raw['reports']['channel_id'] = new_channel.id
+        self.raw['info_channels']['log']['channel_id'] = new_channel.id
 
     @property
     def default_roles(self) -> List[discord.Role]:
@@ -124,13 +113,12 @@ class GuildConfig:
             default_channel = guild.system_channel.id if guild.system_channel is not None else guild.text_channels[0].id
             default_info_channel = dict(channel_id=default_channel, enabled=False)
             new_guild_config = dict(name=guild.name,
-                    welcome=default_info_channel,
-                    log=default_info_channel,
-                    reports=default_info_channel,
-                    default_roles=[],
-                    commands=dict(),
-                    members=dict(),
-                    levels=dict())
+                                    default_roles=[],
+                                    commands=dict(),
+                                    members=dict(),
+                                    levels=dict(),
+                                    info_channels=dict(log=default_info_channel,
+                                                       welcome=default_info_channel))
             json.dump(new_guild_config, new_guild_config_file, sort_keys=True, indent=4)
 
     def write(self):
@@ -155,7 +143,7 @@ class GuildConfig:
 
     def switch_info_channel(self, info_channel_type: str, new_state: bool) -> bool:
         if info_channel_type in ['welcome', 'log', 'reports']:
-            self.raw[info_channel_type]['enabled'] = new_state
+            self.raw['info_channels'][info_channel_type]['enabled'] = new_state
             self.write()
             return True
         else:
