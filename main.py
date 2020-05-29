@@ -40,6 +40,7 @@ async def on_ready():
 bot.load_extension('factorio')
 bot.load_extension('fun_commands')
 bot.load_extension('greetings')
+bot.load_extension('info_channels')
 #bot.load_extension('levels')
 bot.load_extension('miscellaneous')
 bot.load_extension('moderation')
