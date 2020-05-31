@@ -78,7 +78,7 @@ class GuildConfig:
             if entry not in guild_config_to_check.raw:
                 guild_config_to_check.raw[entry] = entry_type()
         if guild is None:
-            await asyncio.wait([cls.check(bot, _guild) for _guild in bot.guilds()])
+            await asyncio.wait([cls.check(bot, _guild) for _guild in bot.guilds])
         else:
             if not os.path.exists('guilds/guild_{}.json'.format(guild.id)):
                 cls.create_guild_config(guild)
