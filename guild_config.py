@@ -45,7 +45,7 @@ class GuildConfig:
     @property
     def welcome_channel(self) -> Optional[discord.TextChannel]:
         if self.raw['info_channels']['welcome']['enabled']:
-            return self.guild.get_channel(self.raw['welcome']['channel_id'])
+            return self.guild.get_channel(self.raw['info_channels']['welcome']['channel_id'])
         else:
             return None
 
@@ -56,7 +56,7 @@ class GuildConfig:
     @property
     def log_channel(self) -> Optional[discord.TextChannel]:
         if self.raw['info_channels']['log']['enabled']:
-            return self.guild.get_channel(self.raw['log']['channel_id'])
+            return self.guild.get_channel(self.raw['info_channels']['log']['channel_id'])
         else:
             return None
 
