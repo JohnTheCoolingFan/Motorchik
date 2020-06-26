@@ -15,6 +15,7 @@ MODPORTAL_URL = 'https://mods.factorio.com'
 LAUNCHER_URL = 'https://factorio-launcher-mods.storage.googleapis.com/{}/{}.zip'
 
 
+# TODO: Fix mod search
 # TODO: make customizable mod-list, which will update automatically over time by editing messages
 
 
