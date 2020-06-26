@@ -15,7 +15,6 @@ MODPORTAL_URL = 'https://mods.factorio.com'
 LAUNCHER_URL = 'https://factorio-launcher-mods.storage.googleapis.com/{}/{}.zip'
 
 
-# TODO: Fix mod search
 # TODO: make customizable mod-list, which will update automatically over time by editing messages
 
 
@@ -103,9 +102,9 @@ class FactorioCog(commands.Cog, name='Factorio'):
         request = req.get(MODPORTAL_URL + '/query/' + mod_name.replace(' ', '%20'))
         if request.status_code == 200:
             soup = BeautifulSoup(request.text, 'html.parser')
-            mod_card = soup.find('div', {'class': 'mod-card'})
-            if mod_card:
-                retrieved_mod_name = mod_card.a['href'].replace('/mod/', '')
+            mod_h2 = soup.find('h2', {'class': 'mb0'})
+            if mod_h2:
+                retrieved_mod_name = mod_h2.a['href'].replace('/mod/', '')
                 return retrieved_mod_name
             else:
                 return ''
