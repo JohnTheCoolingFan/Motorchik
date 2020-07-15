@@ -28,12 +28,16 @@ class Miscellaneous(commands.Cog):
 
     @commands.command()
     async def hostinfo(self, ctx: commands.Context):
+        with open('/proc/uptime', 'r') as uptime_file:
+            uptime_seconds = float(uptime_file.readline().split()[0])
+            uptime_string = str(datetime.timedelta(seconds=uptime_seconds))
         embed = discord.Embed(title='Host info',
                               timestamp=datetime.datetime.now(),
                               colour=discord.Colour.from_rgb(47, 137, 197))
         embed.add_field(name='Hostname', value=platform.node() if platform.node() else 'Unknown')
         embed.add_field(name='Platform', value=platform.platform() if platform.platform() else 'Unknown')
         embed.add_field(name='Architecture', value=platform.machine() if platform.machine() else 'Unknown')
+        embed.add_field(name='System uptime', value=uptime_string)
         embed.add_field(name='Python implementation', value=platform.python_implementation() if platform.python_implementation() else 'Unknown')
         embed.add_field(name='Python version', value=platform.python_version() if platform.python_version() else 'Unknown')
         await ctx.send(embed=embed)
