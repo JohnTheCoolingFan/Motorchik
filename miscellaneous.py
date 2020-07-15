@@ -32,7 +32,7 @@ class Miscellaneous(commands.Cog):
             uptime_seconds = float(uptime_file.readline().split()[0])
             uptime_string = str(datetime.timedelta(seconds=uptime_seconds))
         embed = discord.Embed(title='Host info',
-                              timestamp=datetime.datetime.now(),
+                              timestamp=datetime.datetime.now(tz=datetime.timezone(datetime.timedelta())),
                               colour=discord.Colour.from_rgb(47, 137, 197))
         embed.add_field(name='Hostname', value=platform.node() if platform.node() else 'Unknown')
         embed.add_field(name='Platform', value=platform.platform() if platform.platform() else 'Unknown')
