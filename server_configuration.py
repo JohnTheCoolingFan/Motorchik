@@ -4,7 +4,7 @@ from guild_config import GuildConfig
 from io import StringIO as StrIO
 
 
-class ServerConfiguration(commands.Cog):
+class ServerConfiguration(commands.Cog, name='Server Configuration'):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
