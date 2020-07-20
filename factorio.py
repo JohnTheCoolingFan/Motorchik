@@ -22,6 +22,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        self._session = req.Session()
 
     @commands.command(aliases=['modstat', 'ms'])
     async def mods_statistics(self, ctx: commands.Context, *mods_names):
@@ -65,7 +66,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
         return embed
 
     async def get_mod_info(self, mod_name: str) -> dict:
-        request = req.get(MODPORTAL_URL + '/api/mods/' + mod_name)
+        request = self._session.get(MODPORTAL_URL + '/api/mods/' + mod_name)
         if request.status_code == 200:
             json_req = request.json()
             latest_release = natsorted(json_req['releases'], key=lambda release: release['version'], reverse=True)[0]
@@ -97,9 +98,8 @@ class FactorioCog(commands.Cog, name='Factorio'):
             else:
                 return dict(success=False, mod_name=mod_name)
 
-    @staticmethod
-    async def find_mod(mod_name: str) -> str:
-        request = req.get(MODPORTAL_URL + '/query/' + mod_name.replace(' ', '%20'))
+    async def find_mod(self, mod_name: str) -> str:
+        request = self._session.get(MODPORTAL_URL + '/query/' + mod_name.replace(' ', '%20'))
         if request.status_code == 200:
             soup = BeautifulSoup(request.text, 'html.parser')
             mod_h2 = soup.find('h2', {'class': 'mb0'})
