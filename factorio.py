@@ -16,6 +16,7 @@ LAUNCHER_URL = 'https://factorio-launcher-mods.storage.googleapis.com/{}/{}.zip'
 
 
 # TODO: make customizable mod-list, which will update automatically over time by editing messages
+# TODO: asynchronous and better thumb main color detection
 
 
 class FactorioCog(commands.Cog, name='Factorio'):
