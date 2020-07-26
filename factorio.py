@@ -26,7 +26,6 @@ class FactorioCog(commands.Cog, name='Factorio'):
 
     @commands.command(aliases=['modstat', 'ms'])
     async def mods_statistics(self, ctx: commands.Context, *mods_names):
-        print('Adding xp')
         await asyncio.create_task(UserConfig.create_and_add_xp(ctx.author, 5 * len(mods_names)))
 
         async def process_mod(mod_name: str):
@@ -39,17 +38,14 @@ class FactorioCog(commands.Cog, name='Factorio'):
             print('sending')
             await ctx.send(embed=embed)
 
-        print('making tasks')
         mod_process_tasks = []
         for mod_name in mods_names:
             mod_process_tasks.append(asyncio.create_task(process_mod(mod_name)))
 
-        print('awaiting')
         await asyncio.wait(mod_process_tasks)
 
     @staticmethod
     async def construct_mod_embed(mod_data: dict) -> discord.Embed:
-        print('constructing embed')
         embed = discord.Embed(title=mod_data['title'], description=mod_data['description'], url=mod_data['url'],
                               timestamp=mod_data['timestamp'], color=mod_data['color'])
         embed.set_footer(text='Latest update was released at:')
@@ -71,14 +67,10 @@ class FactorioCog(commands.Cog, name='Factorio'):
         return embed
 
     async def get_mod_info(self, mod_name: str) -> dict:
-        print('getting mod info '+mod_name)
         request = self._session.get(MODPORTAL_URL + '/api/mods/' + mod_name)
-        print('req fin')
         if request.status_code == 200:
-            print('req success, parsing')
             json_req = request.json()
             latest_release = natsorted(json_req['releases'], key=lambda release: release['version'], reverse=True)[0]
-            print('parsed and sorted')
             if json_req['thumbnail'] != '/assets/.thumb.png':
                 #thumb_color = discord.Color.from_rgb(*ColorThief(
                     #BytesIO(req.get('https://mods-data.factorio.com' + json_req['thumbnail']).content)).get_color())
@@ -109,7 +101,6 @@ class FactorioCog(commands.Cog, name='Factorio'):
                 return dict(success=False, mod_name=mod_name)
 
     async def find_mod(self, mod_name: str) -> str:
-        print('Searching '+mod_name)
         request = self._session.get(MODPORTAL_URL + '/query/' + mod_name.replace(' ', '%20'))
         if request.status_code == 200:
             soup = BeautifulSoup(request.text, 'html.parser')
@@ -124,7 +115,6 @@ class FactorioCog(commands.Cog, name='Factorio'):
 
     @commands.command(aliases=['ml'])
     async def modlist(self, ctx: commands.Context):
-        print('modlist called')
         await asyncio.wait({ctx.message.delete(), ctx.invoke(self.mods_statistics, *MOD_LIST_MOTORCHIK)})
 
 
