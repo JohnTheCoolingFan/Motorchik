@@ -29,20 +29,19 @@ class FactorioCog(commands.Cog, name='Factorio'):
     async def mods_statistics(self, ctx: commands.Context, *mods_names):
         await asyncio.create_task(UserConfig.create_and_add_xp(ctx.author, 5 * len(mods_names)))
 
-        async def process_mod(mod_name: str):
-
-            mod_data = await self.get_mod_info(mod_name)
-            if mod_data['success']:
-                embed = await self.construct_mod_embed(mod_data)
-            else:
-                embed = await self.failed_mod_embed(mod_data)
-            await ctx.send(embed=embed)
-
         mod_process_tasks = []
         for mod_name in mods_names:
-            mod_process_tasks.append(asyncio.create_task(process_mod(mod_name)))
+            mod_process_tasks.append(asyncio.create_task(self.process_mod(ctx, mod_name)))
 
         await asyncio.wait(mod_process_tasks)
+
+    async def process_mod(self, ctx: commands.Context, mod_name: str):
+        mod_data = await self.get_mod_info(mod_name)
+        if mod_data['success']:
+            embed = await self.construct_mod_embed(mod_data)
+        else:
+            embed = await self.failed_mod_embed(mod_data)
+        await ctx.send(embed=embed)
 
     @staticmethod
     async def construct_mod_embed(mod_data: dict) -> discord.Embed:
