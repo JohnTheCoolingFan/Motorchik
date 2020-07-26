@@ -35,7 +35,6 @@ class FactorioCog(commands.Cog, name='Factorio'):
                 embed = await self.construct_mod_embed(mod_data)
             else:
                 embed = await self.failed_mod_embed(mod_data)
-            print('sending')
             await ctx.send(embed=embed)
 
         mod_process_tasks = []
