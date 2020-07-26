@@ -81,7 +81,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
             print('parsed and sorted')
             if json_req['thumbnail'] != '/assets/.thumb.png':
                 #thumb_color = discord.Color.from_rgb(*ColorThief(
-                    BytesIO(req.get('https://mods-data.factorio.com' + json_req['thumbnail']).content)).get_color())
+                    #BytesIO(req.get('https://mods-data.factorio.com' + json_req['thumbnail']).content)).get_color())
                 thumbnail_url = 'https://mods-data.factorio.com' + json_req['thumbnail']
             else:
                 #thumb_color = discord.Color.from_rgb(47, 137, 197)
