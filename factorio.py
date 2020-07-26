@@ -73,9 +73,12 @@ class FactorioCog(commands.Cog, name='Factorio'):
     async def get_mod_info(self, mod_name: str) -> dict:
         print('getting mod info '+mod_name)
         request = self._session.get(MODPORTAL_URL + '/api/mods/' + mod_name)
+        print('req fin')
         if request.status_code == 200:
+            print('req success, parsing')
             json_req = request.json()
             latest_release = natsorted(json_req['releases'], key=lambda release: release['version'], reverse=True)[0]
+            print('parsed and sorted')
             if json_req['thumbnail'] != '/assets/.thumb.png':
                 thumb_color = discord.Color.from_rgb(*ColorThief(
                     BytesIO(req.get('https://mods-data.factorio.com' + json_req['thumbnail']).content)).get_color())
