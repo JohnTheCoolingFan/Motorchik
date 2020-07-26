@@ -80,12 +80,13 @@ class FactorioCog(commands.Cog, name='Factorio'):
             latest_release = natsorted(json_req['releases'], key=lambda release: release['version'], reverse=True)[0]
             print('parsed and sorted')
             if json_req['thumbnail'] != '/assets/.thumb.png':
-                thumb_color = discord.Color.from_rgb(*ColorThief(
+                #thumb_color = discord.Color.from_rgb(*ColorThief(
                     BytesIO(req.get('https://mods-data.factorio.com' + json_req['thumbnail']).content)).get_color())
                 thumbnail_url = 'https://mods-data.factorio.com' + json_req['thumbnail']
             else:
-                thumb_color = discord.Color.from_rgb(47, 137, 197)
+                #thumb_color = discord.Color.from_rgb(47, 137, 197)
                 thumbnail_url = ''
+            thumb_color = discord.Color.from_rgb(47, 137, 197)
             return dict(title=json_req['title'],
                         description=json_req['summary'],
                         url=MODPORTAL_URL + '/mod/' + mod_name,
