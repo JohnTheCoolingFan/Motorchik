@@ -226,3 +226,18 @@ class XpLog:
                 xp = int(split_line[3])
                 ))
         return result
+
+class GuildConfigCog(commands.Cog):
+    _guilds: dict
+
+    def __init__(self, bot: commands.Bot):
+        self.bot = bot
+        GuildConfig.check(bot)
+        for guild in bot.guilds:
+            self._guilds[str(guild.id)] = GuildConfig(guild)
+
+    def get_guild_config(self, guild_id: int):
+        return self._guilds[str(guild_id)]
+
+def setup(bot: commands.Bot):
+    bot.add_cog(GuildConfigCog(bot))
