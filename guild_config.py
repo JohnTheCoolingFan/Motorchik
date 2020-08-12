@@ -315,16 +315,25 @@ class XpLog:
         return result
 
 class GuildConfigCog(commands.Cog):
-    _guilds: dict
+    _guilds: List[GuildConfig]
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        GuildConfig.check(bot)
         for guild in bot.guilds:
-            self._guilds[str(guild.id)] = GuildConfig(guild)
+            self._guilds.append(GuildConfig(guild))
+
+    def get_guild_config_index(self, guild_id: int):
+        for i, guild in enumerate(self._guilds):
+            if guild.guild.id == guild_id:
+                return i
+        return None
 
     def get_guild_config(self, guild_id: int):
-        return self._guilds[str(guild_id)]
+        return self._guilds(self.get_guild_config_index(guild_id))
+
+    def write_all_guilds(self):
+        for guild in self._guilds:
+            guild.write()
 
 def setup(bot: commands.Bot):
     bot.add_cog(GuildConfigCog(bot))
