@@ -30,6 +30,10 @@ class FunCommands(commands.Cog, name='Fun'):
     async def udod_communist(self, ctx):
         await ctx.send('https://www.youtube.com/watch?v=YHR5_IvC8Gw')
 
+    @commands.command(hidden=True, aliases=['UDOD_COMMUNIST_2', 'UDOD2', 'udod2', 'УДОД_КОММУНИСТ_2', 'Удод_Коммунист_2', 'УДОД2', 'Удод2', 'удод2'])
+    async def udod_communist2(self, ctx):
+        await ctx.send('https://youtu.be/BgF5HcnNN-Q')
+
 
 def setup(bot):
     bot.add_cog(FunCommands(bot))
