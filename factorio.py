@@ -3,8 +3,8 @@ import discord
 import requests as req
 from bs4 import BeautifulSoup
 from dateutil import parser
-from colorthief import ColorThief
-from io import BytesIO
+#from colorthief import ColorThief
+#from io import BytesIO
 from natsort import natsorted
 from user_config import UserConfig
 import asyncio
