@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from guild_config import GuildConfig
 from io import StringIO as StrIO
+from typing import Optional
 
 
 class ServerConfiguration(commands.Cog, name='Server Configuration'):
@@ -102,9 +103,10 @@ class ServerConfiguration(commands.Cog, name='Server Configuration'):
         await ctx.send_help(ctx.command)
 
     @config.command()
-    async def default_roles(self, ctx: commands.Context, *roles: discord.Role):
+    async def default_roles(self, ctx: commands.Context, *roles: Optional[discord.Role]):
         guild_config = GuildConfig(ctx.guild)
         guild_config.default_roles = roles
+        guild_config.write()
         await ctx.send('List of default roles updated.')
 
     @config.group(name='list', case_sensitive=True, invoke_without_command=True)
