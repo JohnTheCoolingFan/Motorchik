@@ -13,6 +13,7 @@ class Greetings(commands.Cog):
         guild_config = GuildConfig(member.guild)
         if guild_config.welcome_channel:
             await guild_config.welcome_channel.send('Welcome, {0.mention}'.format(member))
+        # TODO: Needs to take security level into consideration and not apply role if member didn't spend N minutes on the server
         if guild_config.default_roles:
             await member.add_roles(*guild_config.default_roles, reason='New member join.')
 
