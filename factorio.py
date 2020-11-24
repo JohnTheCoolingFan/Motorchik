@@ -9,7 +9,9 @@ from natsort import natsorted
 from user_config import UserConfig
 import asyncio
 
-MOD_LIST_MOTORCHIK = ['PlaceableOffGrid', 'NoArtilleryMapReveal', 'RandomFactorioThings', 'PlutoniumEnergy']
+# Old one
+#MOD_LIST_MOTORCHIK = ['PlaceableOffGrid', 'NoArtilleryMapReveal', 'RandomFactorioThings', 'PlutoniumEnergy']
+MOD_LIST_MOTORCHIK = ['PlaceableOffGrid', 'RandomFactorioThings', 'PlutoniumEnergy', 'artillery-spidertron']
 
 MODPORTAL_URL = 'https://mods.factorio.com'
 LAUNCHER_URL = 'https://factorio-launcher-mods.storage.googleapis.com/{}/{}.zip'
