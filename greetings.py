@@ -50,7 +50,8 @@ class Greetings(commands.Cog):
             print('Removing user {} from queue'.format(queue_item.user.id))
             self.queue.remove(queue_item)
 
-    async def check_queued(self, user: discord.Member):
+    @staticmethod
+    def check_queued(user: discord.Member):
         guild_vl = user.guild.verification_level
         mediumlevel = True
         highlevel = True
@@ -58,7 +59,7 @@ class Greetings(commands.Cog):
             mediumlevel = datetime.now() - user.created_at() > timedelta(minutes=5)
         if guild_vl >= discord.VerificationLevel.high:
             highlevel = datetime.now() - user.joined_at() > timedelta(minutes=10)
-            return mediumlevel and highlevel
+        return mediumlevel and highlevel
 
     async def cog_before_invoke(self, ctx: commands.Context):
         if UserConfig.check(ctx.author):
