@@ -25,6 +25,7 @@ class Greetings(commands.Cog):
             await guild_config.welcome_channel.send('Welcome, {0.mention}'.format(member))
         if guild_config.default_roles:
             if member.guild.verification_level != discord.VerificationLevel.none:
+                print("Putting user {} on queue".format(member.id))
                 self.queue.append(QueueItem(member, guild_config.default_roles))
             else:
                 await member.add_roles(*guild_config.default_roles, reason='New member join.')
@@ -37,17 +38,20 @@ class Greetings(commands.Cog):
 
     @tasks.loop(seconds=10)
     async def queue_checker(self):
+        print('Checking queue. {} items'.format(self.queue.len()))
         queue_copy = self.queue.copy()
         queue_to_remove = []
         for queue_item in queue_copy:
-            if self.check_queued(queue_item.item):
+            if self.check_queued(queue_item.user):
+                print('User {} is now valid for automatic role giving'.format(queue_item.user.id))
                 await queue_item.user.add_roles(*queue_item.roles, reason='New member join')
                 queue_to_remove.append(queue_item)
         for queue_item in queue_to_remove:
+            print('Removing user {} from queue'.format(queue_item.user.id))
             queue_copy.remove(queue_item)
         self.queue = queue_copy.copy()
-        del queue_copy
-        del queue_to_remove
+        #del queue_copy
+        #del queue_to_remove
 
     async def check_queued(self, user: discord.Member):
         return (datetime.now() - user.joined_at() > timedelta(minutes=10)) and (datetime.now() - user.created_at() > timedelta(minutes=5))
