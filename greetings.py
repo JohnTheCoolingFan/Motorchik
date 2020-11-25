@@ -40,7 +40,6 @@ class Greetings(commands.Cog):
     @tasks.loop(seconds=10)
     async def queue_checker(self):
         print('Checking queue. {} items'.format(len(self.queue)))
-        #queue_copy = self.queue.copy()
         queue_to_remove = []
         for queue_item in self.queue:
             if self.check_queued(queue_item.user):
@@ -50,8 +49,6 @@ class Greetings(commands.Cog):
         for queue_item in queue_to_remove:
             print('Removing user {} from queue'.format(queue_item.user.id))
             self.queue.remove(queue_item)
-        #del queue_copy
-        #del queue_to_remove
 
     async def check_queued(self, user: discord.Member):
         guild_vl = user.guild.verification_level
