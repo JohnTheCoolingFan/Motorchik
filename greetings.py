@@ -24,7 +24,7 @@ class Greetings(commands.Cog):
         if guild_config.welcome_channel:
             await guild_config.welcome_channel.send('Welcome, {0.mention}'.format(member))
         if guild_config.default_roles:
-            if not member.guild.verification_level.none:
+            if member.guild.verification_level != discord.VerificationLevel.none:
                 self.queue.append(QueueItem(member, guild_config.default_roles))
             else:
                 await member.add_roles(*guild_config.default_roles, reason='New member join.')
