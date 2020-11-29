@@ -5,6 +5,7 @@ Motorchik, discord bot written in python.
 Motorchik is a discord bot, written in python using [discord.py](https://github.com/Rapptz/discord.py).
 At current state Motorchik provides simple tools for discord servers, such as delete a number of messages, ban or kick someone, give default roles to new members, etc.
 Per-server configuration system is still en development, but working (not working: command black-/whitelisting). Also per-user configuration system is in development and kind of working.
+If you want to add this bot on your server, hosted nearly 24/7 on my OrangePi PC, message me at discord John The Cooling Fan#6411 for a bot invitation link.
 
 ## Features
 * Misc
