@@ -37,7 +37,7 @@ If you want to add this bot on your server, hosted nearly 24/7 on my OrangePi PC
   ./main.py
   ```
 ### 4. Autostart
-  You can use any type of auto-starting. My PC runs linux and I use systemd unit to run it automatically
+  You can use any type of auto-starting. My host runs linux and I use systemd unit to run it automatically
   `~/.config/systemd/user/Motorchik.service`
   ```ini
   [Unit]
@@ -60,3 +60,4 @@ If you want to add this bot on your server, hosted nearly 24/7 on my OrangePi PC
   ```
   $ journalctl --user -u Motorchik.service
   ```
+  (Requires restarting the unit for entire log to show up)
