@@ -6,7 +6,6 @@ from dateutil import parser
 #from colorthief import ColorThief
 #from io import BytesIO
 from natsort import natsorted
-from user_config import UserConfig
 import asyncio
 
 # Old one
@@ -29,7 +28,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
 
     @commands.command(aliases=['modstat', 'ms'])
     async def mods_statistics(self, ctx: commands.Context, *mods_names):
-        await asyncio.create_task(UserConfig.create_and_add_xp(ctx.author, 5 * len(mods_names)))
+        #await asyncio.create_task(UserConfig.create_and_add_xp(ctx.author, 5 * len(mods_names))) # Left to remember the formula
 
         mod_process_tasks = []
         for mod_name in mods_names:

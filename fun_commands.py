@@ -1,15 +1,9 @@
 from discord.ext import commands
-from user_config import UserConfig
 
 
 class FunCommands(commands.Cog, name='Fun'):
     def __init__(self, bot):
         self.bot = bot
-
-    async def cog_before_invoke(self, ctx: commands.Context):
-        if UserConfig.check(ctx.author):
-            userconfig = UserConfig(ctx.author)
-            userconfig.add_xp(1)
 
     @commands.command(help='You spin me right round, baby, right round')
     async def spin(self, ctx):

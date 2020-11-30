@@ -1,7 +1,6 @@
 from discord.ext import commands, tasks
 import discord
 from guild_config import GuildConfig
-from user_config import UserConfig
 from typing import List
 from datetime import datetime, timedelta
 
@@ -60,11 +59,6 @@ class Greetings(commands.Cog):
         if guild_vl >= discord.VerificationLevel.high:
             highlevel = datetime.now() - user.joined_at() > timedelta(minutes=10)
         return mediumlevel and highlevel
-
-    async def cog_before_invoke(self, ctx: commands.Context):
-        if UserConfig.check(ctx.author):
-            userconfig = UserConfig(ctx.author)
-            userconfig.add_xp(1)
 
     @commands.command(description='\"Hello\" in English', brief='\"Hello\" in English', help='Returns \"Hello\" in English')
     async def hello(self, ctx: commands.Context):
