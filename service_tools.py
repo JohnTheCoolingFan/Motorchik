@@ -1,6 +1,5 @@
 from discord.ext import commands
 import discord
-from user_config import UserConfig
 
 
 class ServiceTools(commands.Cog, name='Service Tools'):
@@ -31,12 +30,6 @@ class ServiceTools(commands.Cog, name='Service Tools'):
             await user.create_dm()
             dm_channel = user.dm_channel
         await dm_channel.send(message)
-
-    @commands.command()
-    async def add_xp(self, ctx: commands.Context, user_id: int, xp_amount: int):
-        user_config = UserConfig(self.bot.get_user(user_id))
-        user_config.add_xp(xp_amount)
-        await ctx.send('Added {} xp to {}'.format(xp_amount, user_config.user.display_name))
 
 
 def setup(bot: commands.Bot):

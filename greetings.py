@@ -1,7 +1,6 @@
 from discord.ext import commands, tasks
 import discord
 from guild_config import GuildConfig
-from user_config import UserConfig
 from typing import List
 from datetime import datetime, timedelta
 
@@ -39,16 +38,17 @@ class Greetings(commands.Cog):
 
     @tasks.loop(seconds=10)
     async def queue_checker(self):
-        print('Checking queue. {} items'.format(len(self.queue)))
-        queue_to_remove = []
-        for queue_item in self.queue:
-            if self.check_queued(queue_item.user):
-                print('User {} is now valid for automatic role giving'.format(queue_item.user.id))
-                await queue_item.user.add_roles(*queue_item.roles, reason='New member join')
-                queue_to_remove.append(queue_item)
-        for queue_item in queue_to_remove:
-            print('Removing user {} from queue'.format(queue_item.user.id))
-            self.queue.remove(queue_item)
+        if len(self.queue) > 0:
+            print('Checking queue. {} items'.format(len(self.queue)))
+            queue_to_remove = []
+            for queue_item in self.queue:
+                if self.check_queued(queue_item.user):
+                    print('User {} is now valid for automatic role giving'.format(queue_item.user.id))
+                    await queue_item.user.add_roles(*queue_item.roles, reason='New member join')
+                    queue_to_remove.append(queue_item)
+            for queue_item in queue_to_remove:
+                print('Removing user {} from queue'.format(queue_item.user.id))
+                self.queue.remove(queue_item)
 
     @staticmethod
     def check_queued(user: discord.Member):
@@ -60,11 +60,6 @@ class Greetings(commands.Cog):
         if guild_vl >= discord.VerificationLevel.high:
             highlevel = datetime.now() - user.joined_at() > timedelta(minutes=10)
         return mediumlevel and highlevel
-
-    async def cog_before_invoke(self, ctx: commands.Context):
-        if UserConfig.check(ctx.author):
-            userconfig = UserConfig(ctx.author)
-            userconfig.add_xp(1)
 
     @commands.command(description='\"Hello\" in English', brief='\"Hello\" in English', help='Returns \"Hello\" in English')
     async def hello(self, ctx: commands.Context):
