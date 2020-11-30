@@ -2,8 +2,6 @@ from discord.ext import commands
 import discord
 import json
 import os.path
-# import datetime
-# import math
 import asyncio
 from typing import List, Iterable, Optional
 
