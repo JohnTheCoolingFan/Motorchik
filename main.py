@@ -45,8 +45,8 @@ bot.load_extension('moderation')
 bot.load_extension('server_configuration')
 bot.load_extension('service_tools')
 bot.load_extension('test_commands')
-bot.load_extension('user_configuration')
-bot.load_extension('xp_log')
+#bot.load_extension('user_configuration')
+#bot.load_extension('xp_log')
 
 with open('token.txt', 'r') as token_file:
     bot.run(token_file.read().rstrip())
