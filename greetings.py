@@ -38,16 +38,17 @@ class Greetings(commands.Cog):
 
     @tasks.loop(seconds=10)
     async def queue_checker(self):
-        print('Checking queue. {} items'.format(len(self.queue)))
-        queue_to_remove = []
-        for queue_item in self.queue:
-            if self.check_queued(queue_item.user):
-                print('User {} is now valid for automatic role giving'.format(queue_item.user.id))
-                await queue_item.user.add_roles(*queue_item.roles, reason='New member join')
-                queue_to_remove.append(queue_item)
-        for queue_item in queue_to_remove:
-            print('Removing user {} from queue'.format(queue_item.user.id))
-            self.queue.remove(queue_item)
+        if len(self.queue) > 0:
+            print('Checking queue. {} items'.format(len(self.queue)))
+            queue_to_remove = []
+            for queue_item in self.queue:
+                if self.check_queued(queue_item.user):
+                    print('User {} is now valid for automatic role giving'.format(queue_item.user.id))
+                    await queue_item.user.add_roles(*queue_item.roles, reason='New member join')
+                    queue_to_remove.append(queue_item)
+            for queue_item in queue_to_remove:
+                print('Removing user {} from queue'.format(queue_item.user.id))
+                self.queue.remove(queue_item)
 
     @staticmethod
     def check_queued(user: discord.Member):
