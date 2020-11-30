@@ -1,7 +1,5 @@
 #! /usr/bin/python3
 
-# TODO: make experience system
-# TODO: make role-level system with levelup/leveldown system
 # TODO: make expandable InfoChannels system
 
 import discord
