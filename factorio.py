@@ -3,13 +3,9 @@ import discord
 import requests as req
 from bs4 import BeautifulSoup
 from dateutil import parser
-#from colorthief import ColorThief
-#from io import BytesIO
 from natsort import natsorted
 import asyncio
 
-# Old one
-#MOD_LIST_MOTORCHIK = ['PlaceableOffGrid', 'NoArtilleryMapReveal', 'RandomFactorioThings', 'PlutoniumEnergy']
 MOD_LIST_MOTORCHIK = ['artillery-spidertron', 'PlaceableOffGrid', 'NoArtilleryMapReveal', 'RandomFactorioThings', 'PlutoniumEnergy']
 
 MODPORTAL_URL = 'https://mods.factorio.com'
@@ -17,6 +13,7 @@ LAUNCHER_URL = 'https://factorio-launcher-mods.storage.googleapis.com/{}/{}.zip'
 
 
 # TODO: make customizable mod-list, which will update automatically over time by editing messages
+#       InfoChannels milestone
 # TODO: asynchronous and better thumb main color detection
 
 
