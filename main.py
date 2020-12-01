@@ -47,4 +47,5 @@ bot.load_extension('test_commands')
 #bot.load_extension('user_configuration') # Not deleted completely, but disabled to be improved later
 
 with open('token.txt', 'r') as token_file:
-    bot.run(token_file.read().rstrip())
+    #bot.run(token_file.read().rstrip())
+    bot.run(bot.get_cog('BotConfig').token)
