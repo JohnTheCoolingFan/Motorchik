@@ -25,8 +25,6 @@ class FactorioCog(commands.Cog, name='Factorio'):
 
     @commands.command(aliases=['modstat', 'ms'])
     async def mods_statistics(self, ctx: commands.Context, *mods_names):
-        #await asyncio.create_task(UserConfig.create_and_add_xp(ctx.author, 5 * len(mods_names))) # Left to remember the formula
-
         mod_process_tasks = []
         for mod_name in mods_names:
             mod_process_tasks.append(asyncio.create_task(self.process_mod(ctx, mod_name)))
