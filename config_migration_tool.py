@@ -16,10 +16,39 @@ import sys
 # 8. Migrate the json config if needed.
 # 9. Write the bot config file info, if got any new.
 
-with open('config_test.json') as config_file:
+config_file_name = 'config_test.json'
+
+with open(config_file_name) as config_file:
     config_data = json.load(config_file)
 
-mysql_data = config_data['mysql']
+if config_data['storage_method'] != 'mysql':
+    response = input('Config storage method is set to {}. Set it to "mysql"? [Y/n] '.format(config_data['storage_method']))
+    if response.lower() in ['', 'y', 'ye', 'yes']:
+        config_data['storage_method'] = 'mysql'
+        with open(config_file_name, 'w') as  config_file:
+            json.dump(config_data, config_file)
+    else:
+        print('No migration is needed.')
+        sys.exit(1)
+
+if 'mysql' in config_data.keys():
+    mysql_data = config_data['mysql']
+else:
+    response = input('There\'s no database info in bot config. Do you want to add it? [Y/n] ')
+    if response.lower() in ['', 'y', 'ye', 'yes']:
+        host = input('MySQL server host: ')
+        user = input('MySQL user: ')
+        password = input('MySQL user password (will be echoed. Leave empty to add manually): ')
+        database = input('MySQL database name: ')
+        config_data['mysql'] = dict(host=host, user=user, password=password, database=database)
+        with open(config_file_name, 'w') as config_file:
+            json.dump(config_data, config_file)
+        if not password:
+            print('Password is empty. Please add it manually in the config file')
+            sys.exit(1)
+    else:
+        print('Database info is required for migrating and bot\'s functioning with database. Please fill it in manually.')
+        sys.exit(1)
 
 try:
     conn = mariadb.connect(
