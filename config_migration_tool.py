@@ -6,15 +6,6 @@ from os.path import exists
 import json
 import sys
 
-# 1. Read config, get bot token.
-# 2. Look for config storing method. If "mysql" - Good to go.
-# 3. If there's no info on how to connect to mysql, Ask the user.
-# 4. Use the creds to connect to mysql.
-# 5. Seek for database. If not specified, ask the name. If doesn't exist, create.
-# 6. If db doesn't have required tables, create. Also recommended to check the format.
-# 7. Ask the user or look for argument whether or not to migrate the config.
-# 8. Migrate the json config if needed.
-# 9. Write the bot config file info, if got any new.
 
 config_file_name = 'config_test.json'
 
@@ -28,7 +19,7 @@ if config_data['storage_method'] != 'mysql':
         with open(config_file_name, 'w') as  config_file:
             json.dump(config_data, config_file)
     else:
-        print('No migration is needed.')
+        print('Migration denied')
         sys.exit(1)
 
 if 'mysql' in config_data.keys():
@@ -65,16 +56,73 @@ cur = conn.cursor()
 
 def migrate_config(bott: commands.Bot):
     for guild in bott.guilds:
+        print('Processing guild {}'.format(guild.id))
         if exists('guilds/guild_{}.json'.format(guild.id)):
             with open('guild/guild_{}.json'.format(guild.id)) as guild_config_file:
                 guild_config = json.load(guild_config_file)
-            if guild_config['default_roles']:
+
+            # Default roles
+            if 'default_roles' in guild_config.keys() and guild_config['default_roles']:
+                print('  Default roles')
                 values = ''
-                template = '(\{role_id\}, {guild_id}),'.format(guild_id=guild.id)
+                template = '(\{role_id\}, {guild_id}),'.format(guild_id=guild.id) # pylint: disable=W1303,W1401
                 for role in guild_config['default_roles']:
                     values = values + template.format(role_id=role)
                 values = values[0:-1]
                 cur.execute('INSERT INTO default_roles(role_id, guild_id) VALUES {values}'.format(values=values))
+
+            # Info channels
+            if 'info_channels' in guild_config.keys() and guild_config['info_channels']:
+                print('  Info Channels')
+                # Log
+                if 'log' in guild_config['info_channels'].keys() and guild_config['info_channels']['log']:
+                    print('    Log')
+                    channel_id = guild_config['info_channels']['log']['channels_id']
+                    is_enabled = guild_config['info_channels']['log']['enabled']
+                    # Instead of using "enabled" flag, we store log channel info only when it's needed.
+                    if is_enabled:
+                        cur.execute('INSERT INTO log_channels(guild_id, channel_id) VALUES ({guild_id}, {channel_id})'.format(guild_id=guild.id, channel_id=channel_id))
+                # Welcome
+                if 'welcome' in guild_config['info_channels'].keys() and guild_config['info_channels']['welcome']:
+                    print('    Welcome')
+                    channel_id = guild_config['info_channels']['welcome']['channels_id']
+                    is_enabled = guild_config['info_channels']['welcome']['enabled']
+                    # Instead of using "enabled" flag, we store welcome channel info only when it's needed.
+                    if is_enabled:
+                        cur.execute('INSERT INTO welcome_channels(guild_id, channel_id) VALUES ({guild_id}, {channel_id})'.format(guild_id=guild.id, channel_id=channel_id))
+            # Here goes the thing I always feared of and that takes majority of json config, but still useless and broken
+            # Commands (Command Filters)
+            if 'commands' in guild_config.keys() and guild_config['commands']:
+                print('  Command Filters')
+                filtered_commands = {command_name: command_filter for command_name, command_filter in guild_config['commands'].items() if command_filter['blacklist'] or command_filter['whitelist'] or not command_filter['enabled']}
+                values_cfs = ''
+                values_restr = []
+                print('    Command filter list type and ')
+                for command_name, command_filter in filtered_commands.items():
+                    is_enabled = command_filter['enabled']
+                    if not is_enabled:
+                        values_cfs = values_cfs + '({command_name}, {guild_id}, FALSE, FALSE),'.format(command_name=command_name, guild_id=guild.id)
+                        print('      {} is not enabled.'.format(command_name))
+                        continue
+                    # False is blacklist, False is whitelist
+                    list_type = bool(command_filter['whitelist'])
+                    if list_type:
+                        print('      {} has whitelist'.format(command_name))
+                        restrict_list = command_filter['whitelist']
+                    else:
+                        restrict_list = command_filter['blacklist']
+                        print('      {} has blacklist'.format(command_name))
+                    values_restr.append((command_name, restrict_list))
+                    values_cfs = values_cfs + '({command_name}, {guild_id}, TRUE, {list_type}),'.format(command_name=command_name, guild_id=guild.id, list_type='TRUE' if list_type else 'FALSE')
+                values_cfs = values_cfs[0:-1]
+                cur.execute('INSERT INTO command_filters(name, guild_id, is_enabled, list_type) VALUES {values}'.format(values=values_cfs))
+                restr_lookup = dict()
+                for command_name, restr_list in values_restr:
+                    if command_name not in restr_lookup.keys():
+                        cur.execute('SELECT cf_id FROM command_filters WHERE name=\'{}\' AND guild_id={}'.format(command_name, guild.id))
+                        restr_lookup[command_name] = cur[0]
+                    cf_id = restr_lookup[command_name]
+                    cur.execute('INSERT INTO restrict_list(cf_id, channel_id) VALUES ?', tuple((cf_id, channel_id) for channel_id in restr_list))
         else:
             print('Config file for guild {} was not found'.format(guild.id))
 
