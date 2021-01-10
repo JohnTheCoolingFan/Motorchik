@@ -7,7 +7,7 @@ from discord.ext import commands
 from guild_config import GuildConfig
 import os
 
-bot = commands.Bot(command_prefix=commands.when_mentioned_or('$$'))
+bot = commands.Bot(command_prefix=commands.when_mentioned_or('$$'), intents=discord.Intents.all())
 
 
 @bot.listen()
