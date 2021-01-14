@@ -56,9 +56,9 @@ class Greetings(commands.Cog):
         mediumlevel = True
         highlevel = True
         if guild_vl >= discord.VerificationLevel.medium:
-            mediumlevel = datetime.now() - user.created_at() > timedelta(minutes=5)
+            mediumlevel = datetime.now() - user.created_at > timedelta(minutes=5)
         if guild_vl >= discord.VerificationLevel.high:
-            highlevel = datetime.now() - user.joined_at() > timedelta(minutes=10)
+            highlevel = datetime.now() - user.joined_at > timedelta(minutes=10)
         return mediumlevel and highlevel
 
     @commands.command(description='\"Hello\" in English', brief='\"Hello\" in English', help='Returns \"Hello\" in English')
