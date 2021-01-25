@@ -92,24 +92,26 @@ def migrate_config(bott: commands.Bot):
             # Commands (Command Filters)
             if 'commands' in guild_config.keys() and guild_config['commands']:
                 print('  Command Filters')
-                filtered_commands = {command_name: command_filter for command_name, command_filter in guild_config['commands'].items() if command_filter['blacklist'] or command_filter['whitelist'] or not command_filter['enabled']}
+                #filtered_commands = {command_name: command_filter for command_name, command_filter in guild_config['commands'].items() if command_filter['blacklist'] or command_filter['whitelist'] or not command_filter['enabled']}
                 values_cfs = []
                 values_restr = []
-                print('    Command filter list type and ')
-                for command_name, command_filter in filtered_commands.items():
+                for command_name, command_filter in guild_config['commands'].items():
+                    if (not (bool(command_filter['blacklist']) or bool(command_filter['whitelist']))) or command_filter['enabled']:
+                        continue
+                    print('      '+command_name)
                     is_enabled = command_filter['enabled']
                     if not is_enabled:
                         values_cfs.append((command_name, guild.id, False, False))
-                        print('      {} is not enabled.'.format(command_name))
+                        print('        {} is not enabled.'.format(command_name))
                         continue
                     # False is blacklist, False is whitelist
                     list_type = bool(command_filter['whitelist'])
                     if list_type:
-                        print('      {} has whitelist'.format(command_name))
+                        print('        {} has whitelist'.format(command_name))
                         restrict_list = command_filter['whitelist']
                     else:
                         restrict_list = command_filter['blacklist']
-                        print('      {} has blacklist'.format(command_name))
+                        print('        {} has blacklist'.format(command_name))
                     values_restr.append((command_name, restrict_list))
                     values_cfs.append((command_name, guild.id, True, list_type))
                 if values_cfs:
@@ -130,5 +132,6 @@ bot = commands.Bot(command_prefix='$$')
 @bot.event
 async def on_ready():
     migrate_config(bot)
+    await bot.close()
 
 bot.run(config_data['token'])
