@@ -17,7 +17,7 @@ if config_data['storage_method'] != 'mysql':
     if response.lower() in ['', 'y', 'ye', 'yes']:
         config_data['storage_method'] = 'mysql'
         with open(config_file_name, 'w') as  config_file:
-            json.dump(config_data, config_file)
+            json.dump(config_data, config_file, indent=4)
     else:
         print('Migration denied')
         sys.exit(1)
@@ -96,13 +96,15 @@ def migrate_config(bott: commands.Bot):
                 values_cfs = []
                 values_restr = []
                 for command_name, command_filter in guild_config['commands'].items():
-                    if (not (bool(command_filter['blacklist']) or bool(command_filter['whitelist']))) or command_filter['enabled']:
+                    print('DEB '+command_name)
+                    print(command_filter)
+                    if (not (command_filter['blacklist'] or command_filter['whitelist'])) or command_filter['enabled']:
                         continue
                     print('      '+command_name)
                     is_enabled = command_filter['enabled']
                     if not is_enabled:
                         values_cfs.append((command_name, guild.id, False, False))
-                        print('        {} is not enabled.'.format(command_name))
+                        print('        {} is disabled.'.format(command_name))
                         continue
                     # False is blacklist, False is whitelist
                     list_type = bool(command_filter['whitelist'])
@@ -125,6 +127,8 @@ def migrate_config(bott: commands.Bot):
                         cur.executemany('INSERT INTO restrict_list(cf_id, channel_id) VALUES (?, ?)', [tuple([cf_id, channel_id]) for channel_id in restr_list])
         else:
             print('Config file for guild {} was not found'.format(guild.id))
+    conn.commit()
+    conn.close()
     print('Finished')
 
 bot = commands.Bot(command_prefix='$$')
