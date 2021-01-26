@@ -72,6 +72,7 @@ def migrate_config(bott: commands.Bot):
             # Info channels
             if 'info_channels' in guild_config.keys() and guild_config['info_channels']:
                 print('  Info Channels')
+
                 # Log
                 if 'log' in guild_config['info_channels'].keys() and guild_config['info_channels']['log']:
                     print('    Log')
@@ -80,6 +81,7 @@ def migrate_config(bott: commands.Bot):
                     # Instead of using "enabled" flag, we store log channel info only when it's needed.
                     if is_enabled:
                         cur.execute('INSERT INTO log_channels(guild_id, channel_id) VALUES (?, ?)', (guild.id, channel_id))
+
                 # Welcome
                 if 'welcome' in guild_config['info_channels'].keys() and guild_config['info_channels']['welcome']:
                     print('    Welcome')
@@ -88,11 +90,11 @@ def migrate_config(bott: commands.Bot):
                     # Instead of using "enabled" flag, we store welcome channel info only when it's needed.
                     if is_enabled:
                         cur.execute('INSERT INTO welcome_channels(guild_id, channel_id) VALUES (?, ?)', (guild.id, channel_id))
+
             # Here goes the thing I always feared of and that takes majority of json config, but still useless and broken
             # Commands (Command Filters)
             if 'commands' in guild_config.keys() and guild_config['commands']:
                 print('  Command Filters')
-                #filtered_commands = {command_name: command_filter for command_name, command_filter in guild_config['commands'].items() if command_filter['blacklist'] or command_filter['whitelist'] or not command_filter['enabled']}
                 values_cfs = []
                 values_restr = []
                 for command_name, command_filter in guild_config['commands'].items():
