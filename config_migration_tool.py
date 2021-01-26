@@ -98,7 +98,7 @@ def migrate_config(bott: commands.Bot):
                 for command_name, command_filter in guild_config['commands'].items():
                     print('DEB '+command_name)
                     print(command_filter)
-                    if (not (command_filter['blacklist'] or command_filter['whitelist'])) or command_filter['enabled']:
+                    if not ((command_filter['blacklist'] or command_filter['whitelist']) or not command_filter['enabled']):
                         continue
                     print('      '+command_name)
                     is_enabled = command_filter['enabled']
