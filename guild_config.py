@@ -154,9 +154,10 @@ class GuildConfigCog(commands.Cog):
         self.bot = bot
         self.mongo_db = self.mongo_client['motorchik_guild_config']
 
-    # TODO
     async def get_config(self, guild: discord.Guild) -> GuildConfig:
-        pass
+        guilds_collection = self.mongo_db.guilds
+        guild_config_data = guilds_collection.find_one({"guild_id": guild.id})
+        return GuildConfig(guild_config_data)
 
     async def add_guild(self, guild: discord.Guild):
         default_channel = guild.system_channel.id if guild.system_channel is not None else guild.text_channels[0].id
