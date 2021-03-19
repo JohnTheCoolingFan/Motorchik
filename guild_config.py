@@ -1,3 +1,5 @@
+import pymongo
+from enum import Enum
 from discord.ext import commands
 import discord
 import json
@@ -15,6 +17,19 @@ GUILD_CONFIG_ENTRIES_TYPES = dict(commands=dict,
                                   name=str,
                                   info_channels=info_channels)
 
+
+class CommandDisability(Enum):
+    NONE = 0
+    GLOBAL = 1
+    BLACKLISTED = 2
+    WHITELISTED = 3
+
+class CommandDisabledException(discord.DiscordException):
+    def __init__(self, guild: discord.Guild, command_name: str, channel: discord.TextChannel, disability: CommandDisability):
+        self.guild = guild
+        self.command_name = command_name
+        self.channel = channel
+        self.disability = disability
 
 class GuildConfig:
     guild: discord.Guild
@@ -132,3 +147,17 @@ class GuildConfig:
     @property
     def json(self) -> str:
         return json.dumps(self.raw, sort_keys=True, indent=4)
+
+class GuildConfigCog(commands.Cog):
+    def __init__(self, bot: commands.Bot):
+        self.mongo_client = pymongo.MongoClient('localhost', 27017) # TODO with BotConfig
+        self.bot = bot
+        self.mongo_db = self.mongo_client['motorchik_guild_config']
+
+    # TODO
+    async def get_config(self, guild: discord.Guild) -> GuildConfig:
+        pass
+
+class MotorchikBot(commands.Bot):
+    async def guild_config(self, guild: discord.Guild) -> GuildConfig:
+        return self.get_cog('GuildConfigCog').get_config(guild)
