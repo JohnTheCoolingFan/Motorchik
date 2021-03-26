@@ -35,11 +35,22 @@ class CommandDisabledException(discord.DiscordException):
 class GuildConfig:
     guild: discord.Guild
 
-    def __init__(self, guild: discord.Guild, guild_config_data: pymongo.cursor.Cursor):
+    def __init__(self, guild: discord.Guild, guild_config_data, guilds_db):
         # The guild_config_data type is weird but that's what is being returned by pymongo's find_one() (probably).
         # But it can still be used as a dict, I think.
         self.guild = guild
         self.raw_data = guild_config_data
+        self.guilds_db = guilds_db
+
+    async def update_info_channel(self, ic_name: str, state: Optional[bool] = None, new_channel: Optional[discord.TextChannel] = None):
+        if state is None and new_channel is None:
+            return
+        if ic_name in ['log', 'welcome']:
+            if state is not None:
+                new_data = await self.guilds_db.find_one_and_update({'_id': self.raw_data['_id']}, {'$set': {'info_channels.{}.enabled'.format(ic_name): state}}, return_document=True)
+            if new_channel is not None:
+                new_data = await self.guilds_db.find_one_and_update({'_id': self.raw_data['_id']}, {'$set': {'info_channels.{}.channel_id'.format(ic_name): new_channel.id}}, return_document=True)
+            self.raw_data = new_data
 
     @property
     def welcome_channel(self) -> Optional[discord.TextChannel]:
@@ -50,7 +61,13 @@ class GuildConfig:
 
     @welcome_channel.setter
     def welcome_channel(self, new_channel: discord.TextChannel):
-        self.raw['info_channels']['welcome']['channel_id'] = new_channel.id
+        await self.update_info_channel('welcome', new_channel=new_channel)
+
+    async def enable_welcome_channel(self):
+        await self.update_info_channel('welcome', state=True)
+
+    async def disable_welcome_channel(self):
+        await self.update_info_channel('welcome', state=False)
 
     @property
     def log_channel(self) -> Optional[discord.TextChannel]:
@@ -61,7 +78,13 @@ class GuildConfig:
 
     @log_channel.setter
     def log_channel(self, new_channel: discord.TextChannel):
-        self.raw['info_channels']['log']['channel_id'] = new_channel.id
+        await self.update_info_channel('log', new_channel=new_channel)
+
+    async def enable_log_channel(self):
+        await self.update_info_channel('log', state=True)
+
+    async def disable_log_channel(self):
+        await self.update_info_channel('log', state=False)
 
     @property
     def default_roles(self) -> List[discord.Role]:
@@ -69,7 +92,9 @@ class GuildConfig:
 
     @default_roles.setter
     def default_roles(self, new_roles: Iterable[discord.Role]):
-        self.raw_data['default_roles'] = list({role.id for role in new_roles})
+        new_roles = [role.id for role in new_roles]
+        new_data = await self.guilds_db.find_one_and_update({'_id': self.raw_data['_id']}, {'$set': {'default_roles': new_roles}})
+        self.raw_data = new_data
 
 # May be reused somewhere
 #    @classmethod
