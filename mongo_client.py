@@ -19,8 +19,12 @@ class GuildConfigCog(commands.Cog):
             return self.gc_cache[str(guild.id)]
         else:
             guild_config_data = await self.collections.find_one({"guild_id": guild.id})
-            guild_config = GuildConfig(guild, guild_config_data, self.collections)
-            self.gc_cache[str(guild.id)] = guild_config
+            if guild_config_data is not None:
+                guild_config = GuildConfig(guild, guild_config_data, self.collections)
+                self.gc_cache[str(guild.id)] = guild_config
+            else:
+                inserted_id = self.add_guild(guild)
+                guild_config_data = await self.collections.find_one({'_id': inserted_id})
             return guild_config
 
     async def add_guild(self, guild: discord.Guild):
@@ -43,7 +47,7 @@ class GuildConfigCog(commands.Cog):
             "command_filters": [] # Empty list that will be filled when setting up
         }
         guilds_collection = self.mongo_db.guilds
-        await guilds_collection.insert_one(guild_config_data)
+        return await guilds_collection.insert_one(guild_config_data).inserted_id
 
 def setup(bot: commands.Bot):
     bot.add_cog(GuildConfigCog(bot))
