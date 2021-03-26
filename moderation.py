@@ -7,6 +7,7 @@ from typing import Optional
 class Moderation(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        self.guild_config_cog = bot.get_cog('GuildConfigCog')
 
     @commands.has_permissions(manage_messages=True)
     @commands.command(aliases=['clear', 'cl'], description='Clear chat', brief='Clear chat', help='Deletes specified count of messages in this channel. Can be used only by members with messages managing permission.')
@@ -18,7 +19,7 @@ class Moderation(commands.Cog):
     @commands.has_permissions(ban_members=True)
     @commands.command(description='Ban member', help='Ban specified member. Set delete_message_days to 0 to not delete any messages.')
     async def ban(self, ctx: commands.Context, member: discord.Member, reason: Optional[str], delete_message_days: int = 0):
-        guild_config = GuildConfig(ctx.guild)
+        guild_config = await self.guild_config_cog.get_guild(ctx.guild)
         await member.ban(reason=reason, delete_message_days=delete_message_days)
         await ctx.send('Banned member '+str(member))
         if reason is None:
@@ -26,25 +27,25 @@ class Moderation(commands.Cog):
         else:
             reason = 'Reason: ' + reason
         if guild_config.log_channel:
-            await guild_config.log_channel.send('Banned {0}\n{1}'.format(str(member), reason))
+            await guild_config.log_channel.send('Banned {0}\nBy: {1}\n{2}'.format(str(member), ctx.author.mention, reason))
 
     @commands.has_permissions(ban_members=True)
     @commands.command(aliases=['uban'], description='Unban user', help='Unban specified member.')
     async def unban(self, ctx: commands.Context, member: discord.Member, reason: str = 'Not provided'):
-        guild_config = GuildConfig(ctx.guild)
+        guild_config = await self.guild_config_cog.get_guild(ctx.guild)
         await member.unban(reason=reason)
         await ctx.send('Unbanned member '+str(member))
         if guild_config.log_channel:
-            await guild_config.log_channel.send('Unbanned {0}\nReason: {1}'.format(str(member), reason))
+            await guild_config.log_channel.send('Unbanned {0}\nBy: {1}\nReason: {2}'.format(str(member), ctx.author.mention, reason))
 
     @commands.has_permissions(kick_members=True)
     @commands.command(description='Kick member', help='Kick specified member')
     async def kick(self, ctx: commands.Context, member: discord.Member, reason: str = 'Not provided'):
-        guild_config = GuildConfig(ctx.guild)
+        guild_config = await self.guild_config_cog.get_guild(ctx.guild)
         await member.kick(reason=reason)
         await ctx.send('Kicked member '+str(member))
         if guild_config.log_channel:
-            await guild_config.log_channel.send('Kicked {0}\nReason: {1}'.format(str(member), reason))
+            await guild_config.log_channel.send('Kicked {0}\nBy: {1}\nReason: {2}'.format(str(member), ctx.author.mention, reason))
 
 
 def setup(bot: commands.Bot):
