@@ -35,21 +35,21 @@ class CommandDisabledException(discord.DiscordException):
 class GuildConfig:
     guild: discord.Guild
 
-    def __init__(self, guild: discord.Guild, guild_config_data, guilds_db):
+    def __init__(self, guild: discord.Guild, guild_config_data, guilds_collections):
         # The guild_config_data type is weird but that's what is being returned by pymongo's find_one() (probably).
         # But it can still be used as a dict, I think.
         self.guild = guild
         self.raw_data = guild_config_data
-        self.guilds_db = guilds_db
+        self.guilds_collections = guilds_collections
 
     async def update_info_channel(self, ic_name: str, state: Optional[bool] = None, new_channel: Optional[discord.TextChannel] = None):
         if state is None and new_channel is None:
             return
         if ic_name in ['log', 'welcome']:
             if state is not None:
-                new_data = await self.guilds_db.find_one_and_update({'_id': self.raw_data['_id']}, {'$set': {'info_channels.{}.enabled'.format(ic_name): state}}, return_document=True)
+                new_data = await self.guilds_collections.find_one_and_update({'_id': self.raw_data['_id']}, {'$set': {'info_channels.{}.enabled'.format(ic_name): state}}, return_document=True)
             if new_channel is not None:
-                new_data = await self.guilds_db.find_one_and_update({'_id': self.raw_data['_id']}, {'$set': {'info_channels.{}.channel_id'.format(ic_name): new_channel.id}}, return_document=True)
+                new_data = await self.guilds_collections.find_one_and_update({'_id': self.raw_data['_id']}, {'$set': {'info_channels.{}.channel_id'.format(ic_name): new_channel.id}}, return_document=True)
             self.raw_data = new_data
 
     @property
@@ -93,7 +93,7 @@ class GuildConfig:
     @default_roles.setter
     def default_roles(self, new_roles: Iterable[discord.Role]):
         new_roles = [role.id for role in new_roles]
-        new_data = await self.guilds_db.find_one_and_update({'_id': self.raw_data['_id']}, {'$set': {'default_roles': new_roles}})
+        new_data = await self.guilds_collections.find_one_and_update({'_id': self.raw_data['_id']}, {'$set': {'default_roles': new_roles}})
         self.raw_data = new_data
 
 # May be reused somewhere
@@ -152,39 +152,6 @@ class GuildConfig:
 #            return True
 #        else:
 #            return False
-
-class GuildConfigCog(commands.Cog):
-    def __init__(self, bot: commands.Bot):
-        self.mongo_client = pymongo.MongoClient('localhost', 27017) # TODO with BotConfig
-        self.bot = bot
-        self.mongo_db = self.mongo_client['motorchik_guild_config']
-
-    async def get_config(self, guild: discord.Guild) -> GuildConfig:
-        guilds_collection = self.mongo_db.guilds
-        guild_config_data = guilds_collection.find_one({"guild_id": guild.id})
-        return GuildConfig(guild, guild_config_data)
-
-    async def add_guild(self, guild: discord.Guild):
-        default_channel = guild.system_channel.id if guild.system_channel is not None else guild.text_channels[0].id
-        # New entries may be added in the future.
-        guild_config_data = {
-            "guild_id": guild.id,
-            "guild_name": guild.name, # For debugging purposes.
-            "default_roles": [], # Empty list by default
-            "info_channels": { # Names are hardcoded but there is some clearance for expanding Info Channels functionality
-                "welcome": {
-                    "channel_id": default_channel, # Use default system channel or the first text channel
-                    "enabled": False # Disabled by default
-                },
-                "log": {
-                    "channel_id": default_channel, # Same as with 'welcome' info channel
-                    "enabled": False # Disabled by default
-                }
-            },
-            "command_filters": [] # Empty list that will be filled when setting up
-        }
-        guilds_collection = self.mongo_db.guilds
-        guilds_collection.insert_one(guild_config_data)
 
 class MotorchikBot(commands.Bot):
     async def guild_config(self, guild: discord.Guild) -> GuildConfig:
