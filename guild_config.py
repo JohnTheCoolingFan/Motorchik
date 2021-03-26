@@ -1,22 +1,7 @@
-import pymongo
 from enum import Enum
 from discord.ext import commands
 import discord
-import json
-import os.path
-import asyncio
 from typing import List, Iterable, Optional
-
-def info_channels():
-    return dict(log=dict(), welcome=dict())
-
-GUILD_CONFIG_ENTRIES_TYPES = dict(commands=dict,
-                                  default_roles=list,
-                                  levels=dict,
-                                  members=dict,
-                                  name=str,
-                                  info_channels=info_channels)
-
 
 class CommandDisability(Enum):
     NONE = 0
@@ -31,7 +16,6 @@ class CommandDisabledException(discord.DiscordException):
         self.channel = channel
         self.disability = disability
 
-# TODO: updating data
 class GuildConfig:
     guild: discord.Guild
 
@@ -139,15 +123,6 @@ class GuildConfig:
 #    def set_command_filter(self, command_name: str, filter_name: str, new_filter: Iterable[discord.TextChannel]) -> bool:
 #        if command_name in self.commands_names:
 #            self.raw['commands'][command_name][filter_name] = list({channel.id for channel in new_filter})
-#            self.write()
-#            return True
-#        else:
-#            return False
-
-# TODO
-#    def switch_info_channel(self, info_channel_type: str, new_state: bool) -> bool:
-#        if info_channel_type in ['welcome', 'log']:
-#            self.raw_data['info_channels'][info_channel_type]['enabled'] = new_state
 #            self.write()
 #            return True
 #        else:
