@@ -11,6 +11,9 @@ class GuildConfigCog(commands.Cog):
         self.collections = self.mongo_db.guilds
         self.gc_cache = dict()
 
+    def teardown(self):
+        self.mongo_client.close()
+
     async def get_config(self, guild: discord.Guild) -> GuildConfig:
         if str(guild.id) in self.gc_cache:
             return self.gc_cache[str(guild.id)]
@@ -44,3 +47,6 @@ class GuildConfigCog(commands.Cog):
 
 def setup(bot: commands.Bot):
     bot.add_cog(GuildConfigCog(bot))
+
+def teardown(bot: commands.Bot):
+    bot.get_cog('GuildConfigCog').teardown()
