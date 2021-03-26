@@ -7,12 +7,6 @@ from discord.ext import commands
 
 bot = commands.Bot(command_prefix=commands.when_mentioned_or('$$'), intents=discord.Intents.all())
 
-
-@bot.listen()
-async def on_guild_join(guild: discord.Guild):
-    await bot.get_cog('GuildConfigCog').add_guild(guild)
-
-
 @bot.event
 async def on_ready():
     print('Logged in as {0.user}'.format(bot))
