@@ -16,6 +16,7 @@ class Greetings(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.queue = []
+        # Disabling pylint error because it analyses code improperly, which results in error being reported.
         self.queue_checker.start() # pylint: disable=no-member
 
     @commands.Cog.listener()
