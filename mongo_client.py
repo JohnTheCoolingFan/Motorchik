@@ -41,3 +41,6 @@ class GuildConfigCog(commands.Cog):
         }
         guilds_collection = self.mongo_db.guilds
         await guilds_collection.insert_one(guild_config_data)
+
+def setup(bot: commands.Bot):
+    bot.add_cog(GuildConfigCog(bot))
