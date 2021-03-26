@@ -4,7 +4,6 @@
 
 import discord
 from discord.ext import commands
-from guild_config import GuildConfig
 
 bot = commands.Bot(command_prefix=commands.when_mentioned_or('$$'), intents=discord.Intents.all())
 
