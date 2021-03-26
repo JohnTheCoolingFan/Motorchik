@@ -16,7 +16,7 @@ class Greetings(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.queue = []
-        self.queue_checker.start() # pylint: disable=E1101
+        self.queue_checker.start() # pylint: disable=no-member
 
     @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member):
