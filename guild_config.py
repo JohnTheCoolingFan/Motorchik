@@ -16,6 +16,20 @@ class CommandDisabledException(discord.DiscordException):
         self.channel = channel
         self.disability = disability
 
+class CommandFilter:
+    name: str
+    filter_type: CommandDisability
+    filter_list: List[discord.TextChannel]
+    enabled: bool
+    guild: discord.Guild
+
+    def __init__(self, name: str, filter_type: CommandDisability, filter_list: List[discord.TextChannel], enabled: bool, guild: discord.Guild):
+        self.name = name
+        self.filter_type = filter_type
+        self.filter_list = filter_list
+        self.enabled = enabled
+        self.guild = guild
+
 class GuildConfig:
     guild: discord.Guild
 
