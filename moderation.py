@@ -1,6 +1,5 @@
 import discord
 from discord.ext import commands
-from guild_config import GuildConfig
 from typing import Optional
 
 
