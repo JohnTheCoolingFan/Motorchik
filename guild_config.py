@@ -63,6 +63,8 @@ class GuildConfig:
             if new_channel is not None:
                 new_data = await self.guilds_collections.find_one_and_update({'_id': self.raw_data['_id']}, {'$set': {'info_channels.{}.channel_id'.format(ic_name): new_channel.id}}, return_document=True)
             self.raw_data = new_data
+        else:
+            raise InfoChannelNotFoundException(ic_name)
 
     @property
     def welcome_channel(self) -> Optional[discord.TextChannel]:
