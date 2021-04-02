@@ -67,7 +67,7 @@ class GuildConfigCog(commands.Cog):
                                     append_channels: bool = False,                  # wheter to append or overwrite the new channels. True - append, False - overwite
                                     enabled: bool = None,                           # wheter the command will be enabled oe not
                                     filter_type: CommandDisability = None):         # set filter type, if needed
-        mongo_update_data = {'$set': dict()}
+        mongo_update_data = {'$set': dict(), '$setOnInsert': {'channels': [], 'enabled': True, 'type': 2}}
         if new_channels is None and enabled is None and filter_type is None:
             return
         if new_channels is not None:
