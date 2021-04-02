@@ -79,7 +79,10 @@ class GuildConfigCog(commands.Cog):
         # Should this method throw an error when the wrong type disability is passed? Open for discussion.
         if filter_type is not None and filter_type.value >= 2:
             mongo_update_data['$set']['type'] = filter_type.value
-        await self.command_filter_collection.find_one_and_update({'guild_id': guild.id, 'name': name}, mongo_update_data)
+        await self.command_filter_collection.find_one_and_update({'guild_id': guild.id, 'name': name}, mongo_update_data, upsert=True)
+
+    async def create_command_filter(self, guild: discord.Guild, name: str):
+        await self.update_command_filter(guild, name, [], False, True, CommandDisability.BLACKLISTED)
 
 def setup(bot: commands.Bot):
     bot.add_cog(GuildConfigCog(bot))
