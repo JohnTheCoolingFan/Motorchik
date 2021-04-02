@@ -11,3 +11,4 @@ users/*
 xplog/*
 !xplog/log_example.txt
 latest_connection.txt
+.vim
