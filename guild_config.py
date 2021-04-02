@@ -9,6 +9,10 @@ class CommandDisability(Enum):
     BLACKLISTED = 2
     WHITELISTED = 3
 
+class InfoChannelNotFoundException(discord.DiscordException):
+    def __init__(self, ic_name: str):
+        self.ic_name = ic_name
+
 class CommandDisabledException(discord.DiscordException):
     def __init__(self, guild: discord.Guild, command_name: str, channel: discord.TextChannel, disability: CommandDisability):
         self.guild = guild
