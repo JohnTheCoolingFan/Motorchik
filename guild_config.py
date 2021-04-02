@@ -16,11 +16,15 @@ class CommandDisabledException(discord.DiscordException):
         self.channel = channel
         self.disability = disability
 
-# Should be raised if bot doesn't have this command or the command is immutable (can't be filtered)
+# Raised if bot doesn't have this command
 class CommandNotFoundException(discord.DiscordException):
-    def __init__(self, name: str, message: str):
+    def __init__(self, name: str):
         self.name = name
-        self.message = message
+
+# Raised if command can't be filtered
+class CommandImmutableException(discord.DiscordException):
+    def __init__(self, name: str):
+        self.name = name
 
 class CommandFilter:
     name: str
