@@ -67,19 +67,35 @@ class GuildConfigCog(commands.Cog):
                                     append_channels: bool = False,                  # wheter to append or overwrite the new channels. True - append, False - overwite
                                     enabled: bool = None,                           # wheter the command will be enabled oe not
                                     filter_type: CommandDisability = None):         # set filter type, if needed
-        mongo_update_data = {'$set': dict(), '$setOnInsert': {'channels': [], 'enabled': True, 'type': 2}}
+        mongo_update_data = {'$set': dict(), '$setOnInsert': {}}
+
+        # return None if no arguments specified.
         if new_channels is None and enabled is None and filter_type is None:
             return
+
+        # New channels
         if new_channels is not None:
             if append_channels:
                 mongo_update_data['$push'] = {'channels': {'$each': [channel.id for channel in new_channels]}}
             else:
                 mongo_update_data['$set']['channels'] = [channel.id for channel in new_channels]
+        else:
+            mongo_update_data['$setOnInsert']['channels'] = []
+
+        # 'enabled'
         if enabled is not None:
             mongo_update_data['$set']['enabled'] = enabled
+        else:
+            mongo_update_data['$setOnInsert']['enabled'] = True
+
+        # Filter type
         # Should this method throw an error when the wrong type disability is passed? Open for discussion.
         if filter_type is not None and filter_type.value >= 2:
             mongo_update_data['$set']['type'] = filter_type.value
+        else:
+            mongo_update_data['$setOnInsert']['type'] = CommandDisability.BLACKLISTED.value
+
+        # Find, update, upsert if not found
         await self.command_filter_collection.find_one_and_update({'guild_id': guild.id, 'name': name}, mongo_update_data, upsert=True)
 
     async def create_command_filter(self, guild: discord.Guild, name: str):
