@@ -4,8 +4,11 @@ import discord
 from discord.ext import commands
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from guild_config import CommandDisability, CommandFilter, GuildConfig
+from guild_config import (CommandDisability, CommandFilter,
+                          CommandImmutableException, CommandNotFoundException,
+                          GuildConfig)
 
+IMMUTABLE_COMMANDS = ['command']
 
 class GuildConfigCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -76,6 +79,10 @@ class GuildConfigCog(commands.Cog):
         # return None if no arguments specified.
         if new_channels is None and enabled is None and filter_type is None:
             return
+        if name in IMMUTABLE_COMMANDS:
+            raise CommandImmutableException(name)
+        if name not in [command.name for command in self.bot.commands()]:
+            raise CommandNotFoundException(name)
 
         # New channels
         if new_channels is not None:
