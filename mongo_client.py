@@ -57,7 +57,11 @@ class GuildConfigCog(commands.Cog):
     async def get_command_filter(self, guild: discord.Guild, name: str) -> Optional[CommandFilter]:
         command_filter_data = await self.command_filter_collection.find_one({"guild_id": guild.id, "name": name})
         if command_filter_data is not None:
-            return CommandFilter(name, command_filter_data.filter_type, [self.bot.get_channel(channel_id) for channel_id in command_filter_data.channels], command_filter_data.enabled, guild)
+            return CommandFilter(name,
+                                 command_filter_data.filter_type,
+                                 [self.bot.get_channel(channel_id) for channel_id in command_filter_data.channels],
+                                 command_filter_data.enabled,
+                                 guild)
         else:
             return None
 
