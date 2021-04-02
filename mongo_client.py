@@ -18,6 +18,7 @@ class GuildConfigCog(commands.Cog):
 
     def teardown(self):
         self.mongo_client.close()
+        self._gc_cache.clear()
 
     async def get_config(self, guild: discord.Guild) -> GuildConfig:
         if str(guild.id) in self._gc_cache:
