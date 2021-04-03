@@ -1,5 +1,4 @@
 import json
-from typing import Optional
 
 import discord
 from discord.ext import commands
@@ -27,9 +26,9 @@ class BotConfig(commands.Cog):
                 self.mongo['port'] = port
             except ValueError:
                 print('Invalid port: {}'.format(port))
-        if self.raw['mongo']['username']:
+        if 'username' in self.raw['mongo']:
             self.mongo['username'] = self.raw['mongo']['username']
-        if self.raw['mongo']['password']:
+        if 'password' in self.raw['mongo']:
             self.mongo['password'] = self.raw['mongo']['password']
 
 def setup(bot: commands.Bot):
