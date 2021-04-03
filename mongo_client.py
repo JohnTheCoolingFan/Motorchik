@@ -5,8 +5,8 @@ import pymongo
 from discord.ext import commands
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from guild_config import (CommandDisability, CommandFilter,
-                          CommandImmutableException, CommandNotFoundException,
+from guild_config import (CommandDisability, CommandFilter, CommandDisabledError,
+                          CommandImmutableError, CommandNotFoundError,
                           GuildConfig)
 
 IMMUTABLE_COMMANDS = ['command', 'config', 'say', 'say_dm']
@@ -27,9 +27,26 @@ class GuildConfigCog(commands.Cog):
         await self.cf_collection.create_index([('guild_id', pymongo.ASCENDING), ('name', pymongo.TEXT)])
         await self.guilds_collection.create_index([('guild_id', pymongo.ASCENDING)])
 
+    def bot_check_once(self, ctx: commands.Context):
+        if ctx.command.name in IMMUTABLE_COMMANDS:
+            return True
+        else:
+            command_filter = await self.get_command_filter(ctx.guild, ctx.command.name)
+            if command_filter is None:
+                return True
+            else:
+                if not command_filter.enabled:
+                    raise CommandDisabledError(ctx.guild, ctx.command.name, ctx.channel, CommandDisability.GLOBAL)
+                if command_filter.filter_type == CommandDisability.BLACKLISTED and ctx.channel in command_filter.filter_list:
+                    raise CommandDisabledError(ctx.guild, ctx.vommand.name, ctx.channel, command_filter.filter_type)
+                if command_filter.filter_type == CommandDisability.WHITELISTED and ctx.channel not in command_filter.filter_list:
+                    raise CommandDisabledError(ctx.guild, ctx.command.name, ctx.channel, command_filter.filter_type)
+                return True
+
     def teardown(self):
         self._gc_cache.clear()
         self.mongo_client.close()
+        self.bot.remove_check(self.bot_check_once, call_once=True)
 
     async def get_config(self, guild: discord.Guild) -> GuildConfig:
         if str(guild.id) in self._gc_cache:
@@ -88,9 +105,9 @@ class GuildConfigCog(commands.Cog):
         if new_channels is None and enabled is None and filter_type is None:
             return
         if name in IMMUTABLE_COMMANDS:
-            raise CommandImmutableException(name)
+            raise CommandImmutableError(name)
         if name not in [command.name for command in self.bot.commands()]:
-            raise CommandNotFoundException(name)
+            raise CommandNotFoundError(name)
 
         # New channels
         if new_channels is not None:
