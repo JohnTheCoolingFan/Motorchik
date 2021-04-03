@@ -26,12 +26,14 @@ class BotConfig(commands.Cog):
         self.token = self.raw['token']
         self.mongo = dict()
         self.mongo['host'] = self.raw['mongo']['host']
-        if self.raw['mongo']['port']:
+        port = self.raw['mongo']['port']
+        if port:
             try:
-                port = int(self.raw['mongo']['port'])
+                if port is not int:
+                    port = int(port)
                 self.mongo['port'] = port
             except ValueError:
-                print('Invalid port: {}'.format(self.raw['mongo']['port']))
+                print('Invalid port: {}'.format(port))
         if self.raw['mongo']['username']:
             self.mongo['username'] = self.raw['mongo']['username']
         if self.raw['mongo']['password']:
