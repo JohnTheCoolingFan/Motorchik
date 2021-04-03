@@ -17,15 +17,15 @@ class GuildConfigCog(commands.Cog):
         self.mongo_client = AsyncIOMotorClient(bot_config.mongo['host'], bot_config.mongo['port'], username=bot_config.mongo['username'], password=bot_config.mongo['password'], io_loop=bot.loop())
         self.bot = bot
         self.mongo_db = self.mongo_client['motorchik_guild_config']
-        self.guild_collections = self.mongo_db.guilds
-        self.command_filter_collection = self.mongo_db.command_filters
+        self.guilds_collection = self.mongo_db.guilds
+        self.cf_collection = self.mongo_db.command_filters
         self._gc_cache = dict()
 
         # Create indexes
         # I'm not sure what indexing method to use for guild ids, but for now let it be ascending...
         # I'm not even sure if I really need index guild ids
-        await self.command_filter_collection.create_index([('guild_id', pymongo.ASCENDING), ('name', pymongo.TEXT)])
-        await self.guild_collections.create_index([('guild_id', pymongo.ASCENDING)])
+        await self.cf_collection.create_index([('guild_id', pymongo.ASCENDING), ('name', pymongo.TEXT)])
+        await self.guilds_collection.create_index([('guild_id', pymongo.ASCENDING)])
 
     def teardown(self):
         self._gc_cache.clear()
@@ -35,13 +35,13 @@ class GuildConfigCog(commands.Cog):
         if str(guild.id) in self._gc_cache:
             return self._gc_cache[str(guild.id)]
         else:
-            guild_config_data = await self.guild_collections.find_one({"guild_id": guild.id})
+            guild_config_data = await self.guilds_collection.find_one({"guild_id": guild.id})
             if guild_config_data is not None:
-                guild_config = GuildConfig(guild, guild_config_data, self.guild_collections)
+                guild_config = GuildConfig(guild, guild_config_data, self.guilds_collection)
                 self._gc_cache[str(guild.id)] = guild_config
             else:
                 inserted_id = self.add_guild(guild)
-                guild_config_data = await self.guild_collections.find_one({'_id': inserted_id})
+                guild_config_data = await self.guilds_collection.find_one({'_id': inserted_id})
             return guild_config
 
     async def add_guild(self, guild: discord.Guild):
@@ -66,7 +66,7 @@ class GuildConfigCog(commands.Cog):
         return await guilds_collection.insert_one(guild_config_data).inserted_id
 
     async def get_command_filter(self, guild: discord.Guild, name: str) -> Optional[CommandFilter]:
-        command_filter_data = await self.command_filter_collection.find_one({"guild_id": guild.id, "name": name})
+        command_filter_data = await self.cf_collection.find_one({"guild_id": guild.id, "name": name})
         if command_filter_data is not None:
             return CommandFilter(name,
                                  command_filter_data.filter_type,
@@ -115,7 +115,7 @@ class GuildConfigCog(commands.Cog):
             mongo_update_data['$setOnInsert']['type'] = CommandDisability.BLACKLISTED.value
 
         # Find, update, upsert if not found
-        await self.command_filter_collection.find_one_and_update({'guild_id': guild.id, 'name': name}, mongo_update_data, upsert=True)
+        await self.cf_collection.find_one_and_update({'guild_id': guild.id, 'name': name}, mongo_update_data, upsert=True)
 
     async def create_command_filter(self, guild: discord.Guild, name: str):
         await self.update_command_filter(guild, name, [], False, True, CommandDisability.BLACKLISTED)
