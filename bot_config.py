@@ -26,10 +26,8 @@ class BotConfig(commands.Cog):
                 self.mongo['port'] = port
             except ValueError:
                 print('Invalid port: {}'.format(port))
-        if 'username' in self.raw['mongo']:
-            self.mongo['username'] = self.raw['mongo']['username']
-        if 'password' in self.raw['mongo']:
-            self.mongo['password'] = self.raw['mongo']['password']
+        self.mongo['username'] = self.raw['mongo']['username']
+        self.mongo['password'] = self.raw['mongo']['password']
 
 def setup(bot: commands.Bot):
     bot.add_cog(BotConfig('config.json', bot))
