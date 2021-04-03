@@ -16,8 +16,8 @@ class GuildConfigCog(commands.Cog):
         bot_config = bot.get_cog('BotConfig')
         self.mongo_client = AsyncIOMotorClient(bot_config.mongo['host'],
                                                bot_config.mongo['port'],
-                                               username=bot_config.mongo['username'] if 'username' in bot_config.mongo else None
-                                               , password=bot_config.mongo['password'] if 'password' in bot_config.mongo else None,
+                                               username=bot_config.mongo['username'] if 'username' in bot_config.mongo else None,
+                                               password=bot_config.mongo['password'] if 'password' in bot_config.mongo else None,
                                                io_loop=bot.loop)
         self.bot = bot
         self.mongo_db = self.mongo_client['motorchik_guild_config']
