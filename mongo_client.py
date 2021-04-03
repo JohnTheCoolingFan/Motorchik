@@ -21,7 +21,7 @@ class GuildConfigCog(commands.Cog):
         self.cf_collection = self.mongo_db.command_filters
         self._gc_cache = dict()
 
-    def bot_check_once(self, ctx: commands.Context):
+    async def bot_check_once(self, ctx: commands.Context):
         if ctx.command.name in IMMUTABLE_COMMANDS:
             return True
         else:
