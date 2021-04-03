@@ -9,7 +9,7 @@ from guild_config import (CommandDisability, CommandFilter,
                           CommandImmutableException, CommandNotFoundException,
                           GuildConfig)
 
-IMMUTABLE_COMMANDS = ['command']
+IMMUTABLE_COMMANDS = ['command', 'config', 'say', 'say_dm']
 
 class GuildConfigCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
