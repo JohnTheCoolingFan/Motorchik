@@ -69,13 +69,13 @@ class GuildConfig:
         else:
             raise InfoChannelNotFoundError(ic_name)
 
-    def get_welcome_channel(self) -> Optional[discord.TextChannel]:
+    async def get_welcome_channel(self) -> Optional[discord.TextChannel]:
         if self.raw_data['info_channels']['welcome']['enabled']:
             return self.guild.get_channel(self.raw_data['info_channels']['welcome']['channel_id'])
         else:
             return None
 
-    def set_welcome_channel(self, new_channel: discord.TextChannel):
+    async def set_welcome_channel(self, new_channel: discord.TextChannel):
         await self.update_info_channel('welcome', new_channel=new_channel)
 
     async def enable_welcome_channel(self):
@@ -84,13 +84,13 @@ class GuildConfig:
     async def disable_welcome_channel(self):
         await self.update_info_channel('welcome', state=False)
 
-    def get_log_channel(self) -> Optional[discord.TextChannel]:
+    async def get_log_channel(self) -> Optional[discord.TextChannel]:
         if self.raw_data['info_channels']['log']['enabled']:
             return self.guild.get_channel(self.raw_data['info_channels']['log']['channel_id'])
         else:
             return None
 
-    def set_log_channel(self, new_channel: discord.TextChannel):
+    async def set_log_channel(self, new_channel: discord.TextChannel):
         await self.update_info_channel('log', new_channel=new_channel)
 
     async def enable_log_channel(self):
@@ -99,10 +99,10 @@ class GuildConfig:
     async def disable_log_channel(self):
         await self.update_info_channel('log', state=False)
 
-    def get_default_roles(self) -> List[discord.Role]:
+    async def get_default_roles(self) -> List[discord.Role]:
         return [self.guild.get_role(role_id) for role_id in self.raw_data['default_roles']]
 
-    def set_default_roles(self, new_roles: Iterable[discord.Role]):
+    async def set_default_roles(self, new_roles: Iterable[discord.Role]):
         new_roles = [role.id for role in new_roles]
         new_data = await self.guilds_collections.find_one_and_update({'_id': self.raw_data['_id']}, {'$set': {'default_roles': new_roles}})
         self.raw_data = new_data
