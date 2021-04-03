@@ -19,7 +19,8 @@ class GuildConfigCog(commands.Cog):
                                                username=bot_config.mongo['username'] if 'username' in bot_config.mongo else None,
                                                password=bot_config.mongo['password'] if 'password' in bot_config.mongo else None,
                                                io_loop=bot.loop,
-                                               authSource='motorchik_guild_config')
+                                               authSource='motorchik_guild_config',
+                                               connect=True)
         self.bot = bot
         self.mongo_db = self.mongo_client['motorchik_guild_config']
         self.guilds_collection = self.mongo_db.guilds
