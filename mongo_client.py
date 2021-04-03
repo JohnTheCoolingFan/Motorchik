@@ -1,6 +1,7 @@
 from typing import List, Optional
 
 import discord
+import pymongo
 from discord.ext import commands
 from motor.motor_asyncio import AsyncIOMotorClient
 
@@ -19,6 +20,12 @@ class GuildConfigCog(commands.Cog):
         self.guild_collections = self.mongo_db.guilds
         self.command_filter_collection = self.mongo_db.command_filters
         self._gc_cache = dict()
+
+        # Create indexes
+        # I'm not sure what indexing method to use for guild ids, but for now let it be ascending...
+        # I'm not even sure if I really need index guild ids
+        await self.command_filter_collection.create_index([('guild_id', pymongo.ASCENDING), ('name', pymongo.TEXT)])
+        await self.guild_collections.create_index([('guild_id', pymongo.ASCENDING)])
 
     def teardown(self):
         self._gc_cache.clear()
