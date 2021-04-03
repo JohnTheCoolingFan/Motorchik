@@ -9,11 +9,14 @@ class CommandDisability(Enum):
     BLACKLISTED = 2
     WHITELISTED = 3
 
-class InfoChannelNotFoundException(discord.DiscordException):
+class GuildConfigError(commands.errors.CommandError):
+    pass
+
+class InfoChannelNotFoundError(GuildConfigError):
     def __init__(self, ic_name: str):
         self.ic_name = ic_name
 
-class CommandDisabledException(discord.DiscordException):
+class CommandDisabledError(GuildConfigError):
     def __init__(self, guild: discord.Guild, command_name: str, channel: discord.TextChannel, disability: CommandDisability):
         self.guild = guild
         self.command_name = command_name
@@ -21,12 +24,12 @@ class CommandDisabledException(discord.DiscordException):
         self.disability = disability
 
 # Raised if bot doesn't have this command
-class CommandNotFoundException(discord.DiscordException):
+class CommandNotFoundError(GuildConfigError):
     def __init__(self, name: str):
         self.name = name
 
 # Raised if command can't be filtered
-class CommandImmutableException(discord.DiscordException):
+class CommandImmutableError(GuildConfigError):
     def __init__(self, name: str):
         self.name = name
 
@@ -64,7 +67,7 @@ class GuildConfig:
                 new_data = await self.guilds_collections.find_one_and_update({'_id': self.raw_data['_id']}, {'$set': {'info_channels.{}.channel_id'.format(ic_name): new_channel.id}}, return_document=True)
             self.raw_data = new_data
         else:
-            raise InfoChannelNotFoundException(ic_name)
+            raise InfoChannelNotFoundError(ic_name)
 
     @property
     def welcome_channel(self) -> Optional[discord.TextChannel]:

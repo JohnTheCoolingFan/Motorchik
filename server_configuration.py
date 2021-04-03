@@ -5,9 +5,9 @@ from typing import Optional
 import discord
 from discord.ext import commands
 
-from guild_config import (CommandDisability, CommandImmutableException,
-                          CommandNotFoundException,
-                          InfoChannelNotFoundException)
+from guild_config import (CommandDisability, CommandImmutableError,
+                          CommandNotFoundError,
+                          InfoChannelNotFoundError)
 
 
 class ServerConfiguration(commands.Cog, name='Server Configuration'):
@@ -21,11 +21,11 @@ class ServerConfiguration(commands.Cog, name='Server Configuration'):
     async def cog_command_error(self, ctx: commands.Context, error: commands.CommandError):
         if isinstance(error, commands.CheckFailure):
             await ctx.send('Only server administrator can configure bot settings')
-        elif isinstance(error, CommandImmutableException):
+        elif isinstance(error, CommandImmutableError):
             await ctx.send('This command can\'t be filtered')
-        elif isinstance(error, CommandNotFoundException):
+        elif isinstance(error, CommandNotFoundError):
             await ctx.send('Command not found')
-        elif isinstance(error, InfoChannelNotFoundException):
+        elif isinstance(error, InfoChannelNotFoundError):
             await ctx.send('Info channel not found: {}'.format(error.ic_name))
         else:
             print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
