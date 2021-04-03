@@ -49,7 +49,7 @@ class ServerConfiguration(commands.Cog, name='Server Configuration'):
     @config_commands.command()
     async def whitelist(self, ctx: commands.Context, command_name: str, *whitelist_channels: discord.TextChannel):
         await self.guild_config_cog.update_command_filter(ctx.guild, command_name, new_channels=whitelist_channels, filter_type=CommandDisability.WHITELISTED)
-        if whitelist_channels:
+        if not whitelist_channels:
             await ctx.send('Filter list set to empty\nFilter type set to "whitelist"')
         else:
             await ctx.send('Filter list set successfully ({} channels)\nFilter type set to "whitelist"'.format(len(whitelist_channels)))
@@ -57,8 +57,8 @@ class ServerConfiguration(commands.Cog, name='Server Configuration'):
     @config_commands.command()
     async def blacklist(self, ctx: commands.Context, command_name: str, *blacklist_channels: discord.TextChannel):
         await self.guild_config_cog.update_command_filter(ctx.guild, command_name, new_channels=blacklist_channels, filter_type=CommandDisability.BLACKLISTED)
-        if blacklist_channels:
-            await ctx.send('Filter list set to empty\nFilter type set to "whitelist"')
+        if not blacklist_channels:
+            await ctx.send('Filter list set to empty\nFilter type set to "blacklist"')
         else:
             await ctx.send('Filter list set successfully ({} channels)\nFilter type set to "whitelist"'.format(len(blacklist_channels)))
 
