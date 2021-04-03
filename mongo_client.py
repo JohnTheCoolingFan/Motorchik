@@ -5,9 +5,9 @@ import pymongo
 from discord.ext import commands
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from guild_config import (CommandDisability, CommandFilter, CommandDisabledError,
-                          CommandImmutableError, CommandNotFoundError,
-                          GuildConfig)
+from guild_config import (CommandDisability, CommandDisabledError,
+                          CommandFilter, CommandImmutableError,
+                          CommandNotFoundError, GuildConfig)
 
 IMMUTABLE_COMMANDS = ['command', 'config', 'say', 'say_dm']
 
@@ -20,12 +20,6 @@ class GuildConfigCog(commands.Cog):
         self.guilds_collection = self.mongo_db.guilds
         self.cf_collection = self.mongo_db.command_filters
         self._gc_cache = dict()
-
-        # Create indexes
-        # I'm not sure what indexing method to use for guild ids, but for now let it be ascending...
-        # I'm not even sure if I really need index guild ids
-        await self.cf_collection.create_index([('guild_id', pymongo.ASCENDING), ('name', pymongo.TEXT)])
-        await self.guilds_collection.create_index([('guild_id', pymongo.ASCENDING)])
 
     def bot_check_once(self, ctx: commands.Context):
         if ctx.command.name in IMMUTABLE_COMMANDS:
@@ -42,6 +36,13 @@ class GuildConfigCog(commands.Cog):
                 if command_filter.filter_type == CommandDisability.WHITELISTED and ctx.channel not in command_filter.filter_list:
                     raise CommandDisabledError(ctx.guild, ctx.command.name, ctx.channel, command_filter.filter_type)
                 return True
+
+    async def create_indexes(self):
+        # Create indexes
+        # I'm not sure what indexing method to use for guild ids, but for now let it be ascending...
+        # I'm not even sure if I really need index guild ids
+        await self.cf_collection.create_index([('guild_id', pymongo.ASCENDING), ('name', pymongo.TEXT)])
+        await self.guilds_collection.create_index([('guild_id', pymongo.ASCENDING)])
 
     def teardown(self):
         self._gc_cache.clear()
