@@ -12,7 +12,8 @@ IMMUTABLE_COMMANDS = ['command']
 
 class GuildConfigCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
-        self.mongo_client = AsyncIOMotorClient('localhost', 27017, io_loop=bot.loop())
+        bot_config = bot.get_cog['BotConfig']
+        self.mongo_client = AsyncIOMotorClient(bot_config.mongo['host'], bot_config.mongo['port'], username=bot_config.mongo['username'], password=bot_config.mongo['password'], io_loop=bot.loop())
         self.bot = bot
         self.mongo_db = self.mongo_client['motorchik_guild_config']
         self.guild_collections = self.mongo_db.guilds
