@@ -113,7 +113,7 @@ class GuildConfigCog(commands.Cog):
             return
         if name in IMMUTABLE_COMMANDS:
             raise CommandImmutableError(name)
-        if name not in [command.name for command in self.bot.commands()]:
+        if name not in [command.name for command in self.bot.commands]:
             raise CommandNotFoundError(name)
 
         # New channels
