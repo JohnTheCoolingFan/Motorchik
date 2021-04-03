@@ -1,22 +1,15 @@
 import json
-from typing import Optional, TypedDict
+from typing import Optional
 
 import discord
 from discord.ext import commands
-
-
-class MongoCredentials(TypedDict):
-    host: str
-    port: Optional[int]
-    username: Optional[str]
-    password: Optional[str]
 
 
 class BotConfig(commands.Cog):
     bot: commands.Bot
     log_channel: discord.TextChannel
     token: str
-    mongo: MongoCredentials
+    mongo: dict
 
     def __init__(self, filename, bot: commands.Bot):
         with open(filename, 'r') as bot_config_file:
