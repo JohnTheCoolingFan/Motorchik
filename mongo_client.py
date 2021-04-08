@@ -56,13 +56,13 @@ class GuildConfigCog(commands.Cog):
         self.bot.remove_check(self.bot_check_once, call_once=True)
 
     async def get_config(self, guild: discord.Guild) -> GuildConfig:
-        if str(guild.id) in self._gc_cache:
-            return self._gc_cache[str(guild.id)]
+        if guild.id in self._gc_cache:
+            return self._gc_cache[guild.id]
         else:
             guild_config_data = await self.guilds_collection.find_one({"guild_id": guild.id})
             if guild_config_data is not None:
                 guild_config = GuildConfig(guild, guild_config_data, self.guilds_collection)
-                self._gc_cache[str(guild.id)] = guild_config
+                self._gc_cache[guild.id] = guild_config
             else:
                 inserted_id = self.add_guild(guild)
                 guild_config_data = await self.guilds_collection.find_one({'_id': inserted_id})
