@@ -48,7 +48,7 @@ class GuildConfigCog(commands.Cog):
     async def create_indexes(self):
         # Create indexes
         # I'm not sure what indexing method to use for guild ids, but for now let it be ascending...
-        # I'm not even sure if I really need index guild ids
+        # I'm not even sure if I really need to index guild ids
         await self.cf_collection.create_index([('guild_id', pymongo.ASCENDING), ('name', pymongo.TEXT)])
         await self.guilds_collection.create_index([('guild_id', pymongo.ASCENDING)])
 
