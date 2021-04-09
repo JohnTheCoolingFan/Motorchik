@@ -1,7 +1,9 @@
 from enum import Enum
-from discord.ext import commands
+from typing import Iterable, List, Optional
+
 import discord
-from typing import List, Iterable, Optional
+from discord.ext import commands
+
 
 class CommandDisability(Enum):
     NONE = 0
