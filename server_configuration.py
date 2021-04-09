@@ -60,7 +60,7 @@ class ServerConfiguration(commands.Cog, name='Server Configuration'):
         if not blacklist_channels:
             await ctx.send('Filter list set to empty\nFilter type set to "blacklist"')
         else:
-            await ctx.send('Filter list set successfully ({} channels)\nFilter type set to "whitelist"'.format(len(blacklist_channels)))
+            await ctx.send('Filter list set successfully ({} channels)\nFilter type set to "blacklist"'.format(len(blacklist_channels)))
 
     # Info channels configuration
     @commands.group(invoke_without_command=True)
