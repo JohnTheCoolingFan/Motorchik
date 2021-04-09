@@ -78,6 +78,7 @@ class GuildConfigCog(commands.Cog):
             else:
                 inserted_id = await self.add_guild(guild)
                 guild_config_data = await self.guilds_collection.find_one({'_id': inserted_id})
+                guild_config = GuildConfig(guild, guild_config_data, self.guilds_collection)
             return guild_config
 
     # TODO: replace all occurences
