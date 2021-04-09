@@ -25,8 +25,9 @@ class Moderation(commands.Cog):
             reason = 'Reason not provided'
         else:
             reason = 'Reason: ' + reason
-        if guild_config.get_log_channel():
-            await guild_config.get_log_channel().send('Banned {0}\nBy: {1}\n{2}'.format(str(member), ctx.author.mention, reason))
+        log_channel = await guild_config.get_log_channel()
+        if log_channel:
+            await log_channel.send('Banned {0}\nBy: {1}\n{2}'.format(str(member), ctx.author.mention, reason))
 
     @commands.has_permissions(ban_members=True)
     @commands.command(aliases=['uban'], description='Unban user', help='Unban specified member.')
@@ -34,8 +35,9 @@ class Moderation(commands.Cog):
         guild_config = await self.guild_config_cog.get_guild(ctx.guild)
         await member.unban(reason=reason)
         await ctx.send('Unbanned member '+str(member))
-        if guild_config.get_log_channel():
-            await guild_config.get_log_channel().send('Unbanned {0}\nBy: {1}\nReason: {2}'.format(str(member), ctx.author.mention, reason))
+        log_channel = await guild_config.get_log_channel()
+        if log_channel:
+            await log_channel.send('Unbanned {0}\nBy: {1}\nReason: {2}'.format(str(member), ctx.author.mention, reason))
 
     @commands.has_permissions(kick_members=True)
     @commands.command(description='Kick member', help='Kick specified member')
@@ -43,8 +45,9 @@ class Moderation(commands.Cog):
         guild_config = await self.guild_config_cog.get_guild(ctx.guild)
         await member.kick(reason=reason)
         await ctx.send('Kicked member '+str(member))
-        if guild_config.get_log_channel():
-            await guild_config.get_log_channel().send('Kicked {0}\nBy: {1}\nReason: {2}'.format(str(member), ctx.author.mention, reason))
+        log_channel = await guild_config.get_log_channel()
+        if log_channel:
+            await log_channel.send('Kicked {0}\nBy: {1}\nReason: {2}'.format(str(member), ctx.author.mention, reason))
 
 
 def setup(bot: commands.Bot):
