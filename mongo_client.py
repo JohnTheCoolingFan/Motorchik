@@ -40,7 +40,7 @@ class GuildConfigCog(commands.Cog):
                 if not command_filter.enabled:
                     raise CommandDisabledError(ctx.guild, ctx.command.name, ctx.channel, CommandDisability.GLOBAL)
                 if command_filter.filter_type == CommandDisability.BLACKLISTED and ctx.channel in command_filter.filter_list:
-                    raise CommandDisabledError(ctx.guild, ctx.vommand.name, ctx.channel, command_filter.filter_type)
+                    raise CommandDisabledError(ctx.guild, ctx.command.name, ctx.channel, command_filter.filter_type)
                 if command_filter.filter_type == CommandDisability.WHITELISTED and ctx.channel not in command_filter.filter_list:
                     raise CommandDisabledError(ctx.guild, ctx.command.name, ctx.channel, command_filter.filter_type)
                 return True
