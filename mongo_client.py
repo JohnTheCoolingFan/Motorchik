@@ -1,3 +1,5 @@
+import sys
+import traceback
 from typing import List, Optional
 
 import discord
@@ -44,6 +46,14 @@ class GuildConfigCog(commands.Cog):
                 if command_filter.filter_type == CommandDisability.WHITELISTED and ctx.channel not in command_filter.filter_list:
                     raise CommandDisabledError(ctx.guild, ctx.command.name, ctx.channel, command_filter.filter_type)
                 return True
+
+    @commands.Cog.listener()
+    async def on_command_error(self, ctx:commands.Context, exc: commands.errors.CommandError):
+        if isinstance(exc, CommandDisabledError):
+            return
+        else:
+            print(f'Ignoring exception in command {ctx.command}:', file=sys.stderr)
+            traceback.print_exception(type(exc), exc, exc.__traceback__, file=sys.stderr)
 
     async def create_indexes(self):
         # Create indexes
