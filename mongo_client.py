@@ -99,7 +99,8 @@ class GuildConfigCog(commands.Cog):
             }
         }
         guilds_collection = self.mongo_db.guilds
-        return await guilds_collection.insert_one(guild_config_data).inserted_id
+        insert_result = await guilds_collection.insert_one(guild_config_data)
+        return insert_result.inserted_id
 
     async def get_command_filter(self, guild: discord.Guild, name: str) -> Optional[CommandFilter]:
         command_filter_data = await self.cf_collection.find_one({"guild_id": guild.id, "name": name})
