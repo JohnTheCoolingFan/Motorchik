@@ -76,7 +76,7 @@ class GuildConfigCog(commands.Cog):
                 guild_config = GuildConfig(guild, guild_config_data, self.guilds_collection)
                 self._gc_cache[guild.id] = guild_config
             else:
-                inserted_id = self.add_guild(guild)
+                inserted_id = await self.add_guild(guild)
                 guild_config_data = await self.guilds_collection.find_one({'_id': inserted_id})
             return guild_config
 
