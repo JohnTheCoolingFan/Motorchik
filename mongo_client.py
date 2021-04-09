@@ -17,16 +17,14 @@ class GuildConfigCog(commands.Cog):
         bot_config = bot.get_cog('BotConfig')
         self.mongo_client = AsyncIOMotorClient(host = bot_config.mongo['host'],
                                                port=bot_config.mongo['port'],
-                                               #username=bot_config.mongo['username'],
-                                               #password=bot_config.mongo['password'],
+                                               username=bot_config.mongo['username'],
+                                               password=bot_config.mongo['password'],
                                                io_loop=bot.loop,
-                                               #authSource='motorchik_guild_config',
-                                               #connect=True
+                                               authSource='motorchik_guild_config',
+                                               connect=True
                                                )
         self.bot = bot
         self.mongo_db = self.mongo_client['motorchik_guild_config']
-        print('[GUILDCONFIG][MONGODB-ASYNC] Authentication to database')
-        print('[GUILDCONFIG][MONGODB-ASYNC]', self.mongo_db.authenticate(name=bot_config.mongo['username'], password=bot_config.mongo['password']))
         self.guilds_collection = self.mongo_db.guilds
         self.cf_collection = self.mongo_db.command_filters
         self._gc_cache = dict()
