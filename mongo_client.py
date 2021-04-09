@@ -95,7 +95,7 @@ class GuildConfigCog(commands.Cog):
         command_filter_data = await self.cf_collection.find_one({"guild_id": guild.id, "name": name})
         if command_filter_data is not None:
             return CommandFilter(name,
-                                 command_filter_data['type'],
+                                 CommandDisability(command_filter_data['type']),
                                  [self.bot.get_channel(channel_id) for channel_id in command_filter_data['channels']],
                                  command_filter_data['enabled'],
                                  guild)
