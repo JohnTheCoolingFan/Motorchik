@@ -92,7 +92,7 @@ class ServerConfiguration(commands.Cog, name='Server Configuration'):
 
     @config.command()
     async def default_roles(self, ctx: commands.Context, *roles: Optional[discord.Role]):
-        guild_config = self.guild_config_cog.get_config(ctx.guild)
+        guild_config = await self.guild_config_cog.get_config(ctx.guild)
         await guild_config.set_default_roles(roles)
         await ctx.send('Default roles set successfully')
 
