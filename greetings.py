@@ -1,8 +1,8 @@
-from discord.ext import commands, tasks
-import discord
-from guild_config import GuildConfig
-from typing import List
 from datetime import datetime, timedelta
+from typing import List
+
+import discord
+from discord.ext import commands, tasks
 
 
 class QueueItem:
@@ -15,26 +15,31 @@ class Greetings(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        self.guild_config_cog = bot.get_cog('GuildConfigCog')
         self.queue = []
-        self.queue_checker.start() # pylint: disable=E1101
+        # Disabling pylint error because it analyses code improperly, which results in error being reported.
+        self.queue_checker.start() # pylint: disable=no-member
 
     @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member):
-        guild_config = GuildConfig(member.guild)
-        if guild_config.welcome_channel:
-            await guild_config.welcome_channel.send('Welcome, {0.mention}'.format(member))
-        if guild_config.default_roles:
+        guild_config = await self.guild_config_cog.get_guild(member.guild)
+        welcome_channel = await guild_config.get_welcome_channel()
+        default_roles = await guild_config.get_default_roles()
+        if welcome_channel:
+            await welcome_channel.send('Welcome, {0.mention}'.format(member))
+        if default_roles:
             if member.guild.verification_level != discord.VerificationLevel.none:
                 print("Putting user {} on queue".format(member.id))
-                self.queue.append(QueueItem(member, guild_config.default_roles))
+                self.queue.append(QueueItem(member, default_roles))
             else:
-                await member.add_roles(*guild_config.default_roles, reason='New member join.')
+                await member.add_roles(*default_roles, reason='New member join.')
 
     @commands.Cog.listener()
     async def on_member_remove(self, member: discord.Member):
-        guild_config = GuildConfig(member.guild)
-        if guild_config.welcome_channel:
-            await guild_config.welcome_channel.send('Goodbye, {0} (ID:{1})'.format(str(member), member.id))
+        guild_config = await self.guild_config_cog.get_guild(member.guild)
+        welcome_channel = await guild_config.get_welcome_channel()
+        if welcome_channel:
+            await welcome_channel.send('Goodbye, {0} (ID:{1})'.format(str(member), member.id))
 
     @tasks.loop(seconds=10)
     async def queue_checker(self):
