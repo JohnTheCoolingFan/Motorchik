@@ -27,7 +27,7 @@ class Greetings(commands.Cog):
         default_roles = await guild_config.get_default_roles()
         if welcome_channel:
             await welcome_channel.send('Welcome, {0.mention}'.format(member))
-        if await guild_config.get_default_roles():
+        if default_roles:
             if member.guild.verification_level != discord.VerificationLevel.none:
                 print("Putting user {} on queue".format(member.id))
                 self.queue.append(QueueItem(member, default_roles))
@@ -38,7 +38,7 @@ class Greetings(commands.Cog):
     async def on_member_remove(self, member: discord.Member):
         guild_config = await self.guild_config_cog.get_guild(member.guild)
         welcome_channel = await guild_config.get_welcome_channel()
-        if await welcome_channel:
+        if welcome_channel:
             await welcome_channel.send('Goodbye, {0} (ID:{1})'.format(str(member), member.id))
 
     @tasks.loop(seconds=10)
