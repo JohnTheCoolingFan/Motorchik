@@ -80,6 +80,10 @@ class GuildConfigCog(commands.Cog):
                 guild_config_data = await self.guilds_collection.find_one({'_id': inserted_id})
             return guild_config
 
+    # TODO: replace all occurences
+    async def get_guild(self, guild: discord.Guild) -> GuildConfig:
+        return await self.get_config(guild)
+
     async def add_guild(self, guild: discord.Guild):
         default_channel = guild.system_channel.id if guild.system_channel is not None else guild.text_channels[0].id
         # New entries may be added in the future.
