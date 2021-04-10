@@ -40,29 +40,40 @@ class GuildConfigCog(commands.Cog):
         self._cf_cache = dict() # keys are tuples, consisting of: 1. guild id 2. command name
 
     async def bot_check_once(self, ctx: commands.Context):
+        # Don't bother to check the command filter if command can't be filtered
         if ctx.command.name in IMMUTABLE_COMMANDS:
             return True
         else:
             command_filter = await self.get_command_filter(ctx.guild, ctx.command.name)
+            # Command filter isn't set up, so it's allowed to run
             if command_filter is None:
                 return True
             else:
+                # If command is disabled on the server (guild) globally, it's not allowed to run
                 if not command_filter.enabled:
                     raise CommandDisabledError(ctx.guild, ctx.command.name, ctx.channel, CommandDisability.GLOBAL)
+                # If command was called in a blacklisted channel, it's not allowed to run
                 if command_filter.filter_type == CommandDisability.BLACKLISTED and ctx.channel in command_filter.filter_list:
                     raise CommandDisabledError(ctx.guild, ctx.command.name, ctx.channel, command_filter.filter_type)
+                # If command wasn't called in a whitelisted channel, it's not allowed to run
                 if command_filter.filter_type == CommandDisability.WHITELISTED and ctx.channel not in command_filter.filter_list:
                     raise CommandDisabledError(ctx.guild, ctx.command.name, ctx.channel, command_filter.filter_type)
+                # Default
                 return True
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx:commands.Context, exc: commands.errors.CommandError):
+        # For now, just ignore if command is disabled
+        # TODO: message for when command is disabled
+        # TODO: settingg in GuildConfig if these messages should be displayed
         if isinstance(exc, CommandDisabledError):
             return
         else:
+            # The default behaviour. I fell like there is a better way to do this. It was copied from discord.py source
             print(f'Ignoring exception in command {ctx.command}:', file=sys.stderr)
             traceback.print_exception(type(exc), exc, exc.__traceback__, file=sys.stderr)
 
+    # This could be a command...
     async def create_indexes(self):
         # Create indexes
         # I'm not sure what indexing method to use for guild ids, but for now let it be ascending...
@@ -75,7 +86,9 @@ class GuildConfigCog(commands.Cog):
         self.mongo_client.close()
         self.bot.remove_check(self.bot_check_once, call_once=True)
 
+    # Get GuildConfig
     async def get_config(self, guild: discord.Guild) -> GuildConfig:
+        # Get a cached version, if it is cached
         if guild.id in self._gc_cache:
             return self._gc_cache[guild.id]
         else:
@@ -93,6 +106,7 @@ class GuildConfigCog(commands.Cog):
     async def get_guild(self, guild: discord.Guild) -> GuildConfig:
         return await self.get_config(guild)
 
+    # Add default GuildConfig to the database
     async def add_guild(self, guild: discord.Guild):
         default_channel = guild.system_channel.id if guild.system_channel is not None else guild.text_channels[0].id
         # New entries may be added in the future.
@@ -115,6 +129,7 @@ class GuildConfigCog(commands.Cog):
         insert_result = await guilds_collection.insert_one(guild_config_data)
         return insert_result.inserted_id
 
+    # Get command filter from the database
     async def get_command_filter(self, guild: discord.Guild, name: str) -> Optional[CommandFilter]:
         command_filter_data = await self.cf_collection.find_one({"guild_id": guild.id, "name": name})
         if command_filter_data is not None:
@@ -126,6 +141,7 @@ class GuildConfigCog(commands.Cog):
         else:
             return None
 
+    # Update command filter
     async def update_command_filter(self, guild: discord.Guild,                     # Guild
                                     name: str,                                      # command name
                                     new_channels: List[discord.TextChannel] = None, # new channels for the update
