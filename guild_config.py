@@ -7,12 +7,14 @@ from discord.ext import commands
 
 IMMUTABLE_COMMANDS = ['command', 'config', 'say', 'say_dm']
 
+# Enums
 class CommandDisability(Enum):
     NONE = 0
     GLOBAL = 1
     BLACKLISTED = 2
     WHITELISTED = 3
 
+# Errors/Exceptions
 class GuildConfigError(commands.errors.CommandError):
     pass
 
@@ -37,6 +39,7 @@ class CommandImmutableError(GuildConfigError):
     def __init__(self, name: str):
         self.name = name
 
+# Data structures
 class CommandFilter:
     name: str
     filter_type: CommandDisability
@@ -51,6 +54,7 @@ class CommandFilter:
         self.enabled = enabled
         self.guild = guild
 
+# Updates DB info by itself, can be easily cached
 class GuildConfig:
     guild: discord.Guild
 
@@ -158,7 +162,3 @@ class GuildConfig:
 #            return True
 #        else:
 #            return False
-
-class MotorchikBot(commands.Bot):
-    async def guild_config(self, guild: discord.Guild) -> GuildConfig:
-        return await self.get_cog('GuildConfigCog').get_config(guild)
