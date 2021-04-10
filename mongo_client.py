@@ -16,7 +16,11 @@ IMMUTABLE_COMMANDS = ['command', 'config', 'say', 'say_dm']
 class GuildConfigCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         print('[GUILDCONFIG][MONGODB-ASYNC] Initializing MongoDB connection')
+        # Bot
+        self.bot = bot
         bot_config = bot.get_cog('BotConfig')
+
+        # Mongo setup
         self.mongo_client = AsyncIOMotorClient(host = bot_config.mongo['host'],
                                                port=bot_config.mongo['port'],
                                                username=bot_config.mongo['username'],
@@ -25,11 +29,15 @@ class GuildConfigCog(commands.Cog):
                                                authSource='motorchik_guild_config',
                                                connect=True
                                                )
-        self.bot = bot
         self.mongo_db = self.mongo_client['motorchik_guild_config']
+
+        # Collections
         self.guilds_collection = self.mongo_db.guilds
         self.cf_collection = self.mongo_db.command_filters
-        self._gc_cache = dict()
+
+        # Cache
+        self._gc_cache = dict() # keys are ints representing guild ids
+        self._cf_cache = dict() # keys are tuples, consisting of: 1. guild id 2. command name
 
     async def bot_check_once(self, ctx: commands.Context):
         if ctx.command.name in IMMUTABLE_COMMANDS:
