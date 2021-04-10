@@ -5,6 +5,8 @@ import discord
 from discord.ext import commands
 
 
+IMMUTABLE_COMMANDS = ['command', 'config', 'say', 'say_dm']
+
 class CommandDisability(Enum):
     NONE = 0
     GLOBAL = 1

@@ -7,11 +7,11 @@ import pymongo
 from discord.ext import commands
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from guild_config import (CommandDisability, CommandDisabledError,
-                          CommandFilter, CommandImmutableError,
-                          CommandNotFoundError, GuildConfig)
+from guild_config import (IMMUTABLE_COMMANDS, CommandDisability,
+                          CommandDisabledError, CommandFilter,
+                          CommandImmutableError, CommandNotFoundError,
+                          GuildConfig)
 
-IMMUTABLE_COMMANDS = ['command', 'config', 'say', 'say_dm']
 
 class GuildConfigCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
