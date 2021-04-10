@@ -93,13 +93,12 @@ class GuildConfigCog(commands.Cog):
             return self._gc_cache[guild.id]
         else:
             guild_config_data = await self.guilds_collection.find_one({"guild_id": guild.id})
-            if guild_config_data is not None:
-                guild_config = GuildConfig(guild, guild_config_data, self.guilds_collection)
-                self._gc_cache[guild.id] = guild_config
-            else:
+            # Add the default GuildConfig if it dows not exist
+            if guild_config_data is None:
                 inserted_id = await self.add_guild(guild)
                 guild_config_data = await self.guilds_collection.find_one({'_id': inserted_id})
-                guild_config = GuildConfig(guild, guild_config_data, self.guilds_collection)
+            guild_config = GuildConfig(guild, guild_config_data, self.guilds_collection)
+            self._gc_cache[guild.id] = guild_config
             return guild_config
 
     # TODO: replace all occurences
