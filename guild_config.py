@@ -7,6 +7,10 @@ from discord.ext import commands
 
 IMMUTABLE_COMMANDS = ['command', 'config', 'say', 'say_dm']
 
+# TODO: make GuildConfig imdependent from mongodb, just use Cog's methods.
+# TODO: make Interface class (abstract class) for GuildConfigCog
+
+
 # Enums
 class CommandDisability(Enum):
     NONE = 0
