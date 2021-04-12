@@ -22,7 +22,7 @@ Minimum supported python version is 3.7
   - Motorchik is highly configurable for servers (guilds).
  
 ## How to use / Installation
-### 1. Clone this repo to your local machine
+### 1. Clone this repo or download archived sources to your local machine
 ### 2. Make sure you have `discord.py`, `python-dateutil`, `bs4` and `natsort`:
   ```
   # python3 -m pip install discord.py python-dateutil bs4 natsort
@@ -31,6 +31,7 @@ Minimum supported python version is 3.7
   ```
   $ python3 -m pip install --user discord.py python-dateutil bs4 natsort
   ```
+  If you plan to use MongoDB, also install `motor package`
 ### 3. Run `main.py`
   ```sh
   python3 main.py
