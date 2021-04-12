@@ -11,12 +11,15 @@ bot = commands.Bot(command_prefix=commands.when_mentioned_or('$$'), intents=disc
 async def on_ready():
     print('Logged in as {0.user}'.format(bot))
 
+# Fundamental bot extensions
 bot.load_extension('bot_config')
 bot.load_extension('mongo_client')
 bot.load_extension('service_tools')
 bot.load_extension('info_channels') # To be implemented, probably as a part of new guild config
+# Commands for moderators ans server owners
 bot.load_extension('server_configuration')
 bot.load_extension('moderation')
+# Other commands
 bot.load_extension('greetings')
 bot.load_extension('factorio')
 bot.load_extension('fun_commands')
