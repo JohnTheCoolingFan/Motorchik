@@ -120,53 +120,15 @@ class GuildConfig:
         new_data = await self.guilds_collections.find_one_and_update({'_id': self.raw_data['_id']}, {'$set': {'default_roles': new_roles}})
         self.raw_data = new_data
 
-# May be reused somewhere
-#    @classmethod
-#    async def check(cls, bot: commands.Bot, guild: discord.Guild = None):
-#        def check_for_entry(entry: str, guild_config_to_check: cls, entry_type):
-#            if entry not in guild_config_to_check.raw:
-#                guild_config_to_check.raw[entry] = entry_type()
-#        if guild is None:
-#            await asyncio.wait([cls.check(bot, _guild) for _guild in bot.guilds])
-#        else:
-#            if not os.path.exists('guilds/guild_{}.json'.format(guild.id)):
-#                cls.create_guild_config(guild)
-#            guild_config = cls(guild)
-#            print('Checking config of guild ID:{}'.format(guild.id))
-#            for entry_name in GUILD_CONFIG_ENTRIES_TYPES:
-#                check_for_entry(entry_name, guild_config, GUILD_CONFIG_ENTRIES_TYPES[entry_name])
-#            for command in bot.commands:
-#                if command.name not in guild_config.raw['commands'].keys():
-#                    print('Config for command "{0}" not found in config of guild ID:{1}'.format(command.name, guild_config.guild.id))
-#                    guild_config.raw['commands'][command.name] = dict(whitelist=[], blacklist=[], enabled=True)
-#            guild_config.write()
+   # Unimplemented
+   # def add_xp(self, member: discord.Member, xp_count: int):
+       # if str(member.id) not in self.raw['members']:
+           # self.raw['members'][str(member.id)] = 0
+       # self.raw['members'][str(member.id)] += xp_count
+       # self.write()
 
-# Unimplemented for now
-#    def add_xp(self, member: discord.Member, xp_count: int):
-#        if str(member.id) not in self.raw['members']:
-#            self.raw['members'][str(member.id)] = 0
-#        self.raw['members'][str(member.id)] += xp_count
-#        self.write()
-#
-#    def get_xp(self, member: discord.Member) -> int:
-#        return self.raw['members'][str(member.id)]
-
-# Don't work with command filters
-#    def switch_command(self, command_name: str, new_state: bool) -> bool:
-#        if command_name in self.commands_names:
-#            self.raw['commands'][command_name]['enabled'] = new_state
-#            self.write()
-#            return True
-#        else:
-#            return False
-#
-#    def set_command_filter(self, command_name: str, filter_name: str, new_filter: Iterable[discord.TextChannel]) -> bool:
-#        if command_name in self.commands_names:
-#            self.raw['commands'][command_name][filter_name] = list({channel.id for channel in new_filter})
-#            self.write()
-#            return True
-#        else:
-#            return False
+   # def get_xp(self, member: discord.Member) -> int:
+       # return self.raw['members'][str(member.id)]
 
 class AbstractGuildConfigCog(commands.Cog):
     __gc_cache: Dict[int, GuildConfig]               # Guild ID is key, GuildConfig is the item
