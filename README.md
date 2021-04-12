@@ -7,6 +7,8 @@ At current state Motorchik provides simple tools for discord servers, such as de
 Per-server configuration system is still in development, but working (not working: command black-/whitelisting).
 If you want to add this bot on your server, hosted nearly 24/7 on my OrangePi PC, message me at discord John The Cooling Fan#6411 for a bot invitation link.
 
+Minimum supported python version is 3.7
+
 ## Features
 * Misc
   - Greeting message on member join.
