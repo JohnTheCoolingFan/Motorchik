@@ -1,9 +1,10 @@
+import sys
+import traceback
 from enum import Enum
 from typing import Iterable, List, Optional
 
 import discord
 from discord.ext import commands
-
 
 IMMUTABLE_COMMANDS = ['command', 'config', 'say', 'say_dm']
 
@@ -166,3 +167,72 @@ class GuildConfig:
 #            return True
 #        else:
 #            return False
+
+class AbstractGuildConfigCog(commands.Cog):
+    __gc_cache: dict
+    __cf_cache: dict
+    bot: commands.Bot
+
+    async def bot_check_once(self, ctx: commands.Context):
+        # Don't bother to check the command filter if command can't be filtered
+        if ctx.command.name in IMMUTABLE_COMMANDS:
+            return True
+        else:
+            command_filter = await self.get_command_filter(ctx.guild, ctx.command.name)
+            # Command filter isn't set up, so it's allowed to run
+            if command_filter is None:
+                return True
+            else:
+                # If command is disabled on the server (guild) globally, it's not allowed to run
+                if not command_filter.enabled:
+                    raise CommandDisabledError(ctx.guild, ctx.command.name, ctx.channel, CommandDisability.GLOBAL)
+                # If command was called in a blacklisted channel, it's not allowed to run
+                if command_filter.filter_type == CommandDisability.BLACKLISTED and ctx.channel in command_filter.filter_list:
+                    raise CommandDisabledError(ctx.guild, ctx.command.name, ctx.channel, command_filter.filter_type)
+                # If command wasn't called in a whitelisted channel, it's not allowed to run
+                if command_filter.filter_type == CommandDisability.WHITELISTED and ctx.channel not in command_filter.filter_list:
+                    raise CommandDisabledError(ctx.guild, ctx.command.name, ctx.channel, command_filter.filter_type)
+                # Default
+                return True
+
+    @commands.Cog.listener()
+    async def on_command_error(self, ctx:commands.Context, exc: commands.errors.CommandError):
+        # For now, just ignore if command is disabled
+        # TODO: message for when command is disabled
+        # TODO: settingg in GuildConfig if these messages should be displayed
+        if isinstance(exc, CommandDisabledError):
+            return
+        else:
+            # The default behaviour. I fell like there is a better way to do this. It was copied from discord.py source
+            print(f'Ignoring exception in command {ctx.command}:', file=sys.stderr)
+            traceback.print_exception(type(exc), exc, exc.__traceback__, file=sys.stderr)
+
+    def teardown(self):
+        self.__gc_cache.clear()
+        self.__cf_cache.clear()
+
+    # Decide wheter next this one or the next is correct
+    async def get_config(self, guild: discord.Guild) -> GuildConfig:
+        pass
+
+    async def get_guild(self, guild: discord.Guild) -> GuildConfig:
+        return await self.get_config(guild)
+
+    # TODO
+    async def update_guild(self, guild: discord.Guild) -> dict:
+        pass
+
+    async def add_guild(self, guild: discord.Guild):
+        pass
+
+    async def get_command_filter(self, guild: discord.Guild, name: str) -> CommandFilter:
+        pass
+
+    async def update_command_filter(self,
+                                    guild: discord.Guild,
+                                    name: str,
+                                    new_channels: List[discord.TextChannel] = None,
+                                    append_channels: bool = False,
+                                    enabled: bool = None,
+                                    filter_type: CommandDisability = None) -> dict:
+        pass
