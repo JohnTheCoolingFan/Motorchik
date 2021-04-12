@@ -1,7 +1,7 @@
 import sys
 import traceback
 from enum import Enum
-from typing import Iterable, List, Optional
+from typing import Dict, Iterable, List, Optional, Tuple
 
 import discord
 from discord.ext import commands
@@ -169,8 +169,9 @@ class GuildConfig:
 #            return False
 
 class AbstractGuildConfigCog(commands.Cog):
-    __gc_cache: dict
-    __cf_cache: dict
+    __gc_cache: Dict[int, GuildConfig]               # Guild ID is key, GuildConfig is the item
+    __cf_cache: Dict[Tuple[int, str], CommandFilter] # Tuple of Guild ID and command name is key, CommandFilter is the item
+
     bot: commands.Bot
     name = 'GuildConfigCog' # Should not be changed!
 
