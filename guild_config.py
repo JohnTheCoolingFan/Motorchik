@@ -172,6 +172,7 @@ class AbstractGuildConfigCog(commands.Cog):
     __gc_cache: dict
     __cf_cache: dict
     bot: commands.Bot
+    name = 'GuildConfigCog' # Should not be changed!
 
     async def bot_check_once(self, ctx: commands.Context):
         # Don't bother to check the command filter if command can't be filtered
