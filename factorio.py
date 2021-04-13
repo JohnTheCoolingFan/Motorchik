@@ -1,10 +1,11 @@
-from discord.ext import commands
+import asyncio
+
+import aiohttp
 import discord
-import requests as req
 from bs4 import BeautifulSoup
 from dateutil import parser
+from discord.ext import commands
 from natsort import natsorted
-import asyncio
 
 MOD_LIST_MOTORCHIK = ['artillery-spidertron', 'PlaceableOffGrid', 'NoArtilleryMapReveal', 'RandomFactorioThings', 'PlutoniumEnergy']
 
@@ -21,15 +22,11 @@ class FactorioCog(commands.Cog, name='Factorio'):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self._session = req.Session()
+        self.__session = aiohttp.ClientSession()
 
     @commands.command(aliases=['modstat', 'ms'])
     async def mods_statistics(self, ctx: commands.Context, *mods_names):
-        mod_process_tasks = []
-        for mod_name in mods_names:
-            mod_process_tasks.append(asyncio.create_task(self.process_mod(ctx, mod_name)))
-
-        await asyncio.wait(mod_process_tasks)
+        await asyncio.wait([asyncio.create_task(self.process_mod(ctx, mod_name)) for mod_name in mods_names])
 
     async def process_mod(self, ctx: commands.Context, mod_name: str):
         mod_data = await self.get_mod_info(mod_name)
@@ -62,9 +59,9 @@ class FactorioCog(commands.Cog, name='Factorio'):
         return embed
 
     async def get_mod_info(self, mod_name: str) -> dict:
-        request = self._session.get(MODPORTAL_URL + '/api/mods/' + mod_name)
-        if request.status_code == 200:
-            json_req = request.json()
+        api_response = await self.__session.get(MODPORTAL_URL + '/api/mods/' + mod_name)
+        if api_response.statuse == 200:
+            json_req = await api_response.json()
             latest_release = natsorted(json_req['releases'], key=lambda release: release['version'], reverse=True)[0]
             if json_req['thumbnail'] != '/assets/.thumb.png':
                 #thumb_color = discord.Color.from_rgb(*ColorThief(
@@ -89,16 +86,16 @@ class FactorioCog(commands.Cog, name='Factorio'):
                         success=True,
                         mod_name=mod_name)
         else:
-            new_mod_name = await asyncio.create_task(self.find_mod(mod_name))
+            new_mod_name = await self.find_mod(mod_name)
             if new_mod_name:
-                return await asyncio.create_task(self.get_mod_info(new_mod_name))
+                return await self.get_mod_info(new_mod_name)
             else:
                 return dict(success=False, mod_name=mod_name)
 
     async def find_mod(self, mod_name: str) -> str:
-        request = self._session.get(MODPORTAL_URL + '/query/' + mod_name.replace(' ', '%20'))
-        if request.status_code == 200:
-            soup = BeautifulSoup(request.text, 'html.parser')
+        search_response = await self.__session.get(MODPORTAL_URL + '/query/' + mod_name.replace(' ', '%20'))
+        if search_response.statuse == 200:
+            soup = BeautifulSoup(await search_response.text(), 'html.parser')
             mod_h2 = soup.find('h2', {'class': 'mb0'})
             if mod_h2:
                 retrieved_mod_name = mod_h2.a['href'].replace('/mod/', '')
@@ -110,7 +107,8 @@ class FactorioCog(commands.Cog, name='Factorio'):
 
     @commands.command(aliases=['ml'])
     async def modlist(self, ctx: commands.Context):
-        await asyncio.wait({ctx.message.delete(), ctx.invoke(self.mods_statistics, *MOD_LIST_MOTORCHIK)})
+        await ctx.message.delete()
+        await ctx.invoke(self.mods_statistics, *MOD_LIST_MOTORCHIK)
 
 
 def setup(bot: commands.Bot):
