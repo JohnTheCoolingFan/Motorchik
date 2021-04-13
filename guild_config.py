@@ -117,7 +117,7 @@ class GuildConfig:
 
     async def set_default_roles(self, new_roles: Iterable[discord.Role]):
         new_roles = [role.id for role in new_roles]
-        new_data = await self.guilds_collections.find_one_and_update({'_id': self.raw_data['_id']}, {'$set': {'default_roles': new_roles}})
+        new_data = await self.guilds_collections.find_one_and_update({'_id': self.raw_data['_id']}, {'$set': {'default_roles': new_roles}}, return_document=True)
         self.raw_data = new_data
 
    # Unimplemented
