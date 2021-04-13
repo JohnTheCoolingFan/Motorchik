@@ -32,7 +32,7 @@ class ServerConfiguration(commands.Cog, name='Server Configuration'):
             traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
 
     # Command filters configuration
-    @commands.group(name='command')
+    @commands.group(name='command', invoke_without_command=True)
     async def config_commands(self, ctx: commands.Context):
         await ctx.send_help(ctx.command)
 
