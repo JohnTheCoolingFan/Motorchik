@@ -36,8 +36,8 @@ class GuildConfigCog(commands.Cog):
         self.cf_collection = self.mongo_db.command_filters
 
         # Cache
-        self._gc_cache = dict() # keys are ints representing guild ids
-        self._cf_cache = dict() # keys are tuples, consisting of: 1. guild id 2. command name
+        self.__gc_cache = dict() # keys are ints representing guild ids
+        self.__cf_cache = dict() # keys are tuples, consisting of: 1. guild id 2. command name
 
     async def bot_check_once(self, ctx: commands.Context):
         # Don't bother to check the command filter if command can't be filtered
@@ -82,15 +82,15 @@ class GuildConfigCog(commands.Cog):
         await self.guilds_collection.create_index([('guild_id', pymongo.ASCENDING)])
 
     def teardown(self):
-        self._gc_cache.clear()
+        self.__gc_cache.clear()
         self.mongo_client.close()
         self.bot.remove_check(self.bot_check_once, call_once=True)
 
     # Get GuildConfig
     async def get_config(self, guild: discord.Guild) -> GuildConfig:
         # Get a cached version, if it is cached
-        if guild.id in self._gc_cache:
-            return self._gc_cache[guild.id]
+        if guild.id in self.__gc_cache:
+            return self.__gc_cache[guild.id]
         else:
             guild_config_data = await self.guilds_collection.find_one({"guild_id": guild.id})
             # Add the default GuildConfig if it dows not exist
@@ -98,7 +98,7 @@ class GuildConfigCog(commands.Cog):
                 inserted_id = await self.add_guild(guild)
                 guild_config_data = await self.guilds_collection.find_one({'_id': inserted_id})
             guild_config = GuildConfig(guild, guild_config_data, self.guilds_collection)
-            self._gc_cache[guild.id] = guild_config
+            self.__gc_cache[guild.id] = guild_config
             return guild_config
 
     # TODO: replace all occurences
