@@ -83,6 +83,7 @@ class GuildConfigCog(commands.Cog):
 
     def teardown(self):
         self.__gc_cache.clear()
+        self.__cf_cache.clear()
         self.mongo_client.close()
         self.bot.remove_check(self.bot_check_once, call_once=True)
 
