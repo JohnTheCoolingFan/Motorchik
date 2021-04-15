@@ -1,12 +1,13 @@
 import sys
 import traceback
 from enum import Enum
-from typing import Dict, Iterable, List, Optional, Tuple
+from typing import Dict, Iterable, List, Optional, Tuple, TypedDict
 
 import discord
 from discord.ext import commands
 
 IMMUTABLE_COMMANDS = ['command', 'config', 'say', 'say_dm']
+INFO_CHANNEL_TYPES = ['welcome', 'log'] # reports and mod-list are not yet implemented
 
 # TODO: make GuildConfig imdependent from mongodb, just use Cog's methods.
 # TODO: make Interface class (abstract class) for GuildConfigCog
@@ -130,6 +131,10 @@ class GuildConfig:
    # def get_xp(self, member: discord.Member) -> int:
        # return self.raw['members'][str(member.id)]
 
+class InfoChannelSpec(TypedDict):
+    channel: discord.TextChannel = None
+    enabled: bool = None
+
 class AbstractGuildConfigCog(commands.Cog):
     __gc_cache: Dict[int, GuildConfig]               # Guild ID is key, GuildConfig is the item
     __cf_cache: Dict[Tuple[int, str], CommandFilter] # Tuple of Guild ID and command name is key, CommandFilter is the item
@@ -183,7 +188,10 @@ class AbstractGuildConfigCog(commands.Cog):
         return await self.get_config(guild)
 
     # TODO
-    async def update_guild(self, guild: discord.Guild) -> dict:
+    async def update_guild(self,
+                           guild: discord.Guild,
+                           default_roles: List[discord.Role] = None,
+                           info_channels: Dict[str, InfoChannelSpec] = None) -> dict:
         pass
 
     async def add_guild(self, guild: discord.Guild):
