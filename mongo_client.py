@@ -164,7 +164,7 @@ class GuildConfigCog(commands.Cog):
                                     name: str,                                      # command name
                                     new_channels: List[discord.TextChannel] = None, # new channels for the update
                                     append_channels: bool = False,                  # wheter to append or overwrite the new channels. True - append, False - overwite
-                                    enabled: bool = None,                           # wheter the command will be enabled oe not
+                                    enabled: bool = None,                           # wheter the command will be enabled or not
                                     filter_type: CommandDisability = None):         # set filter type, if needed
         mongo_update_data = {'$set': dict(), '$setOnInsert': {}}
 
