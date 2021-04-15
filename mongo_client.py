@@ -113,6 +113,7 @@ class GuildConfigCog(commands.Cog):
             mongo_update_data['$set']['default_roles'] = [role.id for role in default_roles]
         if info_channels is not None:
             for ic_name, ic_spec in info_channels.items():
+                # TODO: support for other properties.
                 if ic_name in INFO_CHANNEL_TYPES:
                     if ic_spec['channel'] is not None:
                         mongo_update_data['$set']['info_channels.{}.channel_id'.format(ic_name)] = ic_spec['channel'].id
