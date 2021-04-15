@@ -58,28 +58,34 @@ class CommandFilter:
         self.filter_type = filter_type
         self.filter_list = filter_list
         self.enabled = enabled
+
         self.guild = guild
+class InfoChannelSpec(TypedDict):
+    channel: discord.TextChannel = None
+    enabled: bool = None
 
 # Updates DB info by itself, can be easily cached
 class GuildConfig:
     guild: discord.Guild
 
-    def __init__(self, guild: discord.Guild, guild_config_data, guilds_collections):
+    def __init__(self, guild: discord.Guild, guild_config_data, guild_config_cog):
         # The guild_config_data type is weird but that's what is being returned by pymongo's find_one() (probably).
         # But it can still be used as a dict, I think.
         self.guild = guild
         self.raw_data = guild_config_data
-        self.guilds_collections = guilds_collections
+        self.guild_config_cog = guild_config_cog
 
     async def update_info_channel(self, ic_name: str, state: Optional[bool] = None, new_channel: Optional[discord.TextChannel] = None):
-        if state is None and new_channel is None:
-            return
-        if ic_name in ['log', 'welcome']:
+        if ic_name in INFO_CHANNEL_TYPES:
+            update_data = {}
             if state is not None:
-                new_data = await self.guilds_collections.find_one_and_update({'_id': self.raw_data['_id']}, {'$set': {'info_channels.{}.enabled'.format(ic_name): state}}, return_document=True)
+                update_data['enabled'] = state
             if new_channel is not None:
-                new_data = await self.guilds_collections.find_one_and_update({'_id': self.raw_data['_id']}, {'$set': {'info_channels.{}.channel_id'.format(ic_name): new_channel.id}}, return_document=True)
-            self.raw_data = new_data
+                update_data['channel'] = new_channel
+            if update_data != {}:
+                new_data = self.guild_config_cog.update_guild(info_channels={ic_name: update_data})
+                if new_data is not None:
+                    self.raw_data = new_data
         else:
             raise InfoChannelNotFoundError(ic_name)
 
@@ -117,9 +123,9 @@ class GuildConfig:
         return [self.guild.get_role(role_id) for role_id in self.raw_data['default_roles']]
 
     async def set_default_roles(self, new_roles: Iterable[discord.Role]):
-        new_roles = [role.id for role in new_roles]
-        new_data = await self.guilds_collections.find_one_and_update({'_id': self.raw_data['_id']}, {'$set': {'default_roles': new_roles}}, return_document=True)
-        self.raw_data = new_data
+        new_data = self.guild_config_cog.update_guild(default_roles=new_roles)
+        if new_data is not None:
+            self.raw_data = new_data
 
    # Unimplemented
    # def add_xp(self, member: discord.Member, xp_count: int):
@@ -130,10 +136,6 @@ class GuildConfig:
 
    # def get_xp(self, member: discord.Member) -> int:
        # return self.raw['members'][str(member.id)]
-
-class InfoChannelSpec(TypedDict):
-    channel: discord.TextChannel = None
-    enabled: bool = None
 
 class AbstractGuildConfigCog(commands.Cog):
     __gc_cache: Dict[int, GuildConfig]               # Guild ID is key, GuildConfig is the item
