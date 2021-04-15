@@ -1,6 +1,6 @@
 import sys
 import traceback
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 import discord
 import pymongo
@@ -10,7 +10,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from guild_config import (IMMUTABLE_COMMANDS, CommandDisability,
                           CommandDisabledError, CommandFilter,
                           CommandImmutableError, CommandNotFoundError,
-                          GuildConfig)
+                          GuildConfig, InfoChannelSpec)
 
 
 class GuildConfigCog(commands.Cog):
@@ -104,6 +104,23 @@ class GuildConfigCog(commands.Cog):
     # TODO: replace all occurences
     async def get_guild(self, guild: discord.Guild) -> GuildConfig:
         return await self.get_config(guild)
+
+    async def update_guild(self, guild: discord.Guild,
+                           default_roles: List[discord.Role] = None,
+                           info_channels: Dict[str, InfoChannelSpec] = None) -> Optional[dict]:
+        mongo_update_data = {'$set': {}}
+        if default_roles is not None:
+            mongo_update_data['$set']['default_roles'] = [role.id for role in default_roles]
+        if info_channels is not None:
+            for ic_name, ic_spec in info_channels.items():
+                if ic_spec['channel'] is not None:
+                    mongo_update_data['$set']['info_channels.{}.channel_id'.format(ic_name)] = ic_spec['channel'].id
+                if ic_spec['enabled'] is not None:
+                    mongo_update_data['$set']['info_channels.{}.enabled'.format(ic_name)] = ic_spec['enabled']
+        if mongo_update_data != {'$set': {}}:
+            new_data = await self.guilds_collection.find_one_and_update({'guild_id': guild.id}, mongo_update_data, return_document=True)
+            return new_data
+        return None
 
     # Add default GuildConfig to the database
     async def add_guild(self, guild: discord.Guild):
