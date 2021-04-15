@@ -8,12 +8,13 @@ from discord.ext import commands
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from guild_config import (IMMUTABLE_COMMANDS, INFO_CHANNEL_TYPES,
-                          CommandDisability, CommandDisabledError,
-                          CommandFilter, CommandImmutableError,
-                          CommandNotFoundError, GuildConfig, InfoChannelSpec)
+                          AbstractGuildConfigCog, CommandDisability,
+                          CommandDisabledError, CommandFilter,
+                          CommandImmutableError, CommandNotFoundError,
+                          GuildConfig, InfoChannelSpec)
 
 
-class GuildConfigCog(commands.Cog):
+class GuildConfigCog(AbstractGuildConfigCog):
     def __init__(self, bot: commands.Bot):
         print('[GUILDCONFIG][MONGODB-ASYNC] Initializing MongoDB connection')
         # Bot
@@ -98,7 +99,7 @@ class GuildConfigCog(commands.Cog):
             if guild_config_data is None:
                 inserted_id = await self.add_guild(guild)
                 guild_config_data = await self.guilds_collection.find_one({'_id': inserted_id})
-            guild_config = GuildConfig(guild, guild_config_data, self.guilds_collection)
+            guild_config = GuildConfig(guild, guild_config_data, self)
             self.__gc_cache[guild.id] = guild_config
             return guild_config
 
