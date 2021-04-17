@@ -14,11 +14,13 @@ class Greetings(commands.Cog):
     queue: List[QueueItem]
 
     def __init__(self, bot: commands.Bot):
+        print('Loading Greetings module...', end='')
         self.bot = bot
         self.guild_config_cog = bot.get_cog('GuildConfigCog')
         self.queue = []
         # Disabling pylint error because it analyses code improperly, which results in error being reported.
         self.queue_checker.start() # pylint: disable=no-member
+        print(' Done')
 
     @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member):

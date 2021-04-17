@@ -21,8 +21,10 @@ LAUNCHER_URL = 'https://factorio-launcher-mods.storage.googleapis.com/{}/{}.zip'
 class FactorioCog(commands.Cog, name='Factorio'):
 
     def __init__(self, bot: commands.Bot):
+        print('Loading Factorio module...', end='')
         self.bot = bot
         self.__session = aiohttp.ClientSession()
+        print(' Done')
 
     @commands.command(aliases=['modstat', 'ms'])
     async def mods_statistics(self, ctx: commands.Context, *mods_names):

@@ -4,7 +4,9 @@ import discord
 
 class ServiceTools(commands.Cog, name='Service Tools'):
     def __init__(self, bot: commands.Bot):
+        print('Loading Service Tools module...', end='')
         self.bot = bot
+        print(' Done')
 
     async def cog_check(self, ctx: commands.Context) -> bool:
         return await self.bot.is_owner(ctx.author)

@@ -3,7 +3,9 @@ from discord.ext import commands
 
 class FunCommands(commands.Cog, name='Fun'):
     def __init__(self, bot):
+        print('Loading FunCommands module...', end='')
         self.bot = bot
+        print(' Done')
 
     @commands.command(help='You spin me right round, baby, right round')
     async def spin(self, ctx):

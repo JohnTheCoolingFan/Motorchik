@@ -6,8 +6,10 @@ from discord.ext import commands
 
 class InfoChannels(commands.Cog):
     def __init__(self, bot: commands.Bot):
+        print('Loading InfoChannels module...', end='')
         self.bot = bot
         self.guild_config_cog = bot.get_cog('GuildConfigCog')
+        print(' Done')
 
     @commands.Cog.listener()
     async def on_member_ban(self, guild: discord.Guild, user: Union[discord.User, discord.Member]):

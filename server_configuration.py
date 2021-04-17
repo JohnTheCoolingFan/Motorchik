@@ -12,8 +12,10 @@ from guild_config import (CommandDisability, CommandImmutableError,
 
 class ServerConfiguration(commands.Cog, name='Server Configuration'):
     def __init__(self, bot: commands.Bot):
+        print('Loading Server Configuration module...', end='')
         self.bot = bot
         self.guild_config_cog = bot.get_cog('GuildConfigCog')
+        print(' Done')
 
     async def cog_check(self, ctx: commands.Context) -> bool:
         return ctx.author.permissions_in(ctx.channel).administrator

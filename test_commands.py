@@ -3,7 +3,9 @@ from discord.ext import commands
 
 class TestCommands(commands.Cog, name='Test Commands', command_attrs=dict(hidden=True)):
     def __init__(self, bot: commands.Bot):
+        print('Loading TestCommands module...', end='')
         self.bot = bot
+        print(' Done')
 
     @commands.command(help='Returns text typed after $test')
     async def test(self, ctx, *, text: str):

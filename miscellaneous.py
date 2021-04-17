@@ -6,7 +6,10 @@ import platform
 
 class Miscellaneous(commands.Cog):
     def __init__(self, bot: commands.Bot):
+        print('Loading Miscellaneous module...', end='')
         self.bot = bot
+        print(' Done')
+
     @commands.command()
     async def github(self, ctx: commands.Context):
         await ctx.send('https://github.com/JohnTheCoolingFan/Motorchik')

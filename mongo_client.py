@@ -16,7 +16,7 @@ from guild_config import (IMMUTABLE_COMMANDS, INFO_CHANNEL_TYPES,
 
 class GuildConfigCog(AbstractGuildConfigCog):
     def __init__(self, bot: commands.Bot):
-        print('[GUILDCONFIG][MONGODB-ASYNC] Initializing MongoDB connection')
+        print('Loading MongoDB GuildConfig module...', end='')
         # Bot
         self.bot = bot
         bot_config = bot.get_cog('BotConfig')
@@ -39,6 +39,7 @@ class GuildConfigCog(AbstractGuildConfigCog):
         # Cache
         self.__gc_cache = dict() # keys are ints representing guild ids
         self.__cf_cache = dict() # keys are tuples, consisting of: 1. guild id 2. command name
+        print(' Done')
 
     async def bot_check_once(self, ctx: commands.Context):
         # Don't bother to check the command filter if command can't be filtered
