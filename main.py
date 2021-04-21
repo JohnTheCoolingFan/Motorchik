@@ -1,6 +1,7 @@
 #! /usr/bin/python3
 
 # TODO: make expandable InfoChannels system
+# TODO: Slash commands.
 
 import discord
 from discord.ext import commands
