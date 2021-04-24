@@ -1,5 +1,8 @@
 #! /usr/bin/python3
 
+# TODO: Auto-Moderation system
+# TODO: Configurable per-server messages
+# TODO: warns and punishments system, with timed punishments
 # TODO: make expandable InfoChannels system
 # TODO: Slash commands.
 
