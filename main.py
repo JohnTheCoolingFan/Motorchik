@@ -11,14 +11,14 @@ from discord.ext import commands
 import argparse
 import motorchik_setup
 
+# Argument parsing
 argparser = argparse.ArgumentParser(description='Motorchik, discord bot with extensive per-guild configuration directly in discord chat.')
-
 argparser.add_argument('-s', '--setup', action='store_true')
 arguments = argparser.parse_args()
-
 if arguments.s or arguments.setup:
     motorchik_setup.interactive_setup()
 
+# Bot initialization
 bot = commands.Bot(command_prefix=commands.when_mentioned_or('$$'), intents=discord.Intents.all())
 
 @bot.event
