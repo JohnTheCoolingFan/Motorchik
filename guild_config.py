@@ -77,6 +77,7 @@ class GuildConfig:
         self.raw_data = guild_config_data
         self.guild_config_cog = guild_config_cog
 
+    # Update info channel's specs.
     async def update_info_channel(self, ic_name: str, state: Optional[bool] = None, new_channel: Optional[discord.TextChannel] = None):
         if ic_name in INFO_CHANNEL_TYPES:
             update_data = {}
@@ -91,20 +92,26 @@ class GuildConfig:
         else:
             raise InfoChannelNotFoundError(ic_name)
 
+    # Get discord.TextChannel for welcome channel
     async def get_welcome_channel(self) -> Optional[discord.TextChannel]:
         if self.raw_data['info_channels']['welcome']['enabled']:
             return self.guild.get_channel(self.raw_data['info_channels']['welcome']['channel_id'])
         else:
             return None
 
+    # Set the welcome channel
     async def set_welcome_channel(self, new_channel: discord.TextChannel):
         await self.update_info_channel('welcome', new_channel=new_channel)
 
+    # Enable welcome channel
     async def enable_welcome_channel(self):
         await self.update_info_channel('welcome', state=True)
 
+    # Disable welcome channel
     async def disable_welcome_channel(self):
         await self.update_info_channel('welcome', state=False)
+
+    # Below all the same for log channel
 
     async def get_log_channel(self) -> Optional[discord.TextChannel]:
         if self.raw_data['info_channels']['log']['enabled']:
@@ -121,9 +128,11 @@ class GuildConfig:
     async def disable_log_channel(self):
         await self.update_info_channel('log', state=False)
 
+    # Get default roles. Return empty list if no roles were set
     async def get_default_roles(self) -> List[discord.Role]:
         return [self.guild.get_role(role_id) for role_id in self.raw_data['default_roles']]
 
+    # Set default roles. Passing an empty iterable results in removing all default roles.
     async def set_default_roles(self, new_roles: Iterable[discord.Role]):
         new_data = self.guild_config_cog.update_guild(default_roles=new_roles)
         if new_data is not None:
@@ -139,13 +148,17 @@ class GuildConfig:
    # def get_xp(self, member: discord.Member) -> int:
        # return self.raw['members'][str(member.id)]
 
+# Abstract base class for all GuildConfigCog modules. Defines some methods that need to be overriden and adds some checks.
 class AbstractGuildConfigCog(commands.Cog):
     __gc_cache: Dict[int, GuildConfig]               # Guild ID is key, GuildConfig is the item
     __cf_cache: Dict[Tuple[int, str], CommandFilter] # Tuple of Guild ID and command name is key, CommandFilter is the item
 
     bot: commands.Bot
     name = 'GuildConfigCog' # Should not be changed!
+    gc_type: str = '' # Define the Cog type. FOr example: 'mongo', 'json'
 
+    # CommandFilter check
+    # Suggestion: remove "enabled" property and use CommandDisability.GLOBAL insted.
     async def bot_check_once(self, ctx: commands.Context):
         # Don't bother to check the command filter if command can't be filtered
         if ctx.command.name in IMMUTABLE_COMMANDS:
@@ -168,6 +181,7 @@ class AbstractGuildConfigCog(commands.Cog):
                 # Default
                 return True
 
+    # Handle CommandDisableError
     @commands.Cog.listener()
     async def on_command_error(self, ctx:commands.Context, exc: commands.errors.CommandError):
         # For now, just ignore if command is disabled
@@ -180,10 +194,12 @@ class AbstractGuildConfigCog(commands.Cog):
             print(f'Ignoring exception in command {ctx.command}:', file=sys.stderr)
             traceback.print_exception(type(exc), exc, exc.__traceback__, file=sys.stderr)
 
+    # I have a feeling that this is unnecessary
     def teardown(self):
         self.__gc_cache.clear()
         self.__cf_cache.clear()
 
+    # Get GuildConfig for given Guild.
     # Decide wheter next this one or the next is correct
     async def get_config(self, guild: discord.Guild) -> GuildConfig:
         pass
@@ -191,19 +207,22 @@ class AbstractGuildConfigCog(commands.Cog):
     async def get_guild(self, guild: discord.Guild) -> GuildConfig:
         return await self.get_config(guild)
 
-    # TODO
+    # Update GuildConfig in the DB
     async def update_guild(self,
                            guild: discord.Guild,
                            default_roles: List[discord.Role] = None,
                            info_channels: Dict[str, InfoChannelSpec] = None) -> dict:
         pass
 
+    # Add a new GuildConfig to the DB
     async def add_guild(self, guild: discord.Guild):
         pass
 
+    # Get a CommandFilter from the DB
     async def get_command_filter(self, guild: discord.Guild, name: str) -> CommandFilter:
         pass
 
+    # Update CommandFilter in the DB
     async def update_command_filter(self,
                                     guild: discord.Guild,
                                     name: str,
