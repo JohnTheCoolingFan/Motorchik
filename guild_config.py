@@ -58,8 +58,8 @@ class CommandFilter:
         self.filter_type = filter_type
         self.filter_list = filter_list
         self.enabled = enabled
-
         self.guild = guild
+
 class InfoChannelSpec(TypedDict):
     channel: discord.TextChannel = None
     enabled: bool = None
