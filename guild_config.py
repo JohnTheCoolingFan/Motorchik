@@ -1,5 +1,6 @@
 import sys
 import traceback
+from dataclasses import dataclass
 from enum import Enum
 from typing import Dict, Iterable, List, Optional, Tuple, TypedDict
 
@@ -46,6 +47,7 @@ class CommandImmutableError(GuildConfigError):
         self.name = name
 
 # Data structures
+@dataclass(frozen=True)
 class CommandFilter:
     name: str
     filter_type: CommandDisability
@@ -53,12 +55,12 @@ class CommandFilter:
     enabled: bool
     guild: discord.Guild
 
-    def __init__(self, name: str, filter_type: CommandDisability, filter_list: List[discord.TextChannel], enabled: bool, guild: discord.Guild):
-        self.name = name
-        self.filter_type = filter_type
-        self.filter_list = filter_list
-        self.enabled = enabled
-        self.guild = guild
+    # def __init__(self, name: str, filter_type: CommandDisability, filter_list: List[discord.TextChannel], enabled: bool, guild: discord.Guild):
+        # self.name = name
+        # self.filter_type = filter_type
+        # self.filter_list = filter_list
+        # self.enabled = enabled
+        # self.guild = guild
 
 class InfoChannelSpec(TypedDict):
     channel: discord.TextChannel = None
