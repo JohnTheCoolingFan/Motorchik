@@ -10,8 +10,12 @@ class Moderation(commands.Cog):
         self.guild_config_cog = bot.get_cog('GuildConfigCog')
         print(' Done')
 
+    # TODO: message filters
     @commands.has_permissions(manage_messages=True)
-    @commands.command(aliases=['clear', 'cl'], description='Clear chat', brief='Clear chat', help='Deletes specified count of messages in this channel. Can be used only by members with messages managing permission.')
+    @commands.command(aliases=['clear', 'cl'],
+                      description='Clear chat',
+                      brief='Clear chat',
+                      help='Deletes specified count of messages in this channel. Can be used only by members with messages managing permission.')
     async def clearchat(self, ctx: commands.Context, messages_count: int):
         await ctx.message.delete()
         deleted = await ctx.channel.purge(limit=messages_count)
