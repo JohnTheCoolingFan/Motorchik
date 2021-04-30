@@ -10,8 +10,7 @@ from discord.ext import commands
 IMMUTABLE_COMMANDS = ['command', 'config', 'say', 'say_dm']
 INFO_CHANNEL_TYPES = ['welcome', 'log'] # reports and mod-list are not yet implemented
 
-# TODO: make GuildConfig imdependent from mongodb, just use Cog's methods.
-# TODO: make Interface class (abstract class) for GuildConfigCog
+# TODO: Json module
 
 
 # Enums
