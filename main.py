@@ -27,18 +27,19 @@ async def on_ready():
 
 # Fundamental bot extensions
 bot.load_extension('bot_config')
-bot.load_extension('mongo_client')
+bot.load_extension('guild_config.mongo_client')
 bot.load_extension('service_tools')
 bot.load_extension('info_channels') # To be implemented, probably as a part of new guild config
+bot.load_extension('greetings')
+
 # Commands for moderators ans server owners
 bot.load_extension('server_configuration')
 bot.load_extension('moderation')
+
 # Other commands
-bot.load_extension('greetings')
-bot.load_extension('factorio')
-bot.load_extension('fun_commands')
-bot.load_extension('miscellaneous')
-bot.load_extension('test_commands')
-#bot.load_extension('user_configuration') # Not deleted completely, but disabled to be improved later
+bot.load_extension('simple_modules.factorio')
+bot.load_extension('simple_modules.fun_commands')
+bot.load_extension('simple_modules.miscellaneous')
+bot.load_extension('simple_modules.test_commands')
 
 bot.run(bot.get_cog('BotConfig').token)
