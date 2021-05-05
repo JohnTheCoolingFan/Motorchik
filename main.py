@@ -8,12 +8,10 @@
 
 import discord
 from discord.ext import commands
-import argparse
 import motorchik_setup
 
 # Argument parsing
-argparser = argparse.ArgumentParser(description='Motorchik, discord bot with extensive per-guild configuration directly in discord chat.')
-argparser.add_argument('-s', '--setup', action='store_true')
+argparser = motorchik_setup.get_argparser()
 arguments = argparser.parse_args()
 if arguments.s or arguments.setup:
     motorchik_setup.interactive_setup()

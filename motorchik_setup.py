@@ -1,8 +1,14 @@
 #! /usr/bin/python3
 
+import argparse
 import getpass
-import os.path as p
 import json
+import os.path as p
+
+def get_argparser():
+    argparser = argparse.ArgumentParser(description='Motorchik, discord bot with extensive per-guild configuration directly in discord chat.')
+    argparser.add_argument('-s', '--setup', action='store_true')
+    return argparser
 
 def interactive_setup():
     print('Welcome to Motorchik interactive setup. It will ask for some parameters and create a new config file with entered parameters')
