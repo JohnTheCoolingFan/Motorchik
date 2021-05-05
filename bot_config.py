@@ -29,6 +29,15 @@ class BotConfig(commands.Cog):
                 else:
                     print('Error: storage_method is "mongo", but there is no configuration for MongoDB (no "mongo" entry)')
                     sys.exit(1)
+            elif self.raw['storage_method'] == 'json':
+                if 'json' in self.raw:
+                    self.json_init()
+                else:
+                    print('Error: storage_method is "json", but there is no configuration for JSON (no "json" entry)')
+                    sys.exit(1)
+            else:
+                print('No config storage method specified. Running without GuildConfig is not supported yet.')
+                sys.exit(1)
             print(' Done')
         else:
             print('Error: config.json does not exist')
@@ -50,9 +59,19 @@ class BotConfig(commands.Cog):
         self.mongo['password'] = self.raw['mongo']['password']
 
     def json_init(self):
+        # More settings? Dunno.
         self.storage_method = 'mongo'
         self.json = dict()
-        self.json['dir'] = 'guilds' if 'dir' not in self.raw['json'] else self.raw['json']['dir'] # Set the dir
+        if 'dir' in self.raw['json']:
+            if isinstance(self.raw['json']['dir'], str):
+                self.json['dir'] = self.raw['json']['dir']
+            else:
+                print('Non-critical Error: "dir" entry for json config storage is not a string. Setting default ("guilds")')
+                self.json['dir'] = 'guilds'
+        else:
+            print('"dir" not found in json config storage method, defaulting to "guilds"')
+        if 'minimize' in self.raw['json']:
+            self.json['minimize'] = bool(self.raw['json']['minimize'])
 
 def setup(bot: commands.Bot):
     bot.add_cog(BotConfig('config.json', bot))
