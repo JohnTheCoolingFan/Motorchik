@@ -149,8 +149,8 @@ class GuildConfig:
 
 # Abstract base class for all GuildConfigCog modules. Defines some methods that need to be overriden and adds some checks.
 class AbstractGuildConfigCog(commands.Cog):
-    __gc_cache: Dict[int, GuildConfig]               # Guild ID is key, GuildConfig is the item
-    __cf_cache: Dict[Tuple[int, str], CommandFilter] # Tuple of Guild ID and command name is key, CommandFilter is the item
+    __gc_cache: Dict[int, GuildConfig]               = dict() # Guild ID is key, GuildConfig is the item
+    __cf_cache: Dict[Tuple[int, str], CommandFilter] = dict() # Tuple of Guild ID and command name is key, CommandFilter is the item
 
     bot: commands.Bot
     name = 'GuildConfigCog' # Should not be changed!
