@@ -37,8 +37,9 @@ class GuildConfigCog(AbstractGuildConfigCog):
         self.cf_collection = self.mongo_db.command_filters
 
         # Cache
-        self.__gc_cache = dict() # keys are ints representing guild ids
-        self.__cf_cache = dict() # keys are tuples, consisting of: 1. guild id 2. command name
+        # Done in parent class.
+        #self.__gc_cache = dict() # keys are ints representing guild ids
+        #self.__cf_cache = dict() # keys are tuples, consisting of: 1. guild id 2. command name
         print(' Done')
 
     async def bot_check_once(self, ctx: commands.Context):
