@@ -19,7 +19,10 @@ def interactive_setup():
 
     log_channel_id = input('(Optional) Log channel id. Leave empty for none: ')
     if log_channel_id:
-        config_data['log_channel'] = int(log_channel_id)
+        try:
+            config_data['log_channel'] = int(log_channel_id)
+        except ValueError:
+            config_data['log_channel'] = 0
     else:
         config_data['log_channel'] = 0
 
