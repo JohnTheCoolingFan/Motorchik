@@ -42,9 +42,12 @@ class GuildConfigCog(AbstractGuildConfigCog):
 
     def load_json(self, guild: discord.Guild):
         filename = self.path + str(guild.id) + '.json'
-        with open(filename) as guild_config_file:
-            guild_config_data = json.load(guild_config_file)
-        return guild_config_data
+        if p.exists(filename):
+            with open(filename) as guild_config_file:
+                guild_config_data = json.load(guild_config_file)
+            return guild_config_data
+        else:
+            return None
 
     async def get_config(self, guild: discord.Guild) -> GuildConfig:
         if guild.id in self.__gc_cache:
@@ -53,7 +56,10 @@ class GuildConfigCog(AbstractGuildConfigCog):
             filename = self.path + str(guild.id) + '.json'
             if not p.exists(filename):
                 await self.add_guild(guild)
-            guild_config = GuildConfig(guild, self.load_json(guild), self)
+            guild_config_data = self.load_json(guild)
+            if guild_config_data is None:
+                guild_config_data = self.add_guild(guild)
+            guild_config = GuildConfig(guild, guild_config_data, self)
             self.__gc_cache[guild.id] = guild_config
             return guild_config
 
@@ -92,6 +98,7 @@ class GuildConfigCog(AbstractGuildConfigCog):
             "command_filters": {}
         }
         self.dump_json(guild_config_data, guild)
+        return guild_config_data
 
     async def get_command_filter(self, guild: discord.Guild, name: str) -> Optional[CommandFilter]:
         guild_config_data = self.load_json(guild)
