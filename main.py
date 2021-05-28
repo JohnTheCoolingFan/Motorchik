@@ -13,7 +13,7 @@ import motorchik_setup
 # Argument parsing
 argparser = motorchik_setup.get_argparser()
 arguments = argparser.parse_args()
-if arguments.s or arguments.setup:
+if arguments.setup:
     motorchik_setup.interactive_setup()
 
 # Bot initialization
