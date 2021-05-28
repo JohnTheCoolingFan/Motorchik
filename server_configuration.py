@@ -66,7 +66,7 @@ class ServerConfiguration(commands.Cog, name='Server Configuration'):
             await ctx.send('Filter list set successfully ({} channels)\nFilter type set to "blacklist"'.format(len(blacklist_channels)))
 
     # Info channels configuration
-    @commands.group(invoke_without_command=True)
+    @commands.group(invoke_without_command=True, aliases=['ich'])
     async def info_channels(self, ctx: commands.Context):
         await ctx.send_help(ctx.command)
 
