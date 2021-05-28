@@ -23,6 +23,7 @@ Minimum supported python version is 3.7
   - Motorchik is highly configurable for servers (guilds).
   - Commands can be turned on/off or black/whitelisted by channel.
   - Various info channels are available to be configured
+  - Configuration can be stored multiple ways (if you want to host this bot by yourself).
  
 ## How to use / Installation
 ### 1. Clone this repo or download archived sources to your local machine
