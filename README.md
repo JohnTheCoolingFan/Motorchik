@@ -44,8 +44,8 @@ Minimum supported python version is 3.7
   ./main.py
   ```
 ### 4. Autostart
-  You can use any type of auto-starting. My host runs linux and I use systemd unit to run it automatically
-  `~/.config/systemd/user/Motorchik.service`
+  You can use any type of auto-starting. My host runs linux and I use systemd unit to run it automatically. This is an example unit for running it as root.
+  `~/.config/systemd/system/Motorchik.service`
   ```ini
   [Unit]
   Description=Motorchik, discord bot written in python
@@ -60,11 +60,10 @@ Minimum supported python version is 3.7
   ```
   And then
   ```
-  $ systemctl --user enable Motorchik.service
-  $ systemctl --user start Motorchik.service
+  $ systemctl enable --now Motorchik.service
   ```
   Everything will be logged to STDOUT, so you can view entire bot's log with:
   ```
-  $ journalctl --user -u Motorchik.service
+  $ journalctl -u Motorchik.service
   ```
   (Requires restarting the unit for entire log to show up)
