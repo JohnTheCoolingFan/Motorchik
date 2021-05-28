@@ -1,5 +1,5 @@
 """
-Manages loading asnd processing config values from config.json and loads GuildConfig clients
+Manages loading and processing config values from config.json and loads GuildConfig clients
 """
 
 import json
