@@ -86,7 +86,7 @@ class GuildConfig:
             if new_channel is not None:
                 update_data['channel'] = new_channel
             if update_data != {}:
-                new_data = self.guild_config_cog.update_guild(self.guild, info_channels={ic_name: update_data})
+                new_data = await self.guild_config_cog.update_guild(self.guild, info_channels={ic_name: update_data})
                 if new_data is not None:
                     self.raw_data = new_data
         else:

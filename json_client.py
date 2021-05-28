@@ -86,6 +86,7 @@ class GuildConfigCog(AbstractGuildConfigCog):
                         guild_config_data['info_channels'][ic_name]['enabled'] = ic_spec['enabled']
 
         self.dump_json(guild_config_data, guild)
+        return guild_config_data
 
     async def add_guild(self, guild: discord.Guild):
         default_channel = guild.system_channel.id if guild.system_channel is not None else guild.text_channels[0].id
