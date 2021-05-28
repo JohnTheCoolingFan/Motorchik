@@ -18,16 +18,19 @@ class GuildConfigCog(AbstractGuildConfigCog):
         self.bot = bot
         bot_config = bot.get_cog('BotConfig')
 
+        # Read config storage path from config.json, parsed by BotConfig cog
         self.path = bot_config.json['dir']
         if self.path[-1] != '/':
             self.path = self.path + '/'
 
+        # Some assitional checks for the validity of the path
         if not p.isdir(self.path):
             print('Error: {} is not a directory'.format(self.path), file=sys.stderr)
             sys.exit(1)
         if not p.exists(self.path):
             os.mkdir(self.path)
 
+        # Add the prefix beforehand
         self.path = self.path + 'guild_'
 
     def dump_json(self, data: dict, guild: discord.Guild):
