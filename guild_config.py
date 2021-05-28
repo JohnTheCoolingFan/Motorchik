@@ -67,6 +67,24 @@ class CommandFilter:
     # channel: discord.TextChannel = None
     # enabled: bool = None
 
+def default_guild_config_data(guild: discord.Guild):
+    default_channel = guild.system_channel.id if guild.system_channel is not None else guild.text_channels[0].ids
+    guild_config_data = {
+        "guild_name": guild.name,
+        "default_roles": [],
+        "info_channels": {
+            "welcome": {
+                "channel_id": default_channel,
+                "enabled": False
+            },
+            "log": {
+                "channel_id": default_channel,
+                "enabled": False
+            }
+        }
+    }
+    return guild_config_data
+
 # Updates DB info by itself, can be easily cached
 class GuildConfig:
     guild: discord.Guild

@@ -11,7 +11,7 @@ from guild_config import (IMMUTABLE_COMMANDS, INFO_CHANNEL_TYPES,
                           AbstractGuildConfigCog, CommandDisability,
                           CommandDisabledError, CommandFilter,
                           CommandImmutableError, CommandNotFoundError,
-                          GuildConfig)
+                          GuildConfig, default_guild_config_data)
 
 
 class GuildConfigCog(AbstractGuildConfigCog):
@@ -96,23 +96,8 @@ class GuildConfigCog(AbstractGuildConfigCog):
 
     # Add default GuildConfig to the database
     async def add_guild(self, guild: discord.Guild):
-        default_channel = guild.system_channel.id if guild.system_channel is not None else guild.text_channels[0].id
-        # New entries may be added in the future.
-        guild_config_data = {
-            "guild_id": guild.id,
-            "guild_name": guild.name, # For debugging purposes.
-            "default_roles": [], # Empty list by default
-            "info_channels": { # Names are hardcoded but there is some clearance for expanding Info Channels functionality
-                "welcome": {
-                    "channel_id": default_channel, # Use default system channel or the first text channel
-                    "enabled": False # Disabled by default
-                },
-                "log": {
-                    "channel_id": default_channel, # Same as with 'welcome' info channel
-                    "enabled": False # Disabled by default
-                }
-            }
-        }
+        guild_config_data = default_guild_config_data(guild)
+        guild_config_data['guild_id'] = guild.id
         guilds_collection = self.mongo_db.guilds
         insert_result = await guilds_collection.insert_one(guild_config_data)
         return insert_result.inserted_id

@@ -8,7 +8,8 @@ import discord
 from discord.ext import commands
 
 from guild_config import (INFO_CHANNEL_TYPES, AbstractGuildConfigCog,
-                          CommandDisability, CommandFilter, GuildConfig)
+                          CommandDisability, CommandFilter, GuildConfig,
+                          default_guild_config_data)
 
 
 class GuildConfigCog(AbstractGuildConfigCog):
@@ -88,22 +89,8 @@ class GuildConfigCog(AbstractGuildConfigCog):
         return guild_config_data
 
     async def add_guild(self, guild: discord.Guild):
-        default_channel = guild.system_channel.id if guild.system_channel is not None else guild.text_channels[0].id
-        guild_config_data = {
-            "guild_name": guild.name,
-            "default_roles": [],
-            "info_channels": {
-                "welcome": {
-                    "channel_id": default_channel,
-                    "enabled": False
-                },
-                "log": {
-                    "channel_id": default_channel,
-                    "enabled": False
-                }
-            },
-            "command_filters": {}
-        }
+        guild_config_data = default_guild_config_data(guild)
+        guild_config_data['command_filters'] = dict()
         self.dump_json(guild_config_data, guild)
         return guild_config_data
 
