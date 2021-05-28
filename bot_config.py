@@ -29,13 +29,13 @@ class BotConfig(commands.Cog):
             self.token = self.raw['token']
             if self.raw['storage_method'] == 'mongo':
                 if 'mongo' in self.raw:
-                    self.mongo_init()
+                    self.storage_method = 'mongo'
                 else:
                     print('Error: storage_method is "mongo", but there is no configuration for MongoDB (no "mongo" entry)')
                     sys.exit(1)
             elif self.raw['storage_method'] == 'json':
                 if 'json' in self.raw:
-                    self.json_init()
+                    self.storage_method = 'json'
                 else:
                     print('Error: storage_method is "json", but there is no configuration for JSON (no "json" entry)')
                     sys.exit(1)
@@ -48,7 +48,6 @@ class BotConfig(commands.Cog):
             sys.exit(1)
 
     def mongo_init(self):
-        self.storage_method = 'mongo'
         self.mongo = dict()
         self.mongo['host'] = self.raw['mongo']['host']
         port = self.raw['mongo']['port']
@@ -65,7 +64,6 @@ class BotConfig(commands.Cog):
 
     def json_init(self):
         # More settings? Dunno.
-        self.storage_method = 'json'
         self.json = dict()
         if 'dir' in self.raw['json']:
             if isinstance(self.raw['json']['dir'], str):
@@ -80,4 +78,12 @@ class BotConfig(commands.Cog):
         self.bot.load_extension('json_client')
 
 def setup(bot: commands.Bot):
-    bot.add_cog(BotConfig('config.json', bot))
+    bot_config_cog = BotConfig('config.json', bot)
+    bot.add_cog(bot_config_cog)
+    if bot_config_cog.storage_method == 'mongo':
+        bot_config_cog.mongo_init()
+    elif bot_config_cog.storage_method == 'json':
+        bot_config_cog.json_init()
+    else:
+        print("Error: no storage method", file=sys.stderr)
+        sys.exit(1)
