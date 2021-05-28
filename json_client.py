@@ -14,7 +14,7 @@ from guild_config import (INFO_CHANNEL_TYPES, AbstractGuildConfigCog,
 
 class GuildConfigCog(AbstractGuildConfigCog):
     def __init__(self, bot: commands.Bot):
-        print('Loading JSON GuildConfig module', end='')
+        print('Loading JSON GuildConfig module...', end='')
         self.bot = bot
         bot_config = bot.get_cog('BotConfig')
 
@@ -32,6 +32,7 @@ class GuildConfigCog(AbstractGuildConfigCog):
 
         # Add the prefix beforehand
         self.path = self.path + 'guild_'
+        print(' Done')
 
     def dump_json(self, data: dict, guild: discord.Guild):
         filename = self.path + str(guild.id) + '.json'
