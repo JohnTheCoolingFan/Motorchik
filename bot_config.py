@@ -65,7 +65,7 @@ class BotConfig(commands.Cog):
 
     def json_init(self):
         # More settings? Dunno.
-        self.storage_method = 'mongo'
+        self.storage_method = 'json'
         self.json = dict()
         if 'dir' in self.raw['json']:
             if isinstance(self.raw['json']['dir'], str):
