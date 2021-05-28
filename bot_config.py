@@ -57,6 +57,7 @@ class BotConfig(commands.Cog):
                 print('Invalid port: {}'.format(port))
         self.mongo['username'] = self.raw['mongo']['username']
         self.mongo['password'] = self.raw['mongo']['password']
+        self.bot.load_extension('guild_config.mongo_client')
 
     def json_init(self):
         # More settings? Dunno.
@@ -72,6 +73,7 @@ class BotConfig(commands.Cog):
             print('"dir" not found in json config storage method, defaulting to "guilds"')
         if 'minimize' in self.raw['json']:
             self.json['minimize'] = bool(self.raw['json']['minimize'])
+        self.bot.load_extension('guild_config.json_client')
 
 def setup(bot: commands.Bot):
     bot.add_cog(BotConfig('config.json', bot))
