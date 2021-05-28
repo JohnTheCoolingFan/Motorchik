@@ -2,7 +2,7 @@ import json
 import os
 import os.path as p
 import sys
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 
 import discord
 from discord.ext import commands
@@ -13,6 +13,9 @@ from guild_config import (INFO_CHANNEL_TYPES, AbstractGuildConfigCog,
 
 
 class GuildConfigCog(AbstractGuildConfigCog):
+    __gc_cache: Dict[int, GuildConfig]               = dict() # Guild ID is key, GuildConfig is the item
+    __cf_cache: Dict[Tuple[int, str], CommandFilter] = dict() # Tuple of Guild ID and command name is key, CommandFilter is the item
+
     def __init__(self, bot: commands.Bot):
         print('Loading JSON GuildConfig module...', end='')
         self.bot = bot
