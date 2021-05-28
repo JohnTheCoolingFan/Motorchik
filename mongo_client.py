@@ -11,7 +11,7 @@ from guild_config import (IMMUTABLE_COMMANDS, INFO_CHANNEL_TYPES,
                           AbstractGuildConfigCog, CommandDisability,
                           CommandDisabledError, CommandFilter,
                           CommandImmutableError, CommandNotFoundError,
-                          GuildConfig, InfoChannelSpec)
+                          GuildConfig)
 
 
 class GuildConfigCog(AbstractGuildConfigCog):
@@ -111,7 +111,7 @@ class GuildConfigCog(AbstractGuildConfigCog):
 
     async def update_guild(self, guild: discord.Guild,
                            default_roles: List[discord.Role] = None,
-                           info_channels: Dict[str, InfoChannelSpec] = None) -> Optional[dict]:
+                           info_channels: Dict[str, dict] = None) -> Optional[dict]:
         mongo_update_data = {'$set': {}}
         if default_roles is not None:
             mongo_update_data['$set']['default_roles'] = [role.id for role in default_roles]

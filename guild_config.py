@@ -2,7 +2,7 @@ import sys
 import traceback
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, Iterable, List, Optional, Tuple, TypedDict
+from typing import Dict, Iterable, List, Optional, Tuple
 
 import discord
 from discord.ext import commands
@@ -62,9 +62,10 @@ class CommandFilter:
         # self.enabled = enabled
         # self.guild = guild
 
-class InfoChannelSpec(TypedDict):
-    channel: discord.TextChannel = None
-    enabled: bool = None
+# TypedDict is not available in Python 3.7
+# class InfoChannelSpec(TypedDict):
+    # channel: discord.TextChannel = None
+    # enabled: bool = None
 
 # Updates DB info by itself, can be easily cached
 class GuildConfig:

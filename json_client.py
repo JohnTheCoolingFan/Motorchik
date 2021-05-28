@@ -8,8 +8,7 @@ import discord
 from discord.ext import commands
 
 from guild_config import (INFO_CHANNEL_TYPES, AbstractGuildConfigCog,
-                          CommandDisability, CommandFilter, GuildConfig,
-                          InfoChannelSpec)
+                          CommandDisability, CommandFilter, GuildConfig)
 
 
 class GuildConfigCog(AbstractGuildConfigCog):
@@ -72,7 +71,7 @@ class GuildConfigCog(AbstractGuildConfigCog):
 
     async def update_guild(self, guild: discord.Guild,
                            default_roles: List[discord.Role] = None,
-                           info_channels: Dict[str, InfoChannelSpec] = None) -> Optional[dict]:
+                           info_channels: Dict[str, dict] = None) -> Optional[dict]:
         guild_config_data = await self.get_guild_config_data(guild)
 
         if default_roles is not None:
