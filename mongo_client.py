@@ -1,6 +1,6 @@
 import sys
 import traceback
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 
 import discord
 import pymongo
