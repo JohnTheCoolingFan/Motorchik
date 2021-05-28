@@ -25,7 +25,6 @@ async def on_ready():
 
 # Fundamental bot extensions
 bot.load_extension('bot_config')
-#bot.load_extension('guild_config.mongo_client') # Done in BotConfig
 bot.load_extension('service_tools')
 bot.load_extension('info_channels') # To be implemented, probably as a part of new guild config
 bot.load_extension('greetings')
