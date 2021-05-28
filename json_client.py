@@ -80,9 +80,9 @@ class GuildConfigCog(AbstractGuildConfigCog):
         if info_channels is not None:
             for ic_name, ic_spec in info_channels.items():
                 if ic_name in INFO_CHANNEL_TYPES:
-                    if ic_spec['channel'] is not None:
+                    if 'channel' in ic_spec and ic_spec['channel'] is not None:
                         guild_config_data['info_channels'][ic_name]['channel_id'] = ic_spec['channel'].id
-                    if ic_spec['enabled'] is not None:
+                    if 'enabled'in ic_spec and ic_spec['enabled'] is not None:
                         guild_config_data['info_channels'][ic_name]['enabled'] = ic_spec['enabled']
 
         self.dump_json(guild_config_data, guild)
