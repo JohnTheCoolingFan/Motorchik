@@ -1,5 +1,7 @@
 import json
+import os
 import os.path as p
+import sys
 from typing import Dict, List, Optional
 
 import discord
@@ -19,6 +21,13 @@ class GuildConfigCog(AbstractGuildConfigCog):
         self.path = bot_config.json['dir']
         if self.path[-1] != '/':
             self.path = self.path + '/'
+
+        if not p.isdir(self.path):
+            print('Error: {} is not a directory'.format(self.path), file=sys.stderr)
+            sys.exit(1)
+        if not p.exists(self.path):
+            os.mkdir(self.path)
+
         self.path = self.path + 'guild_'
 
     def dump_json(self, data: dict, guild: discord.Guild):
