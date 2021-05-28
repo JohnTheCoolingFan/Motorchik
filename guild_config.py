@@ -212,7 +212,7 @@ class AbstractGuildConfigCog(commands.Cog):
     async def update_guild(self,
                            guild: discord.Guild,
                            default_roles: List[discord.Role] = None,
-                           info_channels: Dict[str, InfoChannelSpec] = None) -> dict:
+                           info_channels: Dict[str, dict] = None) -> dict:
         pass
 
     # Add a new GuildConfig to the DB
