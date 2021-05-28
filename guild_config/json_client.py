@@ -52,17 +52,14 @@ class GuildConfigCog(AbstractGuildConfigCog):
             filename = self.path + str(guild.id) + '.json'
             if not p.exists(filename):
                 await self.add_guild(guild)
-            with open(filename, 'r') as guild_config_file:
-                guild_config = GuildConfig(guild, json.load(guild_config_file), self)
-                self.__gc_cache[guild.id] = guild_config
-                return guild_config
+            guild_config = GuildConfig(guild, self.load_json(guild), self)
+            self.__gc_cache[guild.id] = guild_config
+            return guild_config
 
     async def update_guild(self, guild: discord.Guild,
                            default_roles: List[discord.Role] = None,
                            info_channels: Dict[str, InfoChannelSpec] = None) -> Optional[dict]:
-        filename = self.path + str(guild.id) + '.json'
-        with open(filename) as guild_config_file:
-            guild_config_data = json.load(guild_config_file)
+        guild_config_data = self.load_json(guild)
 
         if default_roles is not None:
             guild_config_data['default_roles'] = [role.id for role in default_roles]
@@ -96,9 +93,7 @@ class GuildConfigCog(AbstractGuildConfigCog):
         self.dump_json(guild_config_data, guild)
 
     async def get_command_filter(self, guild: discord.Guild, name: str) -> Optional[CommandFilter]:
-        filename = self.path + str(guild.id) + '.json'
-        with open(filename) as guild_config_file:
-            guild_config_data = json.load(guild_config_file)
+        guild_config_data = self.load_json(guild)
 
         if name in guild_config_data['command_filters']:
             command_filter_data = guild_config_data['command_filters'][name]
@@ -116,9 +111,7 @@ class GuildConfigCog(AbstractGuildConfigCog):
                                     append_channels: bool = False,
                                     enabled: bool = None,
                                     filter_type: CommandDisability = None):
-        filename = self.path + str(guild.id) + '.json'
-        with open(filename) as guild_config_file:
-            guild_config_data = json.load(guild_config_file)
+        guild_config_data = self.load_json(guild)
 
         if name not in guild_config_data['command_filters']:
             guild_config_data['command_filters'][name] = {"type": 2, "channels": [], "enabled": True}
