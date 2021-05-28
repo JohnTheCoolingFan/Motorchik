@@ -39,6 +39,12 @@ class GuildConfigCog(AbstractGuildConfigCog):
             json.dump(data, guild_config_file,
                       indent=4, sort_keys=True) # Easy way to change saving settings in one place
 
+    def load_json(self, guild: discord.Guild):
+        filename = self.path + str(guild.id) + '.json'
+        with open(filename) as guild_config_file:
+            guild_config_data = json.load(guild_config_file)
+        return guild_config_data
+
     async def get_config(self, guild: discord.Guild) -> GuildConfig:
         if guild.id in self.__gc_cache:
             return self.__gc_cache[guild.id]
