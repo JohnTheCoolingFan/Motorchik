@@ -45,45 +45,12 @@ class GuildConfigCog(AbstractGuildConfigCog):
         #self.__cf_cache = dict() # keys are tuples, consisting of: 1. guild id 2. command name
         print(' Done')
 
-    async def bot_check_once(self, ctx: commands.Context):
-        # Don't bother to check the command filter if command can't be filtered
-        if ctx.command.name in IMMUTABLE_COMMANDS:
-            return True
-        else:
-            command_filter = await self.get_command_filter(ctx.guild, ctx.command.name)
-            # Command filter isn't set up, so it's allowed to run
-            if command_filter is None:
-                return True
-            else:
-                # If command is disabled on the server (guild) globally, it's not allowed to run
-                if not command_filter.enabled:
-                    raise CommandDisabledError(ctx.guild, ctx.command.name, ctx.channel, CommandDisability.GLOBAL)
-                # If command was called in a blacklisted channel, it's not allowed to run
-                if command_filter.filter_type == CommandDisability.BLACKLISTED and ctx.channel in command_filter.filter_list:
-                    raise CommandDisabledError(ctx.guild, ctx.command.name, ctx.channel, command_filter.filter_type)
-                # If command wasn't called in a whitelisted channel, it's not allowed to run
-                if command_filter.filter_type == CommandDisability.WHITELISTED and ctx.channel not in command_filter.filter_list:
-                    raise CommandDisabledError(ctx.guild, ctx.command.name, ctx.channel, command_filter.filter_type)
-                # Default
-                return True
-
-    @commands.Cog.listener()
-    async def on_command_error(self, ctx:commands.Context, exc: commands.errors.CommandError):
-        # For now, just ignore if command is disabled
-        # TODO: message for when command is disabled
-        # TODO: settingg in GuildConfig if these messages should be displayed
-        if isinstance(exc, CommandDisabledError):
-            return
-        else:
-            # The default behaviour. I fell like there is a better way to do this. It was copied from discord.py source
-            print(f'Ignoring exception in command {ctx.command}:', file=sys.stderr)
-            traceback.print_exception(type(exc), exc, exc.__traceback__, file=sys.stderr)
-
     # This could be a command...
     async def create_indexes(self):
         # Create indexes
         # I'm not sure what indexing method to use for guild ids, but for now let it be ascending...
         # I'm not even sure if I really need to index guild ids
+        # This is currently unused
         await self.cf_collection.create_index([('guild_id', pymongo.ASCENDING), ('name', pymongo.TEXT)])
         await self.guilds_collection.create_index([('guild_id', pymongo.ASCENDING)])
 
@@ -107,10 +74,6 @@ class GuildConfigCog(AbstractGuildConfigCog):
             guild_config = GuildConfig(guild, guild_config_data, self)
             self.__gc_cache[guild.id] = guild_config
             return guild_config
-
-    # TODO: replace all occurences
-    async def get_guild(self, guild: discord.Guild) -> GuildConfig:
-        return await self.get_config(guild)
 
     async def update_guild(self, guild: discord.Guild,
                            default_roles: List[discord.Role] = None,
