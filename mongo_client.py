@@ -15,6 +15,9 @@ from guild_config import (IMMUTABLE_COMMANDS, INFO_CHANNEL_TYPES,
 
 
 class GuildConfigCog(AbstractGuildConfigCog):
+    __gc_cache: Dict[int, GuildConfig]               = dict() # Guild ID is key, GuildConfig is the item
+    __cf_cache: Dict[Tuple[int, str], CommandFilter] = dict() # Tuple of Guild ID and command name is key, CommandFilter is the item
+
     def __init__(self, bot: commands.Bot):
         print('Loading MongoDB GuildConfig module...', end='')
         # Bot
