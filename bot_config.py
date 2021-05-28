@@ -1,3 +1,7 @@
+"""
+Manages loading asnd processing config values from config.json and loads GuildConfig clients
+"""
+
 import json
 import os.path as p
 import sys
