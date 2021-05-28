@@ -134,7 +134,7 @@ class GuildConfig:
 
     # Set default roles. Passing an empty iterable results in removing all default roles.
     async def set_default_roles(self, new_roles: Iterable[discord.Role]):
-        new_data = self.guild_config_cog.update_guild(default_roles=new_roles)
+        new_data = await self.guild_config_cog.update_guild(self.guild, default_roles=new_roles)
         if new_data is not None:
             self.raw_data = new_data
 
