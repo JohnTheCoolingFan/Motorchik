@@ -49,6 +49,12 @@ class GuildConfigCog(AbstractGuildConfigCog):
         else:
             return None
 
+    def get_guild_config_data(self, guild):
+        guild_config_data = self.load_json(guild)
+        if guild_config_data is None:
+            guild_config_data = self.add_guild(guild)
+        return guild_config_data
+
     async def get_config(self, guild: discord.Guild) -> GuildConfig:
         if guild.id in self.__gc_cache:
             return self.__gc_cache[guild.id]
@@ -56,9 +62,7 @@ class GuildConfigCog(AbstractGuildConfigCog):
             filename = self.path + str(guild.id) + '.json'
             if not p.exists(filename):
                 await self.add_guild(guild)
-            guild_config_data = self.load_json(guild)
-            if guild_config_data is None:
-                guild_config_data = self.add_guild(guild)
+            guild_config_data = self.get_guild_config_data(guild)
             guild_config = GuildConfig(guild, guild_config_data, self)
             self.__gc_cache[guild.id] = guild_config
             return guild_config
@@ -66,7 +70,7 @@ class GuildConfigCog(AbstractGuildConfigCog):
     async def update_guild(self, guild: discord.Guild,
                            default_roles: List[discord.Role] = None,
                            info_channels: Dict[str, InfoChannelSpec] = None) -> Optional[dict]:
-        guild_config_data = self.load_json(guild)
+        guild_config_data = self.get_guild_config_data(guild)
 
         if default_roles is not None:
             guild_config_data['default_roles'] = [role.id for role in default_roles]
@@ -101,7 +105,7 @@ class GuildConfigCog(AbstractGuildConfigCog):
         return guild_config_data
 
     async def get_command_filter(self, guild: discord.Guild, name: str) -> Optional[CommandFilter]:
-        guild_config_data = self.load_json(guild)
+        guild_config_data = self.get_guild_config_data(guild)
 
         if name in guild_config_data['command_filters']:
             command_filter_data = guild_config_data['command_filters'][name]
@@ -119,7 +123,7 @@ class GuildConfigCog(AbstractGuildConfigCog):
                                     append_channels: bool = False,
                                     enabled: bool = None,
                                     filter_type: CommandDisability = None):
-        guild_config_data = self.load_json(guild)
+        guild_config_data = self.get_guild_config_data(guild)
 
         if name not in guild_config_data['command_filters']:
             guild_config_data['command_filters'][name] = {"type": 2, "channels": [], "enabled": True}
