@@ -10,7 +10,6 @@ from discord.ext import commands
 IMMUTABLE_COMMANDS = ['command', 'config', 'say', 'say_dm']
 INFO_CHANNEL_TYPES = ['welcome', 'log'] # reports and mod-list are not yet implemented
 
-# TODO: Json module
 # TODO: Module that stores data in separate channel in the discord guild itself.
 
 
@@ -55,13 +54,6 @@ class CommandFilter:
     enabled: bool
     guild: discord.Guild
 
-    # def __init__(self, name: str, filter_type: CommandDisability, filter_list: List[discord.TextChannel], enabled: bool, guild: discord.Guild):
-        # self.name = name
-        # self.filter_type = filter_type
-        # self.filter_list = filter_list
-        # self.enabled = enabled
-        # self.guild = guild
-
 # TypedDict is not available in Python 3.7
 # class InfoChannelSpec(TypedDict):
     # channel: discord.TextChannel = None
@@ -89,9 +81,8 @@ def default_guild_config_data(guild: discord.Guild):
 class GuildConfig:
     guild: discord.Guild
 
-    def __init__(self, guild: discord.Guild, guild_config_data, guild_config_cog):
-        # The guild_config_data type is weird but that's what is being returned by pymongo's find_one() (probably).
-        # But it can still be used as a dict, I think.
+    def __init__(self, guild: discord.Guild, guild_config_data: dict, guild_config_cog):
+        # guild_config_data type is assumed to be dict but not always is.
         self.guild = guild
         self.raw_data = guild_config_data
         self.guild_config_cog = guild_config_cog
