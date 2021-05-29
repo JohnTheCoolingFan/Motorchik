@@ -68,3 +68,13 @@ Minimum supported python version is 3.7
   $ journalctl -u Motorchik.service
   ```
   (Requires restarting the unit for entire log to show up)
+
+### Features on TODO
+  - [General] Support for modern Discord features, such as slash commands and Message components (buttons)
+  - [General] Localization and per-server message configuration
+  - [Moderation] Automatic moderation, such as spam filtering and timed warns/bans/kicks (e.g. [member] banned for 3 days)
+  - [Moderation] Make $$clearchat more powerful
+  - [Server Configuration] Better configuration interface
+  - [GuildConfig] More storage methods
+  - [Factorio] Better thumbnail color detection
+  - [Factorio] Customizable mod-list that is configured like welcome/log info channel
