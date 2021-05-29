@@ -72,25 +72,25 @@ class Greetings(commands.Cog):
     async def hello(self, ctx: commands.Context):
         await ctx.send('Hello!')
 
-    @commands.command(aliases=['gutentag'], description='\"Hello\" in German', brief='\"Hello\" in German', help='Returns \"Hello\" in German')
-    async def hello_german(self, ctx: commands.Context):
-        await ctx.send('Guten tag')
-
     @commands.command(aliases=['privet'], description='\"Hello\" in Russian', brief='\"Hello\" in Russian', help='Returns \"Hello\" in Russian')
     async def hello_russian(self, ctx: commands.Context):
         await ctx.send('Приветствую!')
+
+    @commands.command(aliases=['gutentag'], description='\"Hello\" in German', brief='\"Hello\" in German', help='Returns \"Hello\" in German')
+    async def hello_german(self, ctx: commands.Context):
+        await ctx.send('Guten tag')
 
     @commands.command(hidden=True, help='tag')
     async def guten(self, ctx: commands.Context):
         await ctx.send('tag')
 
-    @commands.command(hidden=True, aliases=['живой?'])
-    async def is_alive_rus(self, ctx: commands.Context):
-        await ctx.send('Да')
-
     @commands.command(hidden=True, aliases=['youok?'])
     async def is_alive_eng(self, ctx: commands.Context):
         await ctx.send('yes')
+
+    @commands.command(hidden=True, aliases=['живой?'])
+    async def is_alive_rus(self, ctx: commands.Context):
+        await ctx.send('Да')
 
 
 def setup(bot):
