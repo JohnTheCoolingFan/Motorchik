@@ -31,20 +31,20 @@ class BotConfig(commands.Cog):
                 if 'mongo' in self.raw:
                     self.storage_method = 'mongo'
                 else:
-                    print('Error: storage_method is "mongo", but there is no configuration for MongoDB (no "mongo" entry)')
+                    print('Error: storage_method is "mongo", but there is no configuration for MongoDB (no "mongo" entry)', file=sys.stderr)
                     sys.exit(1)
             elif self.raw['storage_method'] == 'json':
                 if 'json' in self.raw:
                     self.storage_method = 'json'
                 else:
-                    print('Error: storage_method is "json", but there is no configuration for JSON (no "json" entry)')
+                    print('Error: storage_method is "json", but there is no configuration for JSON (no "json" entry)', file=sys.stderr)
                     sys.exit(1)
             else:
-                print('No config storage method specified. Running without GuildConfig is not supported yet.')
+                print('No config storage method specified. Running without GuildConfig is not supported yet.', file=sys.stderr)
                 sys.exit(1)
             print(' Done')
         else:
-            print('Error: config.json does not exist')
+            print('Error: config.json does not exist', file=sys.stderr)
             sys.exit(1)
 
     def mongo_init(self):
