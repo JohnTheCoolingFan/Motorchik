@@ -196,7 +196,7 @@ class AbstractGuildConfigCog(commands.Cog):
     async def on_command_error(self, ctx:commands.Context, exc: commands.errors.CommandError):
         # For now, just ignore if command is disabled
         # TODO: message for when command is disabled
-        # TODO: settingg in GuildConfig if these messages should be displayed
+        #       send the message in DM, also would need an opt-out system, so UserConfig will probably need to be brought back...
         if isinstance(exc, CommandDisabledError):
             return
         else:
