@@ -1,10 +1,8 @@
 #! /usr/bin/python3
 
-# TODO: Auto-Moderation system
-# TODO: Configurable per-server messages
-# TODO: warns and punishments system, with timed punishments
-# TODO: make expandable InfoChannels system
+# Requires discord.py 2.0 release:
 # TODO: Slash commands.
+# TODO: Buttons (for ServerConfiguration?)
 
 import discord
 from discord.ext import commands

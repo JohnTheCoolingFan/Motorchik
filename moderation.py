@@ -2,6 +2,8 @@ import discord
 from discord.ext import commands
 from typing import Optional
 
+# TODO: Auto-moderation: spam filtering and alike
+# TODO: warns, punishments, timed punishments
 
 class Moderation(commands.Cog):
     def __init__(self, bot: commands.Bot):
