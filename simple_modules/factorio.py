@@ -101,7 +101,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
 
     async def find_mod(self, mod_name: str) -> str:
         search_response = await self.__session.get(MODPORTAL_URL + '/query/' + mod_name.replace(' ', '%20'))
-        if search_response.statuse == 200:
+        if search_response.status == 200:
             soup = BeautifulSoup(await search_response.text(), 'html.parser')
             mod_h2 = soup.find('h2', {'class': 'mb0'})
             if mod_h2:
