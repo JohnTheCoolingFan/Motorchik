@@ -1,3 +1,7 @@
+"""
+Manages updateing info-channels (Currently only `log` channel)
+"""
+
 from typing import Union
 
 import discord

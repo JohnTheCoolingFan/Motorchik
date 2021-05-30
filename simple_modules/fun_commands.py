@@ -1,3 +1,7 @@
+"""
+Commands for fun
+"""
+
 from discord.ext import commands
 
 

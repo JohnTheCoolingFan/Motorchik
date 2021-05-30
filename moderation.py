@@ -1,3 +1,7 @@
+"""
+Commands for moderation, such as ban, kick and clearchat
+"""
+
 import discord
 from discord.ext import commands
 from typing import Optional

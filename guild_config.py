@@ -1,3 +1,9 @@
+"""
+Library of some sort for making GuildConfig clients.
+Describes GuildConfig interface that can be used in other modules.
+Describes GuildConfigCog methods that GuildConfig class uses to get and set data.
+"""
+
 import sys
 import traceback
 from dataclasses import dataclass

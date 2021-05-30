@@ -1,3 +1,8 @@
+"""
+Commands about Factorio. Mostly just request data from mods.factorio.com
+and make embed from it.
+"""
+
 import asyncio
 
 import aiohttp

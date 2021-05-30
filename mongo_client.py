@@ -1,5 +1,7 @@
-import sys
-import traceback
+"""
+Module that stores GuildConfig data in MongoDB
+"""
+
 from typing import Dict, List, Optional, Tuple
 
 import discord

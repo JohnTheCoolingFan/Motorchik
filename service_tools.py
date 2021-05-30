@@ -1,3 +1,7 @@
+"""
+Commands intended to be used only by bot owner
+"""
+
 from discord.ext import commands
 import discord
 

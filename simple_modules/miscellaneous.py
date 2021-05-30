@@ -1,3 +1,7 @@
+"""
+Miscellaneous commands
+"""
+
 from discord.ext import commands
 import datetime
 import discord

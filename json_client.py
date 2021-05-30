@@ -1,3 +1,7 @@
+"""
+GuildConfigCog to store GuildConfig data on disk in JSON files
+"""
+
 import json
 import os
 import os.path as p

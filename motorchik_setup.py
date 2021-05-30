@@ -1,5 +1,9 @@
 #! /usr/bin/python3
 
+"""
+Script/module to setup new Motorchik instance. Creates config.json.
+"""
+
 import argparse
 import getpass
 import json

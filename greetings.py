@@ -1,3 +1,8 @@
+"""
+Manages `welcome` info-channel and automatic role giving
+Also some 'fun' commands
+"""
+
 from datetime import datetime, timedelta
 from typing import List
 

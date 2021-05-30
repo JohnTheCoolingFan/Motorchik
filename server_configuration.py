@@ -1,3 +1,7 @@
+"""
+Commands for configuring GuildConfig for current guild
+"""
+
 import sys
 import traceback
 from typing import Optional
