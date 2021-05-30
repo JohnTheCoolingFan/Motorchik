@@ -67,7 +67,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
 
     async def get_mod_info(self, mod_name: str) -> dict:
         api_response = await self.__session.get(MODPORTAL_URL + '/api/mods/' + mod_name)
-        if api_response.statuse == 200:
+        if api_response.status == 200:
             json_req = await api_response.json()
             latest_release = natsorted(json_req['releases'], key=lambda release: release['version'], reverse=True)[0]
             if json_req['thumbnail'] != '/assets/.thumb.png':
