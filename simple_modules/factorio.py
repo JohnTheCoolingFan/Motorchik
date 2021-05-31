@@ -77,26 +77,25 @@ class FactorioCog(commands.Cog, name='Factorio'):
             json_req = await api_response.json()
             latest_release = natsorted(json_req['releases'], key=lambda release: release['version'], reverse=True)[0]
             if json_req['thumbnail'] != '/assets/.thumb.png':
-                #thumb_color = discord.Color.from_rgb(*ColorThief(
-                    #BytesIO(req.get('https://mods-data.factorio.com' + json_req['thumbnail']).content)).get_color())
+                #thumb_color = discord.Color.from_rgb(*ColorThief(BytesIO(req.get('https://mods-data.factorio.com' + json_req['thumbnail']).content)).get_color())
                 thumbnail_url = 'https://mods-data.factorio.com' + json_req['thumbnail']
             else:
                 #thumb_color = discord.Color.from_rgb(47, 137, 197)
                 thumbnail_url = ''
             thumb_color = success_embed_color
             return True, dict(title=json_req['title'],
-                        description=json_req['summary'],
-                        url=MODPORTAL_URL + '/mod/' + mod_name,
-                        timestamp=parser.isoparse(latest_release['released_at']),
-                        color=thumb_color,
-                        thumbnail_url=thumbnail_url,
-                        game_version=latest_release['info_json']['factorio_version'],
-                        download_official=MODPORTAL_URL + latest_release['download_url'],
-                        download_launcher=LAUNCHER_URL.format(mod_name,latest_release['version']),
-                        latest_version=latest_release['version'],
-                        downloads_count=json_req['downloads_count'],
-                        author=json_req['owner'],
-                        mod_name=mod_name)
+                              description=json_req['summary'],
+                              url=MODPORTAL_URL + '/mod/' + mod_name,
+                              timestamp=parser.isoparse(latest_release['released_at']),
+                              color=thumb_color,
+                              thumbnail_url=thumbnail_url,
+                              game_version=latest_release['info_json']['factorio_version'],
+                              download_official=MODPORTAL_URL + latest_release['download_url'],
+                              download_launcher=LAUNCHER_URL.format(mod_name,latest_release['version']),
+                              latest_version=latest_release['version'],
+                              downloads_count=json_req['downloads_count'],
+                              author=json_req['owner'],
+                              mod_name=mod_name)
         else:
             new_mod_name = await self.find_mod(mod_name)
             if new_mod_name:
