@@ -102,17 +102,22 @@ class GuildConfigCog(AbstractGuildConfigCog):
 
     # return some generic empty filter by default? Or processing None is just simplier?
     async def get_command_filter(self, guild: discord.Guild, name: str) -> Optional[CommandFilter]:
-        guild_config_data = await self.get_guild_config_data(guild)
-
-        if name in guild_config_data['command_filters']:
-            command_filter_data = guild_config_data['command_filters'][name]
-            return CommandFilter(name,
-                                 CommandDisability(command_filter_data['type']),
-                                 [self.bot.get_channel(channel_id) for channel_id in command_filter_data['channels']],
-                                 command_filter_data['enabled'],
-                                 guild)
+        if (guild.id, name) in self.__cf_cache:
+            return self.__cf_cache[(guild.id, name)]
         else:
-            return None
+            guild_config_data = await self.get_guild_config_data(guild)
+
+            if name in guild_config_data['command_filters']:
+                command_filter_data = guild_config_data['command_filters'][name]
+                command_filter =  CommandFilter(name,
+                                                CommandDisability(command_filter_data['type']),
+                                                [self.bot.get_channel(channel_id) for channel_id in command_filter_data['channels']],
+                                                command_filter_data['enabled'],
+                                                guild)
+                self.__cf_cache[(guild.id, name)] = command_filter
+                return command_filter
+            else:
+                return None
 
     async def update_command_filter(self, guild: discord.Guild,
                                     name: str,
@@ -137,6 +142,7 @@ class GuildConfigCog(AbstractGuildConfigCog):
 
         guild_config_data['command_filters'][name] = command_filter_data
         self.dump_json(guild_config_data, guild)
+        del self.__cf_cache[(guild.id, name)]
 
 def setup(bot: commands.Bot):
     bot.add_cog(GuildConfigCog(bot))
