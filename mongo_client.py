@@ -110,7 +110,8 @@ class GuildConfigCog(AbstractGuildConfigCog):
         if command_filter_data is not None:
             return CommandFilter(name,
                                  CommandDisability(command_filter_data['type']),
-                                 [self.bot.get_channel(channel_id) for channel_id in command_filter_data['channels']],
+                                 # F*** off
+                                 [self.bot.get_channel(channel_id) for channel_id in command_filter_data['channels']],  # type: ignore
                                  command_filter_data['enabled'],
                                  guild)
         else:
