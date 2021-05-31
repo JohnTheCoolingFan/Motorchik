@@ -11,6 +11,7 @@ from bs4 import BeautifulSoup
 from dateutil import parser
 from discord.ext import commands
 from natsort import natsorted
+from typing import Tuple
 
 MOD_LIST_MOTORCHIK = ('artillery-spidertron', 'PlaceableOffGrid', 'NoArtilleryMapReveal', 'RandomFactorioThings', 'PlutoniumEnergy')
 
@@ -40,8 +41,8 @@ class FactorioCog(commands.Cog, name='Factorio'):
             await self.process_mod(ctx, mod_name)
 
     async def process_mod(self, ctx: commands.Context, mod_name: str):
-        mod_data = await self.get_mod_info(mod_name)
-        if mod_data['success']:
+        success, mod_data = await self.get_mod_info(mod_name)
+        if success:
             embed = await self.construct_mod_embed(mod_data)
         else:
             embed = await self.failed_mod_embed(mod_data)
@@ -69,7 +70,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
         embed = discord.Embed(title='Mod not found', description='Failed to find {}'.format(mod_data['mod_name']), color=discord.Color.from_rgb(255, 10, 10))
         return embed
 
-    async def get_mod_info(self, mod_name: str) -> dict:
+    async def get_mod_info(self, mod_name: str) -> Tuple[bool, dict]:
         api_response = await self.__session.get(MODPORTAL_URL + '/api/mods/' + mod_name)
         if api_response.status == 200:
             json_req = await api_response.json()
@@ -82,7 +83,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
                 #thumb_color = discord.Color.from_rgb(47, 137, 197)
                 thumbnail_url = ''
             thumb_color = discord.Color.from_rgb(47, 137, 197)
-            return dict(title=json_req['title'],
+            return True, dict(title=json_req['title'],
                         description=json_req['summary'],
                         url=MODPORTAL_URL + '/mod/' + mod_name,
                         timestamp=parser.isoparse(latest_release['released_at']),
@@ -94,14 +95,13 @@ class FactorioCog(commands.Cog, name='Factorio'):
                         latest_version=latest_release['version'],
                         downloads_count=json_req['downloads_count'],
                         author=json_req['owner'],
-                        success=True,
                         mod_name=mod_name)
         else:
             new_mod_name = await self.find_mod(mod_name)
             if new_mod_name:
                 return await self.get_mod_info(new_mod_name)
             else:
-                return dict(success=False, mod_name=mod_name)
+                return False, dict(mod_name=mod_name)
 
     async def find_mod(self, mod_name: str) -> str:
         search_response = await self.__session.get(MODPORTAL_URL + '/query/' + mod_name.replace(' ', '%20'))
