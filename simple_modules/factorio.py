@@ -17,7 +17,8 @@ MOD_LIST_MOTORCHIK = ('artillery-spidertron', 'PlaceableOffGrid', 'NoArtilleryMa
 MODPORTAL_URL = 'https://mods.factorio.com'
 LAUNCHER_URL = 'https://factorio-launcher-mods.storage.googleapis.com/{}/{}.zip'
 
-default_color = discord.Color.from_rgb(255, 10, 10)
+failed_embed_color  = discord.Color.from_rgb(255, 10,  10 )
+success_embed_color = discord.Color.from_rgb(47,  137, 197)
 
 # TODO: make customizable mod-list, which will update automatically over time by editing messages
 #       InfoChannels milestone
@@ -67,7 +68,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
 
     @staticmethod
     async def failed_mod_embed(mod_name: str) -> discord.Embed:
-        embed = discord.Embed(title='Mod not found', description='Failed to find {}'.format(mod_name), color=default_color)
+        embed = discord.Embed(title='Mod not found', description='Failed to find {}'.format(mod_name), color=failed_embed_color)
         return embed
 
     async def get_mod_info(self, mod_name: str) -> Tuple[bool, dict]:
@@ -82,7 +83,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
             else:
                 #thumb_color = discord.Color.from_rgb(47, 137, 197)
                 thumbnail_url = ''
-            thumb_color = discord.Color.from_rgb(47, 137, 197)
+            thumb_color = success_embed_color
             return True, dict(title=json_req['title'],
                         description=json_req['summary'],
                         url=MODPORTAL_URL + '/mod/' + mod_name,
