@@ -36,7 +36,7 @@ class Greetings(commands.Cog):
             await welcome_channel.send('Welcome, {0.mention}'.format(member))
         if default_roles:
             if member.guild.verification_level != discord.VerificationLevel.none:
-                print("Putting user {} on queue".format(member.id))
+                print("Putting user {} on queue".format(member.id))  # type: ignore
                 self.queue.append(QueueItem(member, default_roles))
             else:
                 await member.add_roles(*default_roles, reason='New member join.')
@@ -46,7 +46,7 @@ class Greetings(commands.Cog):
         guild_config = await self.guild_config_cog.get_guild(member.guild)
         welcome_channel = await guild_config.get_welcome_channel()
         if welcome_channel:
-            await welcome_channel.send('Goodbye, {0} (ID:{1})'.format(str(member), member.id))
+            await welcome_channel.send('Goodbye, {0} (ID:{1})'.format(str(member), member.id))  # type: ignore
 
     @tasks.loop(seconds=10)
     async def queue_checker(self):
@@ -55,20 +55,24 @@ class Greetings(commands.Cog):
             queue_to_remove = []
             for queue_item in self.queue:
                 if self.check_queued(queue_item.user):
-                    print('User {} is now valid for automatic role giving'.format(queue_item.user.id))
+                    print('User {} is now valid for automatic role giving'.format(queue_item.user.id))  # type: ignore
                     await queue_item.user.add_roles(*queue_item.roles, reason='New member join')
                     queue_to_remove.append(queue_item)
             for queue_item in queue_to_remove:
                 print('Removing user {} from queue'.format(queue_item.user.id))
                 self.queue.remove(queue_item)
 
-    @staticmethod
-    def check_queued(member: discord.Member):
+    def check_queued(self, member: discord.Member):
+        if member.joined_at is None:
+            for item in self.queue:
+                if item.user == member:
+                    self.queue.remove(item)
+            return False
         guild_vl = member.guild.verification_level
         mediumlevel = True
         highlevel = True
         if guild_vl >= discord.VerificationLevel.medium:
-            mediumlevel = datetime.now() - member.created_at > timedelta(minutes=5)
+            mediumlevel = datetime.now() - member.created_at > timedelta(minutes=5)  # type: ignore
         if guild_vl >= discord.VerificationLevel.high:
             highlevel = datetime.now() - member.joined_at > timedelta(minutes=10)
         return mediumlevel and highlevel
