@@ -11,9 +11,9 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 from guild_config import (IMMUTABLE_COMMANDS, INFO_CHANNEL_TYPES,
                           AbstractGuildConfigCog, CommandDisability,
-                          CommandDisabledError, CommandFilter,
-                          CommandImmutableError, CommandNotFoundError,
-                          GuildConfig, default_guild_config_data)
+                          CommandFilter, CommandImmutableError,
+                          CommandNotFoundError, GuildConfig,
+                          default_guild_config_data)
 
 
 class GuildConfigCog(AbstractGuildConfigCog):
