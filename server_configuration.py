@@ -23,7 +23,7 @@ class ServerConfiguration(commands.Cog, name='Server Configuration'):
         print(' Done')
 
     async def cog_check(self, ctx: commands.Context) -> bool:
-        return ctx.author.permissions_in(ctx.channel).administrator
+        return ctx.author.permissions_in(ctx.channel).administrator  # type: ignore
 
     async def cog_command_error(self, ctx: commands.Context, error: commands.CommandError):
         if isinstance(error, commands.CheckFailure):
