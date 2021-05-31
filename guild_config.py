@@ -4,10 +4,10 @@ Describes GuildConfig interface that can be used in other modules.
 Describes GuildConfigCog methods that GuildConfig class uses to get and set data.
 """
 
-import sys
-import traceback
 from dataclasses import dataclass
 from enum import Enum
+import sys
+import traceback
 from typing import Dict, Iterable, List, Optional, Tuple
 
 import discord

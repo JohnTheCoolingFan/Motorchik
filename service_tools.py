@@ -2,8 +2,8 @@
 Commands intended to be used only by bot owner
 """
 
-from discord.ext import commands
 import discord
+from discord.ext import commands
 
 
 class ServiceTools(commands.Cog, name='Service Tools'):

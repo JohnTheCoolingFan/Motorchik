@@ -2,9 +2,10 @@
 Commands for moderation, such as ban, kick and clearchat
 """
 
+from typing import Optional
+
 import discord
 from discord.ext import commands
-from typing import Optional
 
 # TODO: Auto-moderation: spam filtering and alike
 # TODO: warns, punishments, timed punishments

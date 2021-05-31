@@ -5,15 +5,21 @@ Module that stores GuildConfig data in MongoDB
 from typing import Dict, List, Optional, Tuple
 
 import discord
-import pymongo
 from discord.ext import commands
 from motor.motor_asyncio import AsyncIOMotorClient
+import pymongo
 
-from guild_config import (IMMUTABLE_COMMANDS, INFO_CHANNEL_TYPES,
-                          AbstractGuildConfigCog, CommandDisability,
-                          CommandFilter, CommandImmutableError,
-                          CommandNotFoundError, GuildConfig,
-                          default_guild_config_data)
+from guild_config import (
+    AbstractGuildConfigCog,
+    CommandDisability,
+    CommandFilter,
+    CommandImmutableError,
+    CommandNotFoundError,
+    GuildConfig,
+    IMMUTABLE_COMMANDS,
+    INFO_CHANNEL_TYPES,
+    default_guild_config_data,
+)
 
 
 class GuildConfigCog(AbstractGuildConfigCog):

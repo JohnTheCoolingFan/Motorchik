@@ -6,6 +6,7 @@
 
 import discord
 from discord.ext import commands
+
 import motorchik_setup
 
 # Argument parsing

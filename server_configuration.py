@@ -9,10 +9,12 @@ from typing import Optional
 import discord
 from discord.ext import commands
 
-from guild_config import (CommandDisability,
-                                       CommandImmutableError,
-                                       CommandNotFoundError,
-                                       InfoChannelNotFoundError)
+from guild_config import (
+    CommandDisability,
+    CommandImmutableError,
+    CommandNotFoundError,
+    InfoChannelNotFoundError,
+)
 
 
 class ServerConfiguration(commands.Cog, name='Server Configuration'):
