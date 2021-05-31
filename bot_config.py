@@ -13,7 +13,7 @@ from discord.ext import commands
 
 class BotConfig(commands.Cog):
     bot: commands.Bot
-    log_channel: discord.TextChannel
+    log_channel: Optional[discord.TextChannel]
     token: str
     storage_method: str = ''
     mongo: Optional[dict]
