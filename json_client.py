@@ -11,9 +11,17 @@ from typing import Dict, List, Optional, Tuple
 import discord
 from discord.ext import commands
 
-from guild_config import (INFO_CHANNEL_TYPES, AbstractGuildConfigCog,
-                          CommandDisability, CommandFilter, GuildConfig,
-                          default_guild_config_data)
+from guild_config import (
+    AbstractGuildConfigCog,
+    CommandDisability,
+    CommandFilter,
+    CommandImmutableError,
+    CommandNotFoundError,
+    GuildConfig,
+    IMMUTABLE_COMMANDS,
+    INFO_CHANNEL_TYPES,
+    default_guild_config_data,
+)
 
 
 class GuildConfigCog(AbstractGuildConfigCog):
@@ -136,6 +144,13 @@ class GuildConfigCog(AbstractGuildConfigCog):
                                     append_channels: bool = False,
                                     enabled: bool = None,
                                     filter_type: CommandDisability = None):
+        if new_channels is None and enabled is None and filter_type is None:
+            return
+        if name in IMMUTABLE_COMMANDS:
+            raise CommandImmutableError(name)
+        if name not in [command.name for command in self.bot.commands]:
+            raise CommandNotFoundError(name)
+
         guild_config_data = await self.get_guild_config_data(guild)
 
         if name not in guild_config_data['command_filters']:
