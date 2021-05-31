@@ -63,14 +63,14 @@ class Greetings(commands.Cog):
                 self.queue.remove(queue_item)
 
     @staticmethod
-    def check_queued(user: discord.Member):
-        guild_vl = user.guild.verification_level
+    def check_queued(member: discord.Member):
+        guild_vl = member.guild.verification_level
         mediumlevel = True
         highlevel = True
         if guild_vl >= discord.VerificationLevel.medium:
-            mediumlevel = datetime.now() - user.created_at > timedelta(minutes=5)
+            mediumlevel = datetime.now() - member.created_at > timedelta(minutes=5)
         if guild_vl >= discord.VerificationLevel.high:
-            highlevel = datetime.now() - user.joined_at > timedelta(minutes=10)
+            highlevel = datetime.now() - member.joined_at > timedelta(minutes=10)
         return mediumlevel and highlevel
 
     @commands.command(description='\"Hello\" in English', brief='\"Hello\" in English', help='Returns \"Hello\" in English')
