@@ -147,7 +147,12 @@ class GuildConfig:
 
     # Get default roles. Return empty list if no roles were set
     async def get_default_roles(self) -> List[discord.Role]:
-        return [self.guild.get_role(role_id) for role_id in self.raw_data['default_roles']]
+        roles = []
+        for role_id in self.raw_data['default_roles']:
+            role = self.guild.get_role(role_id)
+            if role is not None:
+                roles.append(role)
+        return roles
 
     # Set default roles. Passing an empty iterable results in removing all default roles.
     async def set_default_roles(self, new_roles: Iterable[discord.Role]):
