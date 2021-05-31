@@ -182,26 +182,27 @@ class AbstractGuildConfigCog(commands.Cog):
     # CommandFilter check
     # Suggestion: remove "enabled" property and use CommandDisability.GLOBAL insted.
     async def bot_check_once(self, ctx: commands.Context):
-        # Don't bother to check the command filter if command can't be filtered
-        if ctx.command.name in IMMUTABLE_COMMANDS:
-            return True
-        else:
-            command_filter = await self.get_command_filter(ctx.guild, ctx.command.name)
-            # Command filter isn't set up, so it's allowed to run
-            if command_filter is None:
+        if ctx.guild is not None and ctx.channel is not None:
+            # Don't bother to check the command filter if command can't be filtered
+            if ctx.command.name in IMMUTABLE_COMMANDS:
                 return True
             else:
-                # If command is disabled on the server (guild) globally, it's not allowed to run
-                if not command_filter.enabled:
-                    raise CommandDisabledError(ctx.guild, ctx.command.name, ctx.channel, CommandDisability.GLOBAL)
-                # If command was called in a blacklisted channel, it's not allowed to run
-                if command_filter.filter_type == CommandDisability.BLACKLISTED and ctx.channel in command_filter.filter_list:
-                    raise CommandDisabledError(ctx.guild, ctx.command.name, ctx.channel, command_filter.filter_type)
-                # If command wasn't called in a whitelisted channel, it's not allowed to run
-                if command_filter.filter_type == CommandDisability.WHITELISTED and ctx.channel not in command_filter.filter_list:
-                    raise CommandDisabledError(ctx.guild, ctx.command.name, ctx.channel, command_filter.filter_type)
-                # Default
-                return True
+                command_filter = await self.get_command_filter(ctx.guild, ctx.command.name)  # type: ignore
+                # Command filter isn't set up, so it's allowed to run
+                if command_filter is None:
+                    return True
+                else:
+                    # If command is disabled on the server (guild) globally, it's not allowed to run
+                    if not command_filter.enabled:
+                        raise CommandDisabledError(ctx.guild, ctx.command.name, ctx.channel, CommandDisability.GLOBAL)  # type: ignore
+                    # If command was called in a blacklisted channel, it's not allowed to run
+                    if command_filter.filter_type == CommandDisability.BLACKLISTED and ctx.channel in command_filter.filter_list:
+                        raise CommandDisabledError(ctx.guild, ctx.command.name, ctx.channel, command_filter.filter_type)  # type: ignore
+                    # If command wasn't called in a whitelisted channel, it's not allowed to run
+                    if command_filter.filter_type == CommandDisability.WHITELISTED and ctx.channel not in command_filter.filter_list:
+                        raise CommandDisabledError(ctx.guild, ctx.command.name, ctx.channel, command_filter.filter_type)  # type: ignore
+                    # Default
+                    return True
 
     # Handle CommandDisableError
     @commands.Cog.listener()
