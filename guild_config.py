@@ -67,7 +67,7 @@ class CommandFilter:
     # enabled: bool = None
 
 def default_guild_config_data(guild: discord.Guild):
-    default_channel = guild.system_channel.id if guild.system_channel is not None else guild.text_channels[0].id
+    default_channel = guild.system_channel.id if guild.system_channel is not None else guild.text_channels[0].id  # type: ignore
     guild_config_data = {
         "guild_name": guild.name,
         "default_roles": [],
