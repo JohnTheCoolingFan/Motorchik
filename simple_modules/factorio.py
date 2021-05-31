@@ -45,7 +45,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
         if success:
             embed = await self.construct_mod_embed(mod_data)
         else:
-            embed = await self.failed_mod_embed(mod_data)
+            embed = await self.failed_mod_embed(mod_data['mod_name'])
         await ctx.send(embed=embed)
 
     @staticmethod
@@ -66,8 +66,8 @@ class FactorioCog(commands.Cog, name='Factorio'):
         return embed
 
     @staticmethod
-    async def failed_mod_embed(mod_data: dict) -> discord.Embed:
-        embed = discord.Embed(title='Mod not found', description='Failed to find {}'.format(mod_data['mod_name']), color=discord.Color.from_rgb(255, 10, 10))
+    async def failed_mod_embed(mod_name: str) -> discord.Embed:
+        embed = discord.Embed(title='Mod not found', description='Failed to find {}'.format(mod_name), color=discord.Color.from_rgb(255, 10, 10))
         return embed
 
     async def get_mod_info(self, mod_name: str) -> Tuple[bool, dict]:
