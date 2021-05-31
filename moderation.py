@@ -24,7 +24,7 @@ class Moderation(commands.Cog):
                       help='Deletes specified count of messages in this channel. Can be used only by members with messages managing permission.')
     async def clearchat(self, ctx: commands.Context, messages_count: int):
         await ctx.message.delete()
-        deleted = await ctx.channel.purge(limit=messages_count)
+        deleted = await ctx.channel.purge(limit=messages_count)  # type: ignore
         await ctx.send('Deleted {} message(s)'.format(len(deleted)), delete_after=3)
 
     @commands.has_permissions(ban_members=True)
@@ -39,7 +39,7 @@ class Moderation(commands.Cog):
             reason = 'Reason: ' + reason
         log_channel = await guild_config.get_log_channel()
         if log_channel:
-            await log_channel.send('Banned {0}\nBy: {1}\n{2}'.format(str(member), ctx.author.mention, reason))
+            await log_channel.send('Banned {0}\nBy: {1}\n{2}'.format(str(member), ctx.author.mention, reason))  # type: ignore
 
     @commands.has_permissions(ban_members=True)
     @commands.command(aliases=['uban'], description='Unban user', help='Unban specified member.')
@@ -49,7 +49,7 @@ class Moderation(commands.Cog):
         await ctx.send('Unbanned member '+str(member))
         log_channel = await guild_config.get_log_channel()
         if log_channel:
-            await log_channel.send('Unbanned {0}\nBy: {1}\nReason: {2}'.format(str(member), ctx.author.mention, reason))
+            await log_channel.send('Unbanned {0}\nBy: {1}\nReason: {2}'.format(str(member), ctx.author.mention, reason))  # type: ignore
 
     @commands.has_permissions(kick_members=True)
     @commands.command(description='Kick member', help='Kick specified member')
