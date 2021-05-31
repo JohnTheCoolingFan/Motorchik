@@ -170,6 +170,7 @@ class GuildConfig:
    # def get_xp(self, member: discord.Member) -> int:
        # return self.raw['members'][str(member.id)]
 
+# Maybe switch to abc meta-class magic?
 # Abstract base class for all GuildConfigCog modules. Defines some methods that need to be overriden and adds some checks.
 class AbstractGuildConfigCog(commands.Cog):
     __gc_cache: Dict[int, GuildConfig]               = dict() # Guild ID is key, GuildConfig is the item
