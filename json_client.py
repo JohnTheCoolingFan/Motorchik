@@ -48,7 +48,7 @@ class GuildConfigCog(AbstractGuildConfigCog):
                       indent=4, sort_keys=True) # Easy way to change saving settings in one place
         os.chmod(filename, 0o666)
 
-    def load_json(self, guild: discord.Guild):
+    def load_json(self, guild: discord.Guild) -> dict:
         filename = self.path + str(guild.id) + '.json'
         if p.exists(filename):
             with open(filename) as guild_config_file:
@@ -57,7 +57,7 @@ class GuildConfigCog(AbstractGuildConfigCog):
         else:
             return None
 
-    async def get_guild_config_data(self, guild):
+    async def get_guild_config_data(self, guild: discord.Guild) -> dict:
         guild_config_data = self.load_json(guild)
         if guild_config_data is None:
             guild_config_data = await self.add_guild(guild)
@@ -93,12 +93,13 @@ class GuildConfigCog(AbstractGuildConfigCog):
         self.dump_json(guild_config_data, guild)
         return guild_config_data
 
-    async def add_guild(self, guild: discord.Guild):
+    async def add_guild(self, guild: discord.Guild) -> dict:
         guild_config_data = default_guild_config_data(guild)
         guild_config_data['command_filters'] = dict()
         self.dump_json(guild_config_data, guild)
         return guild_config_data
 
+    # return some generic empty filter by default? Or processing None is just simplier?
     async def get_command_filter(self, guild: discord.Guild, name: str) -> Optional[CommandFilter]:
         guild_config_data = await self.get_guild_config_data(guild)
 
