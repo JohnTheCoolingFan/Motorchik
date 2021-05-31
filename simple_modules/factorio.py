@@ -33,7 +33,11 @@ class FactorioCog(commands.Cog, name='Factorio'):
 
     @commands.command(aliases=['modstat', 'ms'])
     async def mods_statistics(self, ctx: commands.Context, *mods_names):
-        await asyncio.wait([asyncio.create_task(self.process_mod(ctx, mod_name)) for mod_name in mods_names])
+        # This solution leads to the messages being sent in random order.
+        #await asyncio.wait([asyncio.create_task(self.process_mod(ctx, mod_name)) for mod_name in mods_names])
+
+        for mod_name in mods_names:
+            await self.process_mod(ctx, mod_name)
 
     async def process_mod(self, ctx: commands.Context, mod_name: str):
         mod_data = await self.get_mod_info(mod_name)
