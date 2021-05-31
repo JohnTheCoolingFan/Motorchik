@@ -17,6 +17,7 @@ from guild_config import (INFO_CHANNEL_TYPES, AbstractGuildConfigCog,
 
 
 class GuildConfigCog(AbstractGuildConfigCog):
+    bot: commands.Bot
     __gc_cache: Dict[int, GuildConfig]               = dict() # Guild ID is key, GuildConfig is the item
     __cf_cache: Dict[Tuple[int, str], CommandFilter] = dict() # Tuple of Guild ID and command name is key, CommandFilter is the item
 
@@ -48,7 +49,7 @@ class GuildConfigCog(AbstractGuildConfigCog):
                       indent=4, sort_keys=True) # Easy way to change saving settings in one place
         os.chmod(filename, 0o666)
 
-    def load_json(self, guild: discord.Guild) -> dict:
+    def load_json(self, guild: discord.Guild) -> Optional[dict]:
         filename = self.path + str(guild.id) + '.json'
         if p.exists(filename):
             with open(filename) as guild_config_file:
