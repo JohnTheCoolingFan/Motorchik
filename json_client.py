@@ -109,9 +109,20 @@ class GuildConfigCog(AbstractGuildConfigCog):
 
             if name in guild_config_data['command_filters']:
                 command_filter_data = guild_config_data['command_filters'][name]
+                # Maybe update the command filter data if it contains deleted channels?
+                # But they will be removed anyway when filter is updated
+                # But while filter is not updated, they will take space and bandwidth!
+                # And updating the command filter will also use bandwidth and/or cpu time
+                command_filter_channels = []
+                for channel_id in command_filter_data['channels']:
+                    channel = self.bot.get_channel(channel_id)
+                    if channel is not None:
+                        command_filter_channels.append(channel)
                 command_filter =  CommandFilter(name,
                                                 CommandDisability(command_filter_data['type']),
-                                                [self.bot.get_channel(channel_id) for channel_id in command_filter_data['channels']],
+                                                # Pyright was whyning about Unknown | None, so I amde a check earlier
+                                                #[self.bot.get_channel(channel_id) for channel_id in command_filter_data['channels']],
+                                                command_filter_channels,
                                                 command_filter_data['enabled'],
                                                 guild)
                 self.__cf_cache[(guild.id, name)] = command_filter
