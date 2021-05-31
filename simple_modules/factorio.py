@@ -3,7 +3,7 @@ Commands about Factorio. Mostly just request data from mods.factorio.com
 and make embed from it.
 """
 
-import asyncio
+from typing import Tuple
 
 import aiohttp
 import discord
@@ -11,13 +11,13 @@ from bs4 import BeautifulSoup
 from dateutil import parser
 from discord.ext import commands
 from natsort import natsorted
-from typing import Tuple
 
 MOD_LIST_MOTORCHIK = ('artillery-spidertron', 'PlaceableOffGrid', 'NoArtilleryMapReveal', 'RandomFactorioThings', 'PlutoniumEnergy')
 
 MODPORTAL_URL = 'https://mods.factorio.com'
 LAUNCHER_URL = 'https://factorio-launcher-mods.storage.googleapis.com/{}/{}.zip'
 
+default_color = discord.Color.from_rgb(255, 10, 10)
 
 # TODO: make customizable mod-list, which will update automatically over time by editing messages
 #       InfoChannels milestone
@@ -67,7 +67,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
 
     @staticmethod
     async def failed_mod_embed(mod_name: str) -> discord.Embed:
-        embed = discord.Embed(title='Mod not found', description='Failed to find {}'.format(mod_name), color=discord.Color.from_rgb(255, 10, 10))
+        embed = discord.Embed(title='Mod not found', description='Failed to find {}'.format(mod_name), color=default_color)
         return embed
 
     async def get_mod_info(self, mod_name: str) -> Tuple[bool, dict]:
