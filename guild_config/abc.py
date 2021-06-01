@@ -21,7 +21,7 @@ from guild_config.guild_config import (
 class CogABCMeta(commands.CogMeta, abc.ABCMeta):
     pass
 
-class GuildConfigABC(metaclass=abc.ABCMeta):
+class GuildConfigMeta(metaclass=abc.ABCMeta):
     @property
     @abc.abstractmethod
     def __gc_cache(self) -> Dict[int, GuildConfig]:
