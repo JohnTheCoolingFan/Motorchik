@@ -10,6 +10,7 @@ from typing import Optional
 import discord
 from discord.ext import commands
 
+# TODO: Cosmetic: set status
 
 class BotConfig(commands.Cog):
     bot: commands.Bot
