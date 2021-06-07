@@ -11,6 +11,8 @@ class TestCommands(commands.Cog, name='Test Commands', command_attrs=dict(hidden
         self.bot = bot
         print(' Done')
 
+    # TODO: https://discordpy.readthedocs.io/en/latest/api.html?highlight=messageable%20send#discord.abc.Messageable.send
+    # allowed_mentions
     @commands.command(help='Returns text typed after $test')
     async def test(self, ctx, *, text: str):
         await ctx.send(text)
