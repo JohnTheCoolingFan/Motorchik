@@ -168,7 +168,8 @@ class GuildConfigCog(AbstractGuildConfigCog):
 
         guild_config_data['command_filters'][name] = command_filter_data
         self.dump_json(guild_config_data, guild)
-        del self.__cf_cache[(guild.id, name)]
+        if (guild.id, name) in self.__cf_cache:
+            del self.__cf_cache[(guild.id, name)]
 
 def setup(bot: commands.Bot):
     bot.add_cog(GuildConfigCog(bot))
