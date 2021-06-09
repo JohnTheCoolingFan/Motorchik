@@ -15,11 +15,11 @@ class TestCommands(commands.Cog, name='Test Commands', command_attrs=dict(hidden
     # allowed_mentions
     @commands.command(help='Returns text typed after $test')
     async def test(self, ctx, *, text: str):
-        await ctx.send(text)
+        await ctx.send(text, allowed_mentions=discord.AllowedMentions(everyone=False, users=False, roles=False)))
 
     @commands.command(help='Returns passed arguments count and the arguments', aliases=['advtest', 'atest'])
     async def advanced_test(self, ctx, *args):
-        await ctx.send('Passed {} arguments: {}'.format(len(args), ', '.join(args)))
+        await ctx.send('Passed {} arguments: {}'.format(len(args), ', '.join(args)), allowed_mentions=discord.AllowedMentions(everyone=False, users=False, roles=False)))
 
 
 def setup(bot):
