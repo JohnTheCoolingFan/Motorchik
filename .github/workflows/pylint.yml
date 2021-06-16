@@ -21,4 +21,4 @@ jobs:
         pip install -r mongo_requirements.txt
     - name: Analysing the code with pylint
       run: |
-        python -m pylint `find -regextype egrep '(.*.py)$'`
+        python -m pylint `find -regextype egrep -regex '(.*.py)$'`
