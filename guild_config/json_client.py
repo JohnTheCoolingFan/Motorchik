@@ -11,7 +11,7 @@ from typing import Dict, List, Optional, Tuple
 import discord
 from discord.ext import commands
 
-from guild_config import (
+from guild_config.guild_config import (
     AbstractGuildConfigCog,
     CommandDisability,
     CommandFilter,

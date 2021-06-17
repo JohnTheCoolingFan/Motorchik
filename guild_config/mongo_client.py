@@ -9,7 +9,7 @@ from discord.ext import commands
 from motor.motor_asyncio import AsyncIOMotorClient
 import pymongo
 
-from guild_config import (
+from guild_config.guild_config import (
     AbstractGuildConfigCog,
     CommandDisability,
     CommandFilter,
