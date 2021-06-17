@@ -2,7 +2,7 @@
 Abstract Base Classes
 """
 
-import abc
+from abc import ABCMeta, abstractmethod
 import sys
 import traceback
 from typing import Any, Dict, List, Tuple
@@ -18,22 +18,22 @@ from guild_config.guild_config import (
     IMMUTABLE_COMMANDS,
 )
 
-class CogABCMeta(commands.CogMeta, abc.ABCMeta):
+class CogABCMeta(commands.CogMeta, ABCMeta):
     pass
 
-class GuildConfigMeta(metaclass=abc.ABCMeta):
+class GuildConfigMeta(metaclass=ABCMeta):
     @property
-    @abc.abstractmethod
+    @abstractmethod
     def __gc_cache(self) -> Dict[int, GuildConfig]:
         pass
 
     @property
-    @abc.abstractmethod
+    @abstractmethod
     def __cf_cache(self) -> Dict[Tuple[int, str], CommandFilter]:
         pass
 
     @property
-    @abc.abstractmethod
+    @abstractmethod
     def bot(self) -> commands.Bot:
         pass
 
@@ -77,28 +77,28 @@ class GuildConfigMeta(metaclass=abc.ABCMeta):
             print(f'Ignoring exception in command {ctx.command}:', file=sys.stderr)
             traceback.print_exception(type(exc), exc, exc.__traceback__, file=sys.stderr)
 
-    @abc.abstractmethod
+    @abstractmethod
     async def get_config(self, guild: discord.Guild) -> GuildConfig:
         pass
 
     async def get_guild(self, guild: discord.Guild) -> GuildConfig:
         return await self.get_config(guild)
 
-    @abc.abstractmethod
+    @abstractmethod
     async def update_guild(self, guild: discord.Guild,
                            default_roles: List[discord.Role] = None,
                            info_channels: Dict[str, dict] = None) -> dict:
         pass
 
-    @abc.abstractmethod
+    @abstractmethod
     async def add_guild(self, guild: discord.Guild) -> Any:
         pass
 
-    @abc.abstractmethod
+    @abstractmethod
     async def get_command_filter(self, guild: discord.Guild, name: str) -> CommandFilter:
         pass
 
-    @abc.abstractmethod
+    @abstractmethod
     async def update_command_filter(self, guild: discord.Guild,
                                     name: str,
                                     new_channels: List[discord.TextChannel] = None,
