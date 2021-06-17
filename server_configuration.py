@@ -9,7 +9,7 @@ from typing import Optional
 import discord
 from discord.ext import commands
 
-from guild_config import (
+from guild_config.guild_config import (
     CommandDisability,
     CommandImmutableError,
     CommandNotFoundError,
