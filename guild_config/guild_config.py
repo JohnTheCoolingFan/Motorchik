@@ -225,7 +225,7 @@ class AbstractGuildConfigCog(commands.Cog):
 
     # Get GuildConfig for given Guild.
     # Decide wheter next this one or the next is correct
-    async def get_config(self, guild: discord.Guild) -> GuildConfig:
+    async def get_config(self, guild: discord.Guild) -> GuildConfig:  # type: ignore
         pass
 
     async def get_guild(self, guild: discord.Guild) -> GuildConfig:
@@ -235,7 +235,7 @@ class AbstractGuildConfigCog(commands.Cog):
     async def update_guild(self,
                            guild: discord.Guild,
                            default_roles: List[discord.Role] = None,
-                           info_channels: Dict[str, dict] = None) -> dict:
+                           info_channels: Dict[str, dict] = None) -> dict:  # type: ignore
         pass
 
     # Add a new GuildConfig to the DB
@@ -243,7 +243,7 @@ class AbstractGuildConfigCog(commands.Cog):
         pass
 
     # Get a CommandFilter from the DB
-    async def get_command_filter(self, guild: discord.Guild, name: str) -> CommandFilter:
+    async def get_command_filter(self, guild: discord.Guild, name: str) -> CommandFilter:  # type: ignore
         pass
 
     # Update CommandFilter in the DB
@@ -253,5 +253,5 @@ class AbstractGuildConfigCog(commands.Cog):
                                     new_channels: List[discord.TextChannel] = None,
                                     append_channels: bool = False,
                                     enabled: bool = None,
-                                    filter_type: CommandDisability = None) -> dict:
+                                    filter_type: CommandDisability = None) -> dict:  # type: ignore
         pass

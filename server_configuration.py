@@ -82,6 +82,7 @@ class ServerConfiguration(commands.Cog, name='Server Configuration'):
         await guild_config.update_info_channel(channel_type, new_channel=new_channel)
         await ctx.send('Sucessfully set channel for "{}" info channel'.format(channel_type))
 
+    # TODO: Use alias to disable command
     @info_channels.command(name='enable')
     async def enable_info_channel(self, ctx: commands.Context, channel_type: str):
         guild_config = await self.guild_config_cog.get_config(ctx.guild)
