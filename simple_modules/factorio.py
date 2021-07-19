@@ -3,16 +3,16 @@ Commands about Factorio. Mostly just request data from mods.factorio.com
 and make embed from it.
 """
 
+from guild_config import GuildConfig
+from json_client import GuildConfigCog # Unfortunately it's hard-coded now. It should get better with guildconfig-abc
 from typing import Tuple
 
 import aiohttp
 import discord
 from bs4 import BeautifulSoup
 from dateutil import parser
-from discord.ext import commands
+from discord.ext import commands, tasks
 from natsort import natsorted
-
-from guild_config import GuildConfig
 
 MOD_LIST = ('artillery-spidertron', 'PlaceableOffGrid', 'NoArtilleryMapReveal', 'RandomFactorioThings', 'PlutoniumEnergy')
 
@@ -33,7 +33,25 @@ class FactorioCog(commands.Cog, name='Factorio'):
         print('Loading Factorio module...', end='')
         self.bot = bot
         self.__session = aiohttp.ClientSession()
+        self.mod_list_updater.start()
         print(' Done')
+
+    @tasks.loop(hours=1)
+    async def mod_list_updater(self):
+        guild_config_cog = self.bot.get_cog('GuildConfigCog')
+        if isinstance(guild_config_cog, GuildConfigCog):
+            for guild in self.bot.guilds:
+                guild_config: GuildConfig = await guild_config_cog.get_config(guild)
+                mod_list_channel = await guild_config.get_modlist_channel()
+                if mod_list_channel is not None:
+                    await mod_list_channel.purge(limit=len(MOD_LIST))
+                    for mod_name in MOD_LIST:
+                        success, mod_data = await self.get_mod_info(mod_name)
+                        if success:
+                            embed = await self.construct_mod_embed(mod_data)
+                        else:
+                            embed = await self.failed_mod_embed(mod_data['mod_name'])
+                        await mod_list_channel.send(embed=embed)
 
     @commands.command(aliases=['modstat', 'ms'])
     async def mods_statistics(self, ctx: commands.Context, *mods_names):
