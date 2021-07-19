@@ -105,7 +105,7 @@ class GuildConfigCog(AbstractGuildConfigCog):
             for ic_name, ic_spec in info_channels.items():
                 if ic_name in INFO_CHANNEL_TYPES:
                     if ic_name not in guild_config_data['info_channels']:
-                        guild_config_data['infoi_channels'][ic_name] = {'enabled': False, 'channel_id': 0}
+                        guild_config_data['info_channels'][ic_name] = {'enabled': False, 'channel_id': 0}
                     if 'channel' in ic_spec and ic_spec['channel'] is not None:
                         guild_config_data['info_channels'][ic_name]['channel_id'] = ic_spec['channel'].id
                     if 'enabled'in ic_spec and ic_spec['enabled'] is not None:
