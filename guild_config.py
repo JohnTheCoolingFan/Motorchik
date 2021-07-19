@@ -14,7 +14,7 @@ import discord
 from discord.ext import commands
 
 IMMUTABLE_COMMANDS = ('command', 'config', 'say', 'say_dm')
-INFO_CHANNEL_TYPES = ('welcome', 'log') # reports and mod-list are not yet implemented
+INFO_CHANNEL_TYPES = ('welcome', 'log', 'mod-list') # reports are not yet implemented
 
 # TODO: Module that stores data in separate channel in the discord guild itself.
 # TODO: Localization?
