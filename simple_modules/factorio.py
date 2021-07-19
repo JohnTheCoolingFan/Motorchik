@@ -12,6 +12,8 @@ from dateutil import parser
 from discord.ext import commands
 from natsort import natsorted
 
+from guild_config import GuildConfig
+
 MOD_LIST_MOTORCHIK = ('artillery-spidertron', 'PlaceableOffGrid', 'NoArtilleryMapReveal', 'RandomFactorioThings', 'PlutoniumEnergy')
 
 MODPORTAL_URL = 'https://mods.factorio.com'
