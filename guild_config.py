@@ -66,7 +66,7 @@ class CommandFilter:
     # channel: discord.TextChannel = None
     # enabled: bool = None
 
-def default_guild_config_data(guild: discord.Guild):
+def default_guild_config_data(guild: discord.Guild) -> dict:
     default_channel = guild.system_channel.id if guild.system_channel is not None else guild.text_channels[0].id  # type: ignore
     guild_config_data = {
         "guild_name": guild.name,
@@ -77,6 +77,10 @@ def default_guild_config_data(guild: discord.Guild):
                 "enabled": False
             },
             "log": {
+                "channel_id": default_channel,
+                "enabled": False
+            },
+            "mod-list": {
                 "channel_id": default_channel,
                 "enabled": False
             }
