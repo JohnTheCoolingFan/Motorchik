@@ -200,7 +200,8 @@ class AbstractGuildConfigCog(commands.Cog):
     # CommandFilter check
     # Suggestion: remove "enabled" property and use CommandDisability.GLOBAL insted.
     async def bot_check_once(self, ctx: commands.Context):
-        if ctx.guild is not None and ctx.channel is not None:
+        # A lot of None checks because of pyright
+        if (ctx.guild is not None) and (ctx.channel is not None) and (ctx.command is not None):
             # Don't bother to check the command filter if command can't be filtered
             if ctx.command.name in IMMUTABLE_COMMANDS:
                 return True
