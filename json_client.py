@@ -11,6 +11,8 @@ from typing import Dict, List, Optional, Tuple
 import discord
 from discord.ext import commands
 
+from bot_config import BotConfig
+
 from guild_config import (
     AbstractGuildConfigCog,
     CommandDisability,
@@ -34,21 +36,29 @@ class GuildConfigCog(AbstractGuildConfigCog):
         self.bot = bot
         bot_config = bot.get_cog('BotConfig')
 
-        # Read config storage path from config.json, parsed by BotConfig cog
-        self.path = bot_config.json['dir']
-        if self.path[-1] != '/':
-            self.path = self.path + '/'
+        if isinstance(bot_config, BotConfig):
+            # Read config storage path from config.json, parsed by BotConfig cog
+            if bot_config.json:
+                self.path = bot_config.json['dir']
+                if self.path[-1] != '/':
+                    self.path = self.path + '/'
 
-        # Some assitional checks for the validity of the path
-        if not p.isdir(self.path):
-            print('Error: {} is not a directory'.format(self.path), file=sys.stderr)
+                # Some assitional checks for the validity of the path
+                if not p.isdir(self.path):
+                    print('Error: {} is not a directory'.format(self.path), file=sys.stderr)
+                    sys.exit(1)
+                if not p.exists(self.path):
+                    os.mkdir(self.path)
+
+                # Add the prefix beforehand
+                self.path = self.path + 'guild_'
+                print(' Done')
+            else:
+                print('Error: BotConfig.json is empty')
+                sys.exit(1)
+        else:
+            print('Error: BotConfig cog is not available')
             sys.exit(1)
-        if not p.exists(self.path):
-            os.mkdir(self.path)
-
-        # Add the prefix beforehand
-        self.path = self.path + 'guild_'
-        print(' Done')
 
     def dump_json(self, data: dict, guild: discord.Guild):
         filename = self.path + str(guild.id) + '.json'
