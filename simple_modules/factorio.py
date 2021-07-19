@@ -14,7 +14,7 @@ from natsort import natsorted
 
 from guild_config import GuildConfig
 
-MOD_LIST_MOTORCHIK = ('artillery-spidertron', 'PlaceableOffGrid', 'NoArtilleryMapReveal', 'RandomFactorioThings', 'PlutoniumEnergy')
+MOD_LIST = ('artillery-spidertron', 'PlaceableOffGrid', 'NoArtilleryMapReveal', 'RandomFactorioThings', 'PlutoniumEnergy')
 
 MODPORTAL_URL = 'https://mods.factorio.com'
 LAUNCHER_URL = 'https://factorio-launcher-mods.storage.googleapis.com/{}/{}.zip'
@@ -121,7 +121,7 @@ class FactorioCog(commands.Cog, name='Factorio'):
     @commands.command(aliases=['ml'])
     async def modlist(self, ctx: commands.Context):
         await ctx.message.delete()
-        await ctx.invoke(self.mods_statistics, *MOD_LIST_MOTORCHIK)
+        await ctx.invoke(self.mods_statistics, *MOD_LIST)
 
 
 def setup(bot: commands.Bot):
