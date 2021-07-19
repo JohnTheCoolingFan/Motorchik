@@ -145,6 +145,23 @@ class GuildConfig:
     async def disable_log_channel(self):
         await self.update_info_channel('log', state=False)
 
+    # Below all the same for mod-list channel
+
+    async def get_modlist_channel(self) -> Optional[discord.TextChannel]:
+        if self.raw_data['info_channels']['log']['enabled']:
+            return self.guild.get_channel(self.raw_data['info_channels']['mod-list']['channel_id'])
+        else:
+            return None
+
+    async def set_modlist_channel(self, new_channel: discord.TextChannel):
+        await self.update_info_channel('mod-list', new_channel=new_channel)
+
+    async def enable_modlist_channel(self):
+        await self.update_info_channel('mod-list', state=True)
+
+    async def disable_modlist_channel(self):
+        await self.update_info_channel('mod-list', state=False)
+
     # Get default roles. Return empty list if no roles were set
     async def get_default_roles(self) -> List[discord.Role]:
         roles = []
