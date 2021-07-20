@@ -101,6 +101,7 @@ class GuildConfigCog(AbstractGuildConfigCog):
 
         if default_roles is not None:
             guild_config_data['default_roles'] = [role.id for role in default_roles]
+        # TODO: handle custom values better
         if info_channels is not None:
             for ic_name, ic_spec in info_channels.items():
                 if ic_name in INFO_CHANNEL_TYPES:
