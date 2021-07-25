@@ -138,8 +138,9 @@ class FactorioCog(commands.Cog, name='Factorio'):
 
     @commands.command(aliases=['ml'])
     async def modlist(self, ctx: commands.Context):
-        await ctx.message.delete()
-        await ctx.invoke(self.mods_statistics, *MOD_LIST)
+        if ctx.message is not None:
+            await ctx.message.delete()
+            await ctx.invoke(self.mods_statistics, *MOD_LIST)
 
 
 def setup(bot: commands.Bot):
