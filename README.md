@@ -27,15 +27,23 @@ Minimum supported python version is 3.7
  
 ## How to use / Installation
 ### 1. Clone this repo or download archived sources to your local machine
-### 2. Make sure you have `discord.py`, `python-dateutil`, `bs4` and `natsort`:
+### 2. Make sure you have `discord.py`, `python-dateutil`, `beautifulsoup4` and `natsort`:
   ```
-  # python3 -m pip install discord.py python-dateutil bs4 natsort
+  # python3 -m pip install discord.py python-dateutil beautifulsoup4 natsort
   ```
   or
   ```
-  $ python3 -m pip install --user discord.py python-dateutil bs4 natsort
+  $ python3 -m pip install --user discord.py python-dateutil beautifulsoup4 natsort
   ```
-  If you plan to use MongoDB, also install `motor package`
+  or
+  ```
+  $ python3 -m pip install -r requirements.txt
+  ```
+  or
+  ```
+  python3 -m pip install --user -r requirements.txt
+  ```
+  If you plan to use MongoDB configuration module, also install dependencies from `mongo_requirements.txt`
 ### 3. Run `main.py`
   ```sh
   python3 main.py
