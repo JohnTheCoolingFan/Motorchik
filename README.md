@@ -33,16 +33,10 @@ Minimum supported python version is 3.7
   ```
   or
   ```
-  $ python3 -m pip install --user discord.py python-dateutil beautifulsoup4 natsort
-  ```
-  or
-  ```
   $ python3 -m pip install -r requirements.txt
   ```
-  or
-  ```
-  python3 -m pip install --user -r requirements.txt
-  ```
+  Add `--user` after `pip install` to install these packages to your local user.
+  You can also install these packages using your OS' package manager if you want.
   If you plan to use MongoDB configuration module, also install dependencies from `mongo_requirements.txt`
 ### 3. Run `main.py`
   ```sh
