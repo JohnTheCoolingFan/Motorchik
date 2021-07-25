@@ -1,4 +1,4 @@
 discord.py
 python-dateutil
-bs4
+beautifulsoup4
 natsort
