@@ -42,6 +42,11 @@ class Miscellaneous(commands.Cog):
         embed.add_field(name='Python version', value=platform.python_version() if platform.python_version() else 'Unknown')
         await ctx.send(embed=embed)
 
+    # Discord has became a full-of-shit bureaucratic company.
+    @commands.command()
+    async def fuckdiscord(self, ctx: commands.Context):
+        await ctx.send('Fuck discord.\n{}'.format('https://gist.github.com/Rapptz/4a2f62751b9600a31a0d3c78100287f1'))
+
 
 def setup(bot):
     bot.add_cog(Miscellaneous(bot))
