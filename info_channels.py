@@ -13,6 +13,7 @@ class InfoChannels(commands.Cog):
         print('Loading InfoChannels module...', end='')
         self.bot = bot
         self.guild_config_cog = bot.get_cog('GuildConfigCog')
+        self.allowed_mentions = discord.AllowedMentions(everyone=False, users=False, roles=False)
         print(' Done')
 
     @commands.Cog.listener()

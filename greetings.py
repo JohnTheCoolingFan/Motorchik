@@ -23,6 +23,7 @@ class Greetings(commands.Cog):
         self.bot = bot
         self.guild_config_cog = bot.get_cog('GuildConfigCog')
         self.queue = []
+        self.allowed_mentions = discord.AllowedMentions(everyone=False, users=False, roles=False)
         # Disabling pylint error because it analyses code improperly, which results in error being reported.
         self.queue_checker.start() # pylint: disable=no-member
         print(' Done')
@@ -46,7 +47,7 @@ class Greetings(commands.Cog):
         guild_config = await self.guild_config_cog.get_guild(member.guild)
         welcome_channel = await guild_config.get_welcome_channel()
         if welcome_channel:
-            await welcome_channel.send('Goodbye, {0} (ID:{1})'.format(str(member), member.id))  # type: ignore
+            await welcome_channel.send('Goodbye, {0} (ID:{1})'.format(str(member), member.id), allowed_mentions=self.allowed_mentions)  # type: ignore
 
     @tasks.loop(seconds=10)
     async def queue_checker(self):
