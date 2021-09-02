@@ -16,6 +16,7 @@ from guild_config import (
     InfoChannelNotFoundError,
 )
 
+# TODO: command filter query
 
 class ServerConfiguration(commands.Cog, name='Server Configuration'):
     def __init__(self, bot: commands.Bot):
