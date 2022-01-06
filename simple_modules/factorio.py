@@ -14,7 +14,7 @@ from dateutil import parser
 from discord.ext import commands, tasks
 from natsort import natsorted
 
-MOD_LIST = ('artillery-spidertron', 'PlaceableOffGrid', 'NoArtilleryMapReveal', 'RandomFactorioThings', 'PlutoniumEnergy')
+MOD_LIST = ('artillery-spidertron', 'PlaceableOffGrid', 'NoArtilleryMapReveal', 'RandomFactorioThings', 'PlutoniumEnergy', 'ReactorDansen')
 
 MODPORTAL_URL = 'https://mods.factorio.com'
 LAUNCHER_URL = 'https://factorio-launcher-mods.storage.googleapis.com/{}/{}.zip'
