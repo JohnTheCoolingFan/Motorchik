@@ -1,3 +1,5 @@
+[![discord server](https://img.shields.io/discord/370167294439063564)](https://discord.gg/rqkaeYJhzS)
+
 # Motorchik
 Motorchik, discord bot written in python.
 
